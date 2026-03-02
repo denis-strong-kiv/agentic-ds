@@ -1,0 +1,17 @@
+name = "agentic-ds"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+account_id = "413d779e9a7306f7d52573d831a1876b"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "agentic-ds-db"
+database_id = "0ddee1c6-7205-4fe4-af1e-62fdda1520ab"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "e048896040564908b8934adcc7123f96"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "agentic-ds-bucket"
