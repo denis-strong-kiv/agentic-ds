@@ -79,15 +79,6 @@ const preview: Preview = {
     colorMode: {
       description: 'Color mode',
       defaultValue: 'light',
-      toolbar: {
-        title: 'Mode',
-        icon: 'sun',
-        items: [
-          { value: 'light', title: 'Light', icon: 'sun' },
-          { value: 'dark', title: 'Dark', icon: 'moon' },
-        ],
-        dynamicTitle: true,
-      },
     },
     locale: {
       description: 'Locale / direction',
