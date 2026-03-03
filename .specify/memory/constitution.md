@@ -1,50 +1,136 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+## Sync Impact Report
+
+**Version Change**: none (uninitialized) → 1.0.0
+**Bump Rationale**: Initial ratification — MAJOR 1 establishes all governance from scratch.
+
+### Principles Defined
+- (new) I. Brand Isolation
+- (new) II. Runtime Configurability
+- (new) III. Simplicity by Default
+- (new) IV. Deployability
+
+### Sections Added
+- Technology Constraints (platform & storage rules)
+- Development Standards (cache invalidation, routing, type safety)
+
+### Templates
+- `.specify/templates/plan-template.md` — Constitution Check placeholder retained;
+  gates (Brand Isolation, Runtime Configurability, Deployability) must be verified
+  per feature. ✅ noted in report, no structural edit required.
+- `.specify/templates/spec-template.md` — Existing structure is compatible. ✅
+- `.specify/templates/tasks-template.md` — Existing phase/story structure is compatible. ✅
+
+### Deferred TODOs
+- None. All required fields resolved from repo context and user input.
+-->
+
+# Agentic-DS Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Brand Isolation
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every brand MUST have independently scoped configuration, routing, and assets.
+No brand's data or configuration MAY be readable, writable, or inferable from
+another brand's request context. Brand identity MUST be resolved at the edge
+before any application logic executes.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Rationale**: Cross-brand data leakage is a correctness and trust failure.
+Isolation is the foundational contract that makes multi-brand viable.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Runtime Configurability
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+Brand configuration MUST be resolvable at runtime without redeployment.
+Onboarding a new brand MUST require only data changes (D1 rows + KV entries +
+R2 assets) — never a code change or redeployment. Feature flags and brand
+overrides MUST follow the same runtime-only rule.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: Code deploys gated on brand onboarding create bottlenecks and
+operational risk. Runtime config is the only scalable path.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. Simplicity by Default
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Shared code is the default. Brand-specific code paths are the exception and
+MUST be justified by a concrete divergent requirement. Abstractions MUST NOT
+be introduced unless two or more distinct, existing use-cases require them.
+YAGNI applies unconditionally.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Rationale**: Over-engineering for hypothetical brand differences produces
+bloat that is harder to onboard, test, and reason about.
+
+### IV. Single-Deploy Constraint
+
+The system MUST run as a single Cloudflare Worker deployment. Separate Workers
+per brand, brand-specific build pipelines, or environment-per-brand topologies
+are prohibited unless explicitly approved via a constitution amendment with a
+documented migration plan.
+
+**Rationale**: A single-deploy model keeps operational overhead minimal and
+ensures uniform behaviour across brands on a shared edge runtime.
+
+## Technology Constraints
+
+The platform is Cloudflare Workers (TypeScript). The following bindings are
+the canonical storage layer and MUST NOT be substituted without a constitution
+amendment:
+
+- **D1** (`env.DB`): Source of truth for brand configuration and `items` data.
+- **KV** (`env.KV`): Edge-cache for brand config and list endpoints (60 s TTL).
+  Any mutation to brand config MUST invalidate the relevant KV key(s).
+- **R2** (`env.BUCKET`): Brand asset storage (logos, themes, static files).
+
+No external runtime dependencies MAY be introduced. All logic MUST be
+expressible within the single-file Worker (`src/index.ts`) unless a feature
+amendment explicitly approves additional source files.
+
+## Development Standards
+
+- **Routing**: Manual URL pattern matching in the `fetch` handler. No router
+  library MAY be added without a constitution amendment. Route ordering is
+  significant — more-specific patterns MUST precede catch-all patterns.
+- **Cache invalidation**: Every mutation endpoint (create, update, delete) for
+  any brand-scoped resource MUST delete the corresponding KV cache key before
+  returning a response.
+- **Type safety**: `noUnusedLocals` and `noUnusedParameters` are enforced by
+  `tsconfig.json`. New bindings require `npm run cf-typegen` after updating
+  `wrangler.toml`.
+- **Smoke testing**: `GET /db/test` initialises the schema and serves as the
+  canonical smoke test. New schema objects MUST be initialised via this endpoint
+  or an equivalent idempotent migration endpoint.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other practices and documentation. It is the
+authoritative source of truth for architectural decisions on this project.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Amendment procedure**:
+1. Propose the amendment in a PR with a written rationale.
+2. Identify the version bump type (MAJOR / MINOR / PATCH) per the policy below.
+3. Update `constitution.md`, increment `CONSTITUTION_VERSION`, and set
+   `LAST_AMENDED_DATE` to the amendment date.
+4. Run the consistency propagation checklist (plan-template, spec-template,
+   tasks-template) and resolve any misalignments before merging.
+
+**Versioning policy**:
+- **MAJOR**: Removal or redefinition of a principle; backward-incompatible
+  governance change.
+- **MINOR**: New principle, new section, or materially expanded guidance.
+- **PATCH**: Wording clarifications, typo fixes, non-semantic refinements.
+
+**Compliance**: Every PR that introduces a new feature or changes application
+behaviour MUST include a Constitution Check confirming no principle is violated.
+Complexity MUST be justified; unjustified complexity is grounds for rejection.
+
+**Version**: 1.0.0 | **Ratified**: 2026-03-02 | **Last Amended**: 2026-03-02
+
+## Design System Reference
+
+The canonical design system inventory — token scopes, component token mappings, D1/KV schemas,
+route table, and extension protocol — is maintained at:
+
+`.specify/memory/design-system.md`
+
+Agents implementing UI features, token authoring, or brand management MUST read this file before
+generating plans or code. It defines the semantic naming convention, what is currently implemented
+versus planned, and the rules for adding new tokens correctly.

@@ -40,3 +40,10 @@ CREATE TABLE IF NOT EXISTS items (
 ## TypeScript
 
 `tsconfig.json` enforces `noUnusedLocals` and `noUnusedParameters`. Module resolution is set to `bundler` (Wrangler bundles for the Workers runtime). The `@cloudflare/workers-types` package provides types for `D1Database`, `KVNamespace`, `R2Bucket`, etc. Run `npm run cf-typegen` after changing bindings in `wrangler.toml`.
+
+## Active Technologies
+- TypeScript — Cloudflare Workers runtime (V8 isolate, Workers SDK 4.x) + Zero external runtime npm deps. Shoelace (Web Awesome) is the consumer-side UIKit — not bundled into the Worker. (001-multibrand-tokens)
+- D1 (`env.DB`) — brands + tokens + validation log; KV (`env.KV`) — resolved token cache (300s TTL); R2 (`env.BUCKET`) — brand assets (out of scope for this feature) (001-multibrand-tokens)
+
+## Recent Changes
+- 001-multibrand-tokens: Added TypeScript — Cloudflare Workers runtime (V8 isolate, Workers SDK 4.x) + Zero external runtime npm deps. Shoelace (Web Awesome) is the consumer-side UIKit — not bundled into the Worker.
