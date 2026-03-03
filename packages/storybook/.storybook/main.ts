@@ -4,20 +4,16 @@ import path from 'path';
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)', '../stories/**/*.mdx'],
   addons: [
-    '@storybook/addon-essentials',
+    '@storybook/addon-docs',
     '@storybook/addon-a11y',
-    '@storybook/addon-interactions',
     '@storybook/addon-themes',
   ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
-  docs: {
-    autodocs: 'tag',
-  },
   async viteFinal(config) {
-    const uiSrc = path.resolve(__dirname, '../../../packages/ui/src');
+    const uiSrc = path.resolve(import.meta.dirname, '../../../packages/ui/src');
     config.resolve = config.resolve ?? {};
     config.resolve.alias = {
       ...(config.resolve.alias as Record<string, string> | undefined ?? {}),
