@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { brandTokens, type BrandId, type ColorMode } from '../tokens/brand-tokens.js';
 import { useMemo } from 'react';
@@ -215,15 +214,25 @@ export const DefaultBrand: Story = {
 };
 
 export const AllBrands: Story = {
-  name: 'All Brands — Light & Dark',
+  name: 'All Brands — Light Mode',
   render: () => (
     <div style={{ maxWidth: 820, margin: '0 auto', fontFamily: 'system-ui, sans-serif', padding: '1rem' }}>
       <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: '2rem' }}>Contrast Audit — All Brands</h2>
       {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => (
-        <React.Fragment key={id}>
-          <ContrastTable brandId={id} mode="light" />
-          <ContrastTable brandId={id} mode="dark" />
-        </React.Fragment>
+        <ContrastTable key={id} brandId={id} mode="light" />
+      ))}
+    </div>
+  ),
+};
+
+export const DarkModeAudit: Story = {
+  name: 'All Brands — Dark Mode',
+  parameters: { backgrounds: { default: 'dark' } },
+  render: () => (
+    <div style={{ maxWidth: 820, margin: '0 auto', fontFamily: 'system-ui, sans-serif', padding: '1rem', background: '#111' }}>
+      <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: '2rem', color: '#fff' }}>Contrast Audit — Dark Mode</h2>
+      {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => (
+        <ContrastTable key={id} brandId={id} mode="dark" />
       ))}
     </div>
   ),

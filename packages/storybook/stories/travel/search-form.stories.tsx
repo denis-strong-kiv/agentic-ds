@@ -52,3 +52,13 @@ export const Activities: Story = {
   args: { defaultVertical: 'activities' },
 };
 
+export const OnLightBackground: Story = {
+  args: { defaultVertical: 'flights' },
+  decorators: [
+    (Story: ComponentType) => (
+      <div style={{ background: 'var(--color-background-default)', padding: '2rem' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
