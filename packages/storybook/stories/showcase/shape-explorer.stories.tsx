@@ -126,26 +126,18 @@ function ShapeFrameWithStyle({ preset, mode = 'light' }: { preset: ShapePreset; 
   );
 }
 
-export const AllPresetsLight: Story = {
-  name: 'Sharp / Rounded / Pill — Light',
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '1.5rem', padding: '1rem' }}>
-      <ShapeFrameWithStyle preset="sharp" mode="light" />
-      <ShapeFrameWithStyle preset="rounded" mode="light" />
-      <ShapeFrameWithStyle preset="pill" mode="light" />
-    </div>
-  ),
-};
-
-export const AllPresetsDark: Story = {
-  name: 'Sharp / Rounded / Pill — Dark',
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '1.5rem', padding: '1rem', background: '#0f0f14' }}>
-      <ShapeFrameWithStyle preset="sharp" mode="dark" />
-      <ShapeFrameWithStyle preset="rounded" mode="dark" />
-      <ShapeFrameWithStyle preset="pill" mode="dark" />
-    </div>
-  ),
+export const AllPresets: Story = {
+  name: 'Sharp / Rounded / Pill',
+  render: (_, { globals }) => {
+    const mode = (globals.colorMode ?? 'light') as ColorMode;
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '1.5rem', padding: '1rem' }}>
+        <ShapeFrameWithStyle preset="sharp" mode={mode} />
+        <ShapeFrameWithStyle preset="rounded" mode={mode} />
+        <ShapeFrameWithStyle preset="pill" mode={mode} />
+      </div>
+    );
+  },
 };
 
 export const BrandShapeMapping: Story = {

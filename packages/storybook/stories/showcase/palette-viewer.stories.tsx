@@ -73,49 +73,47 @@ function PaletteDisplay({ brandId, mode }: { brandId: BrandId; mode: ColorMode }
   );
 }
 
-export const DefaultLight: Story = {
-  name: 'Default — Light',
-  render: () => <PaletteDisplay brandId="default" mode="light" />,
+export const Default: Story = {
+  name: 'Default',
+  render: (_, { globals }) => <PaletteDisplay brandId="default" mode={(globals.colorMode as ColorMode) ?? 'light'} />,
 };
 
-export const DefaultDark: Story = {
-  name: 'Default — Dark',
-  render: () => <PaletteDisplay brandId="default" mode="dark" />,
+export const Luxury: Story = {
+  name: 'Luxury Airways',
+  render: (_, { globals }) => <PaletteDisplay brandId="luxury" mode={(globals.colorMode as ColorMode) ?? 'light'} />,
 };
 
-export const LuxuryLight: Story = {
-  name: 'Luxury Airways — Light',
-  render: () => <PaletteDisplay brandId="luxury" mode="light" />,
+export const Adventure: Story = {
+  name: 'Adventure Co',
+  render: (_, { globals }) => <PaletteDisplay brandId="adventure" mode={(globals.colorMode as ColorMode) ?? 'light'} />,
 };
 
-export const AdventureLight: Story = {
-  name: 'Adventure Co — Light',
-  render: () => <PaletteDisplay brandId="adventure" mode="light" />,
+export const Eco: Story = {
+  name: 'Eco Getaways',
+  render: (_, { globals }) => <PaletteDisplay brandId="eco" mode={(globals.colorMode as ColorMode) ?? 'light'} />,
 };
 
-export const EcoLight: Story = {
-  name: 'Eco Getaways — Light',
-  render: () => <PaletteDisplay brandId="eco" mode="light" />,
-};
-
-export const AllBrandsLightPreview: Story = {
+export const AllBrands: Story = {
   name: 'All Brands — Primary Swatches',
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', padding: '1.5rem' }}>
-      {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => {
-        const light = brandTokens[id].light;
-        return (
-          <div key={id}>
-            <p style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: 15 }}>{id}</p>
-            <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.5rem' }}>
-              {(['--color-primary-default', '--color-accent-default', '--color-success-default', '--color-warning-default', '--color-error-default'] as const).map(v => (
-                <div key={v} style={{ flex: 1, height: 40, borderRadius: 4, background: light[v] ?? '#ccc' }} title={`${v}: ${light[v]}`} />
-              ))}
+  render: (_, { globals }) => {
+    const mode = (globals.colorMode as ColorMode) ?? 'light';
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', padding: '1.5rem' }}>
+        {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => {
+          const tokens = brandTokens[id][mode];
+          return (
+            <div key={id}>
+              <p style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: 15 }}>{id}</p>
+              <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.5rem' }}>
+                {(['--color-primary-default', '--color-accent-default', '--color-success-default', '--color-warning-default', '--color-error-default'] as const).map(v => (
+                  <div key={v} style={{ flex: 1, height: 40, borderRadius: 4, background: tokens[v] ?? '#ccc' }} title={`${v}: ${tokens[v]}`} />
+                ))}
+              </div>
+              <p style={{ fontSize: 11, color: tokens['--color-foreground-muted'] ?? '#888' }}>Shape: {tokens['--shape-preset-button']}</p>
             </div>
-            <p style={{ fontSize: 11, color: '#666' }}>Light &nbsp;|&nbsp; Shape: {light['--shape-preset-button']}</p>
-          </div>
-        );
-      })}
-    </div>
-  ),
+          );
+        })}
+      </div>
+    );
+  },
 };

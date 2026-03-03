@@ -198,42 +198,34 @@ function ContrastTable({ brandId, mode }: { brandId: BrandId; mode: ColorMode })
 }
 
 export const DefaultBrand: Story = {
-  name: 'Default Brand — Light & Dark',
-  render: () => (
-    <div style={{ maxWidth: 820, margin: '0 auto', fontFamily: 'system-ui, sans-serif', padding: '1rem' }}>
-      <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: '0.5rem' }}>WCAG Contrast Checker</h2>
-      <p style={{ fontSize: 13, color: '#666', marginBottom: '2rem' }}>
-        Computed contrast ratios for semantic token pairs. AA = 4.5:1 (normal), 3:1 (large). AAA = 7:1 (normal), 4.5:1 (large).
-        <br />
-        <em>Note: ratios are estimated from OKLCH lightness — use browser tooling for certified values.</em>
-      </p>
-      <ContrastTable brandId="default" mode="light" />
-      <ContrastTable brandId="default" mode="dark" />
-    </div>
-  ),
+  name: 'Default Brand',
+  render: (_, { globals }) => {
+    const mode = (globals.colorMode ?? 'light') as ColorMode;
+    return (
+      <div style={{ maxWidth: 820, margin: '0 auto', fontFamily: 'system-ui, sans-serif', padding: '1rem' }}>
+        <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: '0.5rem' }}>WCAG Contrast Checker</h2>
+        <p style={{ fontSize: 13, color: '#666', marginBottom: '2rem' }}>
+          Computed contrast ratios for semantic token pairs. AA = 4.5:1 (normal), 3:1 (large). AAA = 7:1 (normal), 4.5:1 (large).
+          <br />
+          <em>Note: ratios are estimated from OKLCH lightness — use browser tooling for certified values.</em>
+        </p>
+        <ContrastTable brandId="default" mode={mode} />
+      </div>
+    );
+  },
 };
 
 export const AllBrands: Story = {
-  name: 'All Brands — Light Mode',
-  render: () => (
-    <div style={{ maxWidth: 820, margin: '0 auto', fontFamily: 'system-ui, sans-serif', padding: '1rem' }}>
-      <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: '2rem' }}>Contrast Audit — All Brands</h2>
-      {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => (
-        <ContrastTable key={id} brandId={id} mode="light" />
-      ))}
-    </div>
-  ),
-};
-
-export const DarkModeAudit: Story = {
-  name: 'All Brands — Dark Mode',
-  parameters: { backgrounds: { default: 'dark' } },
-  render: () => (
-    <div style={{ maxWidth: 820, margin: '0 auto', fontFamily: 'system-ui, sans-serif', padding: '1rem', background: '#111' }}>
-      <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: '2rem', color: '#fff' }}>Contrast Audit — Dark Mode</h2>
-      {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => (
-        <ContrastTable key={id} brandId={id} mode="dark" />
-      ))}
-    </div>
-  ),
+  name: 'All Brands',
+  render: (_, { globals }) => {
+    const mode = (globals.colorMode ?? 'light') as ColorMode;
+    return (
+      <div style={{ maxWidth: 820, margin: '0 auto', fontFamily: 'system-ui, sans-serif', padding: '1rem' }}>
+        <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: '2rem' }}>Contrast Audit — All Brands</h2>
+        {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => (
+          <ContrastTable key={id} brandId={id} mode={mode} />
+        ))}
+      </div>
+    );
+  },
 };

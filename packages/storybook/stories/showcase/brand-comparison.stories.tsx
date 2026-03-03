@@ -3,7 +3,7 @@ import { Button } from '@travel/ui/components/ui/button';
 import { Badge } from '@travel/ui/components/ui/badge';
 import { Card, CardHeader, CardContent, CardFooter } from '@travel/ui/components/ui/card';
 import { Input } from '@travel/ui/components/ui/input';
-import { brandTokens, type BrandId } from '../tokens/brand-tokens.js';
+import { brandTokens, type BrandId, type ColorMode } from '../tokens/brand-tokens.js';
 import React from 'react';
 
 /**
@@ -74,32 +74,21 @@ const SampleComponents = () => (
   </div>
 );
 
-export const LightMode: Story = {
-  name: 'All Brands · Light',
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem', padding: '1.5rem' }}>
-      {(Object.keys(brandNames) as BrandId[]).map(id => (
-        <BrandFrame key={id} brandId={id} mode="light">
-          <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{brandNames[id]}</p>
-          <SampleComponents />
-        </BrandFrame>
-      ))}
-    </div>
-  ),
-};
-
-export const DarkMode: Story = {
-  name: 'All Brands · Dark',
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem', padding: '1.5rem', background: '#111' }}>
-      {(Object.keys(brandNames) as BrandId[]).map(id => (
-        <BrandFrame key={id} brandId={id} mode="dark">
-          <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{brandNames[id]}</p>
-          <SampleComponents />
-        </BrandFrame>
-      ))}
-    </div>
-  ),
+export const AllBrands: Story = {
+  name: 'All Brands',
+  render: (_, { globals }) => {
+    const mode = (globals.colorMode ?? 'light') as ColorMode;
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem', padding: '1.5rem' }}>
+        {(Object.keys(brandNames) as BrandId[]).map(id => (
+          <BrandFrame key={id} brandId={id} mode={mode}>
+            <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{brandNames[id]}</p>
+            <SampleComponents />
+          </BrandFrame>
+        ))}
+      </div>
+    );
+  },
 };
 
 export const CardComponents: Story = {
