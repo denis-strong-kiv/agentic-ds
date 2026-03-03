@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, getDirection, type Locale } from '../../i18n/routing';
+import { SkipLink } from '@travel/ui/components/ui/skip-link';
 import '../globals.css';
 
 const geistSans = Geist({
@@ -44,6 +45,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   return (
     <html lang={locale} dir={dir}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <SkipLink href="#main-content" />
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

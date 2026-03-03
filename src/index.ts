@@ -104,7 +104,10 @@ async function listItems(env: Env): Promise<Response> {
 
 async function createItem(request: Request, env: Env): Promise<Response> {
   const body = await request.json<{ name: string; data?: string }>();
-  if (!body.name) return json({ error: "name is required" }, 400);
+  if (!body.name || typeof body.name !== "string") return json({ error: "name is required" }, 400);
+  if (body.name.length > 255) return json({ error: "name must be 255 characters or fewer" }, 422);
+  if (body.data !== undefined && typeof body.data !== "string") return json({ error: "data must be a string" }, 422);
+  if (body.data !== undefined && body.data.length > 65535) return json({ error: "data must be 65535 characters or fewer" }, 422);
 
   const id = crypto.randomUUID();
   const created_at = new Date().toISOString();
@@ -137,6 +140,10 @@ async function updateItem(
     .first<{ name: string; data: string | null }>();
   if (!item) return json({ error: "Not found" }, 404);
 
+  if (body.name !== undefined && typeof body.name !== "string") return json({ error: "name must be a string" }, 422);
+  if (body.name !== undefined && body.name.length > 255) return json({ error: "name must be 255 characters or fewer" }, 422);
+  if (body.data !== undefined && typeof body.data !== "string") return json({ error: "data must be a string" }, 422);
+  if (body.data !== undefined && body.data.length > 65535) return json({ error: "data must be 65535 characters or fewer" }, 422);
   const name = body.name ?? item.name;
   const data = body.data ?? item.data;
   await env.DB.prepare("UPDATE items SET name = ?, data = ? WHERE id = ?")

@@ -8,7 +8,7 @@ export default function HomePage() {
   const tNav = useTranslations('nav');
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-background-default)] px-4">
+    <main id="main-content" className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-background-default)] px-4">
       <div className="w-full max-w-2xl text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-[var(--color-foreground-default)]">
           {t('title')}

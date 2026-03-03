@@ -1,42 +1,203 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with this repository.
 
-## Commands
+---
+
+## Overview
+
+This repository is a **multi-brand travel design system** monorepo built with Turborepo + npm workspaces.
+It also contains a legacy Cloudflare Worker at the root (`src/index.ts`); see the [Cloudflare Worker](#cloudflare-worker) section below.
+
+---
+
+## Monorepo Structure
+
+```
+Agentic-DS/
+├── apps/
+│   └── web/                  # Next.js 16 app — reference implementation
+│       ├── app/[locale]/     # next-intl locale-aware routing
+│       ├── i18n/             # routing.ts, request.ts, navigation.ts
+│       └── messages/         # en.json, ar.json translation files
+├── packages/
+│   ├── tokens/               # Token engine — OKLCH → CSS custom properties
+│   ├── tokens-native/        # React Native token output (hex + DP values)
+│   ├── ui/                   # Radix Primitives component library
+│   └── storybook/            # Storybook 8 documentation site
+├── src/index.ts              # (Legacy) Cloudflare Worker
+└── tasks.md                  # 90-task project plan
+```
+
+## Key Commands
 
 ```bash
-npm run dev          # Start local development server (wrangler dev)
-npm run deploy       # Deploy to Cloudflare Workers
-npm run cf-typegen   # Regenerate Cloudflare TypeScript types from wrangler.toml
+# Development
+npm run dev               # Start all packages in watch mode (Turborepo)
+npm run dev --filter=@travel/web     # Start only the Next.js app
+
+# Testing
+npm test                  # Run all tests across all packages (Vitest)
+npm test --filter=@travel/ui         # Run UI component tests only
+cd packages/tokens-native && npx vitest run  # Run RN parity tests
+
+# Storybook
+npm run storybook         # Start Storybook dev server on :6006
+
+# Building
+npm run build             # Build all packages
+ANALYZE=true npm run build --filter=@travel/web  # Build + open bundle analyzer
+
+# Type checking
+npm run typecheck         # TypeScript check across all packages
+
+# Token pipeline
+cd packages/tokens && npm run build  # Rebuild CSS custom property output
 ```
 
-First-time setup requires `npx wrangler login` to authenticate with Cloudflare.
+---
 
-There is no test runner configured. The `GET /db/test` endpoint initializes the database schema (creates the `items` table if it doesn't exist) and can be used as a smoke test during local dev.
+## Packages
 
-## Architecture
+### `@travel/tokens` — Token Engine
 
-Single-file Cloudflare Worker (`src/index.ts`) with no external runtime dependencies. All logic lives in one file organized into five feature sections.
+Located at `packages/tokens/`.
 
-**Environment bindings** (defined in `wrangler.toml`, typed via the `Env` interface):
-- `env.DB` — Cloudflare D1 (SQLite): primary data store for `items`
-- `env.KV` — Cloudflare KV: caching layer with 60s TTL, key `items:list`
-- `env.BUCKET` — Cloudflare R2: file/object storage
+- Reads JSON definitions from `src/definitions/` (colors, spacing, typography, motion, shapes)
+- Generates CSS custom properties at `src/output/tokens.css`
+- **Color model**: OKLCH two-seed model — each brand defines a primary seed + accent seed; the engine derives 10-step palettes plus semantic aliases
+- **Brands**: `default`, `luxury`, `adventure`, `eco` — each gets its own CSS class (`.brand-luxury`, etc.)
+- Color modes: `:root` = light, `.dark` = dark mode
 
-**Routing** is manual URL pattern matching in the `fetch` handler — no router library. The `/items/cached` route must be matched before the `/items/:id` regex; this ordering is intentional and must be preserved.
+**Critical**: After editing any file in `src/definitions/`, run `npm run build` to regenerate `tokens.css`.
 
-**Cache invalidation**: `createItem`, `updateItem`, and `deleteItem` all delete the `items:list` KV key. Any new mutation endpoints must do the same.
+### `@travel/ui` — Component Library
 
-**Database schema** (created by `GET /db/test`):
-```sql
-CREATE TABLE IF NOT EXISTS items (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  data TEXT,
-  created_at TEXT NOT NULL
-)
+Located at `packages/ui/`.
+
+- Built on **Radix UI Primitives** (zero implicit HTML, full keyboard nav + ARIA)
+- Styled with **Tailwind CSS v4** using CSS custom properties from `@travel/tokens`
+- Variants via **CVA** (class-variance-authority)
+- RTL-safe: all directional utilities use CSS logical properties (`ms-*`, `me-*`, `ps-*`, `pe-*`, `start-*`, `end-*`)
+- Motion: `motion-safe:` Tailwind prefix + CSS `@keyframes` in `src/styles/motion.css`
+
+**Component locations:**
+- `src/components/ui/` — base components (Button, Card, Input, Dialog, etc.)
+- `src/components/travel/` — travel-domain components (FlightCard, HotelCard, etc.)
+
+**Adding a component:**
+1. Create `src/components/ui/[name].tsx` using Radix primitive + CVA variants
+2. Use `var(--color-*)`, `var(--shape-*)`, `var(--duration-*)` for all theming
+3. Add logical CSS properties for RTL support
+4. Write tests in `src/components/ui/__tests__/[name].test.tsx`
+
+### `@travel/tokens-native` — React Native Tokens
+
+Located at `packages/tokens-native/`.
+
+- Same brand tokens as `@travel/tokens` but in React Native–compatible formats
+- Colors are **hex strings** (RN doesn't support `oklch()`)
+- Spacing is **numbers in DPs** (not `rem`)
+- Shadows use `shadowColor/shadowOffset/shadowOpacity/shadowRadius/elevation` format
+- `getNativeTokens(brandId, mode)` — synchronous static lookup
+- `useBrandTokens(brandId, mode?)` — React hook with OS dark-mode detection via `matchMedia`
+
+### `@travel/storybook` — Documentation
+
+Located at `packages/storybook/`.
+
+- Storybook 8 with `@storybook/react-vite`
+- Plugins: `@storybook/addon-a11y`, `@storybook/addon-docs`, `@storybook/addon-essentials`
+- **BrandDecorator** in `.storybook/preview.ts` wraps every story with `BrandProvider`
+- Vite aliases in `.storybook/main.ts` `viteFinal` resolve `@travel/ui/components/*` paths
+- MDX doc pages at `stories/docs/`
+
+### `apps/web` — Reference App
+
+- Next.js 16 + React 19 + TypeScript strict
+- **i18n**: `next-intl` v4, locales `['en', 'ar']`, `localePrefix: 'as-needed'`
+- **Routing**: `app/[locale]/` layout validates locale, sets `lang`/`dir` on `<html>`
+- **Brand resolution**: middleware reads `x-brand` header
+- **Skip link**: `<SkipLink href="#main-content" />` in every locale layout (WCAG 2.4.1)
+
+---
+
+## Token Pipeline
+
 ```
+JSON definitions (packages/tokens/src/definitions/)
+    ↓  build script
+CSS custom properties (packages/tokens/src/output/tokens.css)
+    ↓  @theme in globals.css
+Tailwind utility classes (var(--color-*) etc.)
+    ↓  consumed by
+CVA variant className strings in components
+```
+
+React Native parallel output:
+```
+Same brand color seeds
+    ↓  hex-converted static table
+packages/tokens-native/src/tokens.ts
+    ↓  hooks
+getNativeTokens() + useBrandTokens()
+```
+
+---
 
 ## TypeScript
 
-`tsconfig.json` enforces `noUnusedLocals` and `noUnusedParameters`. Module resolution is set to `bundler` (Wrangler bundles for the Workers runtime). The `@cloudflare/workers-types` package provides types for `D1Database`, `KVNamespace`, `R2Bucket`, etc. Run `npm run cf-typegen` after changing bindings in `wrangler.toml`.
+- `tsconfig.base.json`: `"moduleResolution": "bundler"`, `"strict": true`, `"exactOptionalPropertyTypes": true`, `"noUnusedLocals": true`, `"noUnusedParameters": true`
+- `.js` extensions **not required** in imports (bundler resolution)
+- Target: zero TS errors across all packages
+
+---
+
+## Testing
+
+- **Vitest** per-package (`vitest.config.ts` in each package)
+- **React Testing Library** + `@testing-library/user-event` for components
+- Environment: `jsdom` for UI, `node` for token packages
+- **333+ tests** must pass on all commits to `feature/specify`
+
+---
+
+## Accessibility
+
+- `@storybook/addon-a11y` runs axe-core on every story
+- All interactive Radix components have built-in ARIA + keyboard nav
+- `SkipLink` component (WCAG 2.4.1) in every page layout
+- RTL logical properties ensure correct layout in `dir="rtl"` contexts
+- `motion-safe:` prefix respects `prefers-reduced-motion`
+- Skeleton has `aria-hidden="true"` (decorative)
+
+---
+
+## Conventions
+
+| Topic | Convention |
+|---|---|
+| Color tokens | `var(--color-[category]-[scale])` |
+| Shape tokens | `var(--shape-preset-[component])` |
+| Spacing | Tailwind scale (`p-4`, `gap-6`, etc.) |
+| Directional | CSS logical properties (`ms-*`, `me-*`, `ps-*`, `pe-*`) |
+| Motion | `motion-safe:` prefix; durations via `var(--duration-*)` |
+| Exports | Named exports only |
+| File naming | `kebab-case.tsx` for files, `PascalCase` for exported names |
+
+---
+
+## Cloudflare Worker (Legacy)
+
+The legacy Worker lives at `src/index.ts` (root level). Commands:
+
+```bash
+npm run dev          # wrangler dev
+npm run deploy       # deploy to Cloudflare
+npm run cf-typegen   # regenerate types from wrangler.toml
+```
+
+**Bindings**: `env.DB` (D1/SQLite), `env.KV` (60s TTL cache), `env.BUCKET` (R2).
+**Routing**: manual URL matching — `/items/cached` must match before `/items/:id`.
+**Cache invalidation**: mutations (`createItem`, `updateItem`, `deleteItem`) delete `items:list` KV key.
+

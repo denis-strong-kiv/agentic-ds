@@ -7,26 +7,38 @@ import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
 
+// ─── Security: brand allow-list ───────────────────────────────────────────────
+// Only known brand IDs are accepted. Unknown values fall through to 'default'.
+const VALID_BRAND_IDS = new Set(['default', 'luxury', 'adventure', 'eco']);
+
+function sanitizeBrandId(raw: string | null | undefined): string {
+  if (!raw) return 'default';
+  // Normalize: lowercase, strip non-alphanumeric-hyphen chars, truncate to 32
+  const normalized = raw.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 32);
+  return VALID_BRAND_IDS.has(normalized) ? normalized : 'default';
+}
+
 // ─── Locale middleware (next-intl) ────────────────────────────────────────────
 const intlMiddleware = createMiddleware(routing);
 
 // ─── Brand helpers ────────────────────────────────────────────────────────────
 
-/** Extract brand key from the request using multiple strategies. */
+/** Extract brand key from the request using multiple strategies.
+ *  All raw values are sanitized through sanitizeBrandId() before use. */
 function extractBrandKey(request: NextRequest): string {
   // 1. Explicit header (e.g. from BFF or gateway)
-  const headerBrand = request.headers.get('x-brand');
-  if (headerBrand) return headerBrand;
+  const headerBrand = sanitizeBrandId(request.headers.get('x-brand'));
+  if (headerBrand !== 'default') return headerBrand;
 
   // 2. Path segment after locale prefix: /[locale]/b/<brand-id>/...
   const pathMatch = request.nextUrl.pathname.match(/\/b\/([a-z0-9-]+)\//);
-  if (pathMatch) return pathMatch[1];
+  if (pathMatch) return sanitizeBrandId(pathMatch[1]);
 
   // 3. Subdomain: brand.example.com
   const host = request.headers.get('host') ?? '';
   const subdomain = host.split('.')[0];
   if (subdomain && subdomain !== 'www' && subdomain !== 'localhost') {
-    return subdomain;
+    return sanitizeBrandId(subdomain);
   }
 
   // 4. Default brand
