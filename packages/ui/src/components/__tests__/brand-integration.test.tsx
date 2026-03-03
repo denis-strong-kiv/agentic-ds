@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { BrandProvider, useBrand, useBrandContext } from '../../brand/BrandProvider.js';
@@ -32,7 +31,7 @@ beforeEach(() => {
     'acme:light': ACME_LIGHT_CSS,
     'acme:dark': ACME_DARK_CSS,
     'globex:light': GLOBEX_LIGHT_CSS,
-  });
+  }) as unknown as typeof globalThis.fetch;
 });
 
 afterEach(() => {

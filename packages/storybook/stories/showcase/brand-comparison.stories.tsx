@@ -3,7 +3,7 @@ import { Button } from '@travel/ui/components/ui/button';
 import { Badge } from '@travel/ui/components/ui/badge';
 import { Card, CardHeader, CardContent, CardFooter } from '@travel/ui/components/ui/card';
 import { Input } from '@travel/ui/components/ui/input';
-import { brandTokens, getBrandCSS, type BrandId } from '../tokens/brand-tokens.js';
+import { brandTokens, type BrandId } from '../tokens/brand-tokens.js';
 import React from 'react';
 
 /**
@@ -16,9 +16,7 @@ function BrandFrame({ brandId, mode = 'light', children }: {
   children: React.ReactNode;
 }) {
   const tokens = brandTokens[brandId][mode];
-  const css = getBrandCSS(brandId, mode);
   const styleId = `brand-frame-${brandId}-${mode}`;
-
   React.useEffect(() => {
     let el = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!el) { el = document.createElement('style'); el.id = styleId; document.head.appendChild(el); }

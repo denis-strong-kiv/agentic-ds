@@ -1,14 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SearchForm } from '../search-form.js';
 import type { SearchPayload } from '../search-form.js';
 
-const LOCATION_OPTIONS = [
-  { value: 'JFK', label: 'New York JFK', sublabel: 'John F. Kennedy Intl' },
-  { value: 'LAX', label: 'Los Angeles LAX', sublabel: 'Los Angeles Intl' },
-  { value: 'LHR', label: 'London LHR', sublabel: 'Heathrow' },
-];
 
 describe('SearchForm', () => {
   it('renders all vertical tabs', () => {
@@ -109,7 +104,7 @@ describe('SearchForm', () => {
 
   it('calls onSearch with flight payload', async () => {
     const user = userEvent.setup();
-    const handleSearch = vi.fn<[SearchPayload], void>();
+    const handleSearch = vi.fn<(payload: SearchPayload) => void>();
     render(<SearchForm onSearch={handleSearch} />);
     await user.click(screen.getByText('Search Flights'));
     expect(handleSearch).toHaveBeenCalledOnce();
@@ -119,7 +114,7 @@ describe('SearchForm', () => {
 
   it('calls onSearch with hotels payload', async () => {
     const user = userEvent.setup();
-    const handleSearch = vi.fn<[SearchPayload], void>();
+    const handleSearch = vi.fn<(payload: SearchPayload) => void>();
     render(<SearchForm onSearch={handleSearch} />);
     await user.click(screen.getByRole('tab', { name: /hotels/i }));
     await user.click(screen.getByText('Search Hotels'));
@@ -130,7 +125,7 @@ describe('SearchForm', () => {
 
   it('calls onSearch with cars payload', async () => {
     const user = userEvent.setup();
-    const handleSearch = vi.fn<[SearchPayload], void>();
+    const handleSearch = vi.fn<(payload: SearchPayload) => void>();
     render(<SearchForm onSearch={handleSearch} />);
     await user.click(screen.getByRole('tab', { name: /cars/i }));
     await user.click(screen.getByText('Search Cars'));

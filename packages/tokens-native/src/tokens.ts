@@ -36,7 +36,6 @@ const motion = {
 
 function shadow(
   color: string,
-  sm: NativeShadowStyle['shadowOffset'],
   smRadius: number,
   smElevation: number,
 ): { sm: NativeShadowStyle; md: NativeShadowStyle; lg: NativeShadowStyle; xl: NativeShadowStyle } {
@@ -72,7 +71,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#0284c7', foreground: '#ffffff', subtle: '#f0f9ff' },
       },
       shape: { button: 8, card: 12, input: 8, badge: 6, dialog: 16 },
-      shadow: shadow('#0f172a', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#0f172a', 2, 2),
     },
     dark: {
       color: {
@@ -94,7 +93,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#38bdf8', foreground: '#0c4a6e', subtle: '#0c4a6e' },
       },
       shape: { button: 8, card: 12, input: 8, badge: 6, dialog: 16 },
-      shadow: shadow('#000000', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#000000', 2, 2),
     },
   },
 
@@ -119,7 +118,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#1d4ed8', foreground: '#ffffff', subtle: '#eff6ff' },
       },
       shape: { button: 2, card: 4, input: 2, badge: 2, dialog: 4 },
-      shadow: shadow('#1e2d5e', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#1e2d5e', 2, 2),
     },
     dark: {
       color: {
@@ -141,7 +140,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#60a5fa', foreground: '#172554', subtle: '#172554' },
       },
       shape: { button: 2, card: 4, input: 2, badge: 2, dialog: 4 },
-      shadow: shadow('#000000', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#000000', 2, 2),
     },
   },
 
@@ -166,7 +165,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#0369a1', foreground: '#ffffff', subtle: '#f0f9ff' },
       },
       shape: { button: 8, card: 12, input: 8, badge: 6, dialog: 16 },
-      shadow: shadow('#14532d', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#14532d', 2, 2),
     },
     dark: {
       color: {
@@ -188,7 +187,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#38bdf8', foreground: '#0c4a6e', subtle: '#0c4a6e' },
       },
       shape: { button: 8, card: 12, input: 8, badge: 6, dialog: 16 },
-      shadow: shadow('#000000', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#000000', 2, 2),
     },
   },
 
@@ -213,7 +212,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#0284c7', foreground: '#ffffff', subtle: '#f0f9ff' },
       },
       shape: { button: 9999, card: 24, input: 9999, badge: 9999, dialog: 24 },
-      shadow: shadow('#134e4a', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#134e4a', 2, 2),
     },
     dark: {
       color: {
@@ -235,7 +234,7 @@ const brandData: Record<BrandId, Record<ColorMode, Omit<NativeTokens, 'brandId' 
         info:    { default: '#38bdf8', foreground: '#0c4a6e', subtle: '#0c4a6e' },
       },
       shape: { button: 9999, card: 24, input: 9999, badge: 9999, dialog: 24 },
-      shadow: shadow('#000000', { width: 0, height: 1 }, 2, 2),
+      shadow: shadow('#000000', 2, 2),
     },
   },
 };

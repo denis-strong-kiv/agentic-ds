@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { brandTokens, type BrandId, type ColorMode } from '../tokens/brand-tokens.js';
-import React, { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 
 const meta: Meta = {
   title: 'Showcase/Contrast Checker',

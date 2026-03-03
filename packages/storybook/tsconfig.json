@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "paths": {
+      "@travel/ui/components/*": ["../ui/src/components/*"],
+      "@travel/ui/brand/*": ["../ui/src/brand/*"],
+      "@travel/ui/hooks": ["../ui/src/hooks/index.ts"],
+      "@travel/ui/hooks/*": ["../ui/src/hooks/*"],
+      "@travel/ui/utils/*": ["../ui/src/utils/*"],
+      "@travel/tokens": ["../tokens/src/index.ts"],
+      "@travel/tokens-native": ["../tokens-native/src/index.ts"]
+    }
+  },
+  "include": [".storybook/**/*", "stories/**/*"],
+  "exclude": ["node_modules", "storybook-static"]
+}

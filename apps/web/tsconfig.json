@@ -19,7 +19,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@travel/ui/components/*": ["../../packages/ui/src/components/*"],
+      "@travel/ui/brand/*": ["../../packages/ui/src/brand/*"],
+      "@travel/ui/hooks": ["../../packages/ui/src/hooks/index.ts"],
+      "@travel/ui/hooks/*": ["../../packages/ui/src/hooks/*"],
+      "@travel/ui/utils/*": ["../../packages/ui/src/utils/*"]
     }
   },
   "include": [

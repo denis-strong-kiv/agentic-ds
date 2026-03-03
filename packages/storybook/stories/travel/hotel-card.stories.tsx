@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { HotelCard } from '@travel/ui/components/travel/hotel-card';
-import React from 'react';
 
 const meta: Meta<typeof HotelCard> = {
   title: 'Travel/HotelCard',

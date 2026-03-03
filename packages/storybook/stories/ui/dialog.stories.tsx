@@ -4,7 +4,6 @@ import {
   DialogDescription, DialogFooter, DialogClose,
 } from '@travel/ui/components/ui/dialog';
 import { Button } from '@travel/ui/components/ui/button';
-import React from 'react';
 
 const meta: Meta = {
   title: 'UI/Dialog',

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
@@ -18,7 +17,11 @@ function TableFixture({
       <TableCaption>Flight results</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead sortable sortDirection={sortDirection} onSort={onSort}>Airline</TableHead>
+          <TableHead
+            sortable
+            {...(sortDirection !== undefined ? { sortDirection } : {})}
+            {...(onSort !== undefined ? { onSort } : {})}
+          >Airline</TableHead>
           <TableHead>Price</TableHead>
         </TableRow>
       </TableHeader>

@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { brandTokens, type BrandId, type ColorMode } from '../tokens/brand-tokens.js';
-import React from 'react';
 
 const meta: Meta = {
   title: 'Showcase/Palette Viewer',
@@ -105,7 +104,6 @@ export const AllBrandsLightPreview: Story = {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', padding: '1.5rem' }}>
       {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => {
         const light = brandTokens[id].light;
-        const dark = brandTokens[id].dark;
         return (
           <div key={id}>
             <p style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: 15 }}>{id}</p>

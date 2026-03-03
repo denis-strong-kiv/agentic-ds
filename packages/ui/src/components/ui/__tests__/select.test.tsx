@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
@@ -14,7 +13,10 @@ function SelectFixture({
   disabled?: boolean;
 }) {
   return (
-    <Select defaultValue={defaultValue} onValueChange={onValueChange}>
+    <Select
+      {...(defaultValue !== undefined ? { defaultValue } : {})}
+      {...(onValueChange !== undefined ? { onValueChange } : {})}
+    >
       <SelectTrigger disabled={disabled}>
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>

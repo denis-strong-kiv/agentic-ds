@@ -1,11 +1,9 @@
-import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import { Calendar } from '../calendar.js';
 
 const today = new Date();
-const currentMonth = today.toLocaleDateString('en-US', { month: 'long' });
 const currentYear = today.getFullYear().toString();
 
 describe('Calendar', () => {

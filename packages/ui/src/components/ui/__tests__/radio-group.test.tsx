@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
@@ -14,7 +13,11 @@ function RadioGroupFixture({
   disabled?: boolean;
 }) {
   return (
-    <RadioGroup defaultValue={defaultValue} onValueChange={onValueChange} disabled={disabled}>
+    <RadioGroup
+      {...(defaultValue !== undefined ? { defaultValue } : {})}
+      {...(onValueChange !== undefined ? { onValueChange } : {})}
+      {...(disabled !== undefined ? { disabled } : {})}
+    >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <RadioGroupItem value="option-a" id="option-a" />
         <label htmlFor="option-a">Option A</label>

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { brandTokens, getBrandCSS, type BrandId, type ColorMode } from '../tokens/brand-tokens.js';
-import React, { useEffect, useRef, useState } from 'react';
+import { brandTokens, type BrandId, type ColorMode } from '../tokens/brand-tokens.js';
+import { useEffect, useRef } from 'react';
 
 const meta: Meta = {
   title: 'Showcase/Shape Explorer',

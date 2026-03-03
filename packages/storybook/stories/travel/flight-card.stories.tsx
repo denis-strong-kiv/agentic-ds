@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { FlightCard } from '@travel/ui/components/travel/flight-card';
-import React from 'react';
 
 const sampleSegment = {
   airline: 'British Airways',

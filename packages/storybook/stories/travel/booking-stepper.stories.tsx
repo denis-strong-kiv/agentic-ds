@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { BookingStepper } from '@travel/ui/components/travel/booking-stepper';
 import type { BookingStep } from '@travel/ui/components/travel/booking-stepper';
-import React from 'react';
 
 const allSteps: BookingStep[] = [
   { id: 'search', label: 'Search', status: 'completed' },

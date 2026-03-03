@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
@@ -21,11 +20,14 @@ function DialogFixture({
   onOpenChange?: (open: boolean) => void;
 }) {
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog {...(onOpenChange !== undefined ? { onOpenChange } : {})}>
       <DialogTrigger asChild>
         <button>Open Dialog</button>
       </DialogTrigger>
-      <DialogContent size={size} hideClose={hideClose}>
+      <DialogContent
+        {...(size !== undefined ? { size } : {})}
+        {...(hideClose !== undefined ? { hideClose } : {})}
+      >
         <DialogHeader>
           <DialogTitle>Dialog Title</DialogTitle>
           <DialogDescription>Dialog description text</DialogDescription>

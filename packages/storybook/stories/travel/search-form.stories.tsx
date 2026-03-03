@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { ComponentType } from 'react';
 import { SearchForm } from '@travel/ui/components/travel/search-form';
-import React from 'react';
+import type { SearchPayload } from '@travel/ui/components/travel/search-form';
 
 const airports = [
   { value: 'JFK', label: 'New York (JFK)', description: 'John F. Kennedy International' },
@@ -19,13 +20,13 @@ const meta: Meta<typeof SearchForm> = {
   tags: ['autodocs'],
   args: {
     locationOptions: airports,
-    onSearch: (payload) => console.log('Search', payload),
+    onSearch: (payload: SearchPayload) => console.log('Search', payload),
   },
   parameters: {
     layout: 'fullscreen',
   },
   decorators: [
-    (Story) => (
+    (Story: ComponentType) => (
       <div style={{ background: 'var(--color-primary-default)', padding: '2rem' }}>
         <Story />
       </div>
@@ -54,7 +55,7 @@ export const Activities: Story = {
 export const OnLightBackground: Story = {
   args: { defaultVertical: 'flights' },
   decorators: [
-    (Story) => (
+    (Story: ComponentType) => (
       <div style={{ background: 'var(--color-background-default)', padding: '2rem' }}>
         <Story />
       </div>
