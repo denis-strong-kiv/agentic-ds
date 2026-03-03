@@ -1,39 +1,56 @@
 import type { Preview } from '@storybook/react';
 import React, { useEffect } from 'react';
-import { brandTokens, type BrandId, type ColorMode } from '../stories/tokens/brand-tokens.js';
+import { brandTokens, type BrandId } from '../stories/tokens/brand-tokens.js';
 
 // ─── Brand + Mode Decorator ───────────────────────────────────────────────────
-// Injects brand CSS custom properties into a scoped wrapper element.
-// Also sets data-mode and dir on the wrapper so dark/RTL layouts work.
+// Renders the story twice — once in a light-token pane and once in a dark-token
+// pane — side by side. CSS custom properties are scoped to each pane via inline
+// styles so components using var(--color-*) automatically see the right values.
 const BrandDecorator = (Story: React.FC, context: { globals: Record<string, string> }) => {
   const brand = (context.globals.brand ?? 'default') as BrandId;
-  const mode = (context.globals.colorMode ?? 'light') as ColorMode;
   const locale = context.globals.locale ?? 'en';
   const isRTL = locale === 'ar';
 
-  const tokens = brandTokens[brand]?.[mode] ?? brandTokens.default.light;
-  const styleId = 'sb-brand-tokens';
+  const lightTokens = brandTokens[brand]?.light ?? brandTokens.default.light;
+  const darkTokens = brandTokens[brand]?.dark ?? brandTokens.default.dark;
 
   useEffect(() => {
-    let style = document.getElementById(styleId) as HTMLStyleElement | null;
-    if (!style) {
-      style = document.createElement('style');
-      style.id = styleId;
-      document.head.appendChild(style);
-    }
-    const vars = Object.entries(tokens).map(([k, v]) => `  ${k}: ${v};`).join('\n');
-    style.textContent = `:root {\n${vars}\n}`;
-
-    document.documentElement.setAttribute('data-mode', mode);
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
-    document.documentElement.style.backgroundColor = tokens['--color-background-default'] ?? '';
-    document.documentElement.style.color = tokens['--color-foreground-default'] ?? '';
-  }, [brand, mode, locale]);
+  }, [isRTL]);
+
+  const makePaneStyle = (tokens: Record<string, string>): React.CSSProperties => ({
+    ...(tokens as React.CSSProperties),
+    flex: 1,
+    minWidth: 0,
+    padding: '1.5rem',
+    background: tokens['--color-background-default'],
+    color: tokens['--color-foreground-default'],
+  });
+
+  const labelStyle: React.CSSProperties = {
+    fontSize: '0.6875rem',
+    fontWeight: 600,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    opacity: 0.4,
+    marginBottom: '0.75rem',
+  };
 
   return React.createElement(
     'div',
-    { style: { padding: '1.5rem', minHeight: '100%', background: tokens['--color-background-default'], color: tokens['--color-foreground-default'] } },
-    React.createElement(Story),
+    { style: { display: 'flex', minHeight: '100%' } },
+    React.createElement(
+      'div',
+      { 'data-mode': 'light', style: makePaneStyle(lightTokens) },
+      React.createElement('div', { style: labelStyle }, '☀ Light'),
+      React.createElement(Story),
+    ),
+    React.createElement(
+      'div',
+      { 'data-mode': 'dark', style: makePaneStyle(darkTokens) },
+      React.createElement('div', { style: labelStyle }, '☾ Dark'),
+      React.createElement(Story),
+    ),
   );
 };
 
@@ -72,19 +89,6 @@ const preview: Preview = {
           { value: 'luxury', title: 'Luxury Airways' },
           { value: 'adventure', title: 'Adventure Co' },
           { value: 'eco', title: 'Eco Getaways' },
-        ],
-        dynamicTitle: true,
-      },
-    },
-    colorMode: {
-      description: 'Color mode',
-      defaultValue: 'light',
-      toolbar: {
-        title: 'Mode',
-        icon: 'sun',
-        items: [
-          { value: 'light', title: 'Light', icon: 'sun' },
-          { value: 'dark', title: 'Dark', icon: 'moon' },
         ],
         dynamicTitle: true,
       },

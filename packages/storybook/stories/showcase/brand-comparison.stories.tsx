@@ -74,31 +74,27 @@ const SampleComponents = () => (
   </div>
 );
 
-export const LightMode: Story = {
-  name: 'All Brands · Light',
+export const AllBrands: Story = {
+  name: 'All Brands · Light & Dark',
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem', padding: '1.5rem' }}>
-      {(Object.keys(brandNames) as BrandId[]).map(id => (
-        <BrandFrame key={id} brandId={id} mode="light">
-          <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{brandNames[id]}</p>
-          <SampleComponents />
-        </BrandFrame>
-      ))}
-    </div>
-  ),
-};
-
-export const DarkMode: Story = {
-  name: 'All Brands · Dark',
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem', padding: '1.5rem', background: '#111' }}>
-      {(Object.keys(brandNames) as BrandId[]).map(id => (
-        <BrandFrame key={id} brandId={id} mode="dark">
-          <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{brandNames[id]}</p>
-          <SampleComponents />
-        </BrandFrame>
-      ))}
-    </div>
+    <>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem', padding: '1.5rem' }}>
+        {(Object.keys(brandNames) as BrandId[]).map(id => (
+          <BrandFrame key={`${id}-light`} brandId={id} mode="light">
+            <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{brandNames[id]}</p>
+            <SampleComponents />
+          </BrandFrame>
+        ))}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem', padding: '1.5rem', background: '#0f0f14' }}>
+        {(Object.keys(brandNames) as BrandId[]).map(id => (
+          <BrandFrame key={`${id}-dark`} brandId={id} mode="dark">
+            <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{brandNames[id]}</p>
+            <SampleComponents />
+          </BrandFrame>
+        ))}
+      </div>
+    </>
   ),
 };
 

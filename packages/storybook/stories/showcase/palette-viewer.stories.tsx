@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { brandTokens, type BrandId, type ColorMode } from '../tokens/brand-tokens.js';
+import { brandTokens, type BrandId } from '../tokens/brand-tokens.js';
+import type { ColorMode } from '../tokens/brand-tokens.js';
 
 const meta: Meta = {
   title: 'Showcase/Palette Viewer',
@@ -45,7 +46,15 @@ function SemanticGroup({ label, vars, tokens }: {
   );
 }
 
-function PaletteDisplay({ brandId, mode }: { brandId: BrandId; mode: ColorMode }) {
+function PaletteDisplay({ brandId, mode }: { brandId: BrandId; mode?: ColorMode }) {
+  if (!mode) {
+    return (
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: 1, minWidth: 0 }}><PaletteDisplay brandId={brandId} mode="light" /></div>
+        <div style={{ flex: 1, minWidth: 0 }}><PaletteDisplay brandId={brandId} mode="dark" /></div>
+      </div>
+    );
+  }
   const tokens = brandTokens[brandId][mode];
   const bg = tokens['--color-background-default'] ?? '#fff';
   const fg = tokens['--color-foreground-default'] ?? '#000';
@@ -73,49 +82,51 @@ function PaletteDisplay({ brandId, mode }: { brandId: BrandId; mode: ColorMode }
   );
 }
 
-export const DefaultLight: Story = {
-  name: 'Default — Light',
-  render: () => <PaletteDisplay brandId="default" mode="light" />,
+export const Default: Story = {
+  name: 'Default',
+  render: () => <PaletteDisplay brandId="default" />,
 };
 
-export const DefaultDark: Story = {
-  name: 'Default — Dark',
-  render: () => <PaletteDisplay brandId="default" mode="dark" />,
+export const Luxury: Story = {
+  name: 'Luxury Airways',
+  render: () => <PaletteDisplay brandId="luxury" />,
 };
 
-export const LuxuryLight: Story = {
-  name: 'Luxury Airways — Light',
-  render: () => <PaletteDisplay brandId="luxury" mode="light" />,
+export const Adventure: Story = {
+  name: 'Adventure Co',
+  render: () => <PaletteDisplay brandId="adventure" />,
 };
 
-export const AdventureLight: Story = {
-  name: 'Adventure Co — Light',
-  render: () => <PaletteDisplay brandId="adventure" mode="light" />,
+export const Eco: Story = {
+  name: 'Eco Getaways',
+  render: () => <PaletteDisplay brandId="eco" />,
 };
 
-export const EcoLight: Story = {
-  name: 'Eco Getaways — Light',
-  render: () => <PaletteDisplay brandId="eco" mode="light" />,
-};
-
-export const AllBrandsLightPreview: Story = {
+export const AllBrands: Story = {
   name: 'All Brands — Primary Swatches',
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', padding: '1.5rem' }}>
-      {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => {
-        const light = brandTokens[id].light;
-        return (
-          <div key={id}>
-            <p style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: 15 }}>{id}</p>
-            <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.5rem' }}>
-              {(['--color-primary-default', '--color-accent-default', '--color-success-default', '--color-warning-default', '--color-error-default'] as const).map(v => (
-                <div key={v} style={{ flex: 1, height: 40, borderRadius: 4, background: light[v] ?? '#ccc' }} title={`${v}: ${light[v]}`} />
-              ))}
-            </div>
-            <p style={{ fontSize: 11, color: '#666' }}>Light &nbsp;|&nbsp; Shape: {light['--shape-preset-button']}</p>
+    <div style={{ padding: '1.5rem' }}>
+      {(['default', 'luxury', 'adventure', 'eco'] as BrandId[]).map(id => (
+        <div key={id} style={{ marginBottom: '1.5rem' }}>
+          <p style={{ fontWeight: 700, marginBottom: '0.75rem', fontSize: 15, textTransform: 'capitalize' }}>{id}</p>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            {(['light', 'dark'] as ColorMode[]).map(m => {
+              const tokens = brandTokens[id][m];
+              return (
+                <div key={m} style={{ flex: 1, padding: '0.75rem', borderRadius: 6, background: tokens['--color-background-default'], border: '1px solid rgba(128,128,128,0.2)' }}>
+                  <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: tokens['--color-foreground-muted'], marginBottom: '0.5rem' }}>{m}</p>
+                  <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.4rem' }}>
+                    {(['--color-primary-default', '--color-accent-default', '--color-success-default', '--color-warning-default', '--color-error-default'] as const).map(v => (
+                      <div key={v} style={{ flex: 1, height: 36, borderRadius: 4, background: tokens[v] ?? '#ccc' }} title={`${v}: ${tokens[v]}`} />
+                    ))}
+                  </div>
+                  <p style={{ fontSize: 10, color: tokens['--color-foreground-muted'] }}>Shape: {tokens['--shape-preset-button']}</p>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
   ),
 };
