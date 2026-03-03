@@ -21,10 +21,10 @@ const base = {
   '--duration-slow': '300ms',
   '--easing-ease-out': 'cubic-bezier(0.16, 1, 0.3, 1)',
   '--easing-ease-in-out': 'cubic-bezier(0.45, 0, 0.55, 1)',
-  // Typography (matches Google Fonts loaded in preview-head.html)
-  '--font-display': "'Space Grotesk', system-ui, sans-serif",
-  '--font-heading': "'Plus Jakarta Sans', system-ui, sans-serif",
-  '--font-body': "'Inter', system-ui, sans-serif",
+  // Typography
+  '--font-display': 'system-ui, sans-serif',
+  '--font-heading': 'system-ui, sans-serif',
+  '--font-body': 'system-ui, sans-serif',
 };
 
 // ─── Default Brand (blue primary, purple accent, rounded) ────────────────────
