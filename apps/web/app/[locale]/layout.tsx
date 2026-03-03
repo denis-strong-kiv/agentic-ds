@@ -5,6 +5,8 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, getDirection, type Locale } from '../../i18n/routing';
 import { SkipLink } from '@travel/ui/components/ui/skip-link';
+import { ThemeProvider } from '../../components/theme-provider';
+import { ThemeToggle } from '../../components/theme-toggle';
 import '../globals.css';
 
 const inter = Inter({
@@ -54,11 +56,24 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <html lang={locale} dir={dir}>
+      <head>
+        {/* Prevent flash of wrong theme before hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var s=localStorage.getItem('theme');var p=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-mode',s||p);})();`,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${plusJakartaSans.variable} ${spaceGrotesk.variable} antialiased`}>
         <SkipLink href="#main-content" />
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <ThemeProvider>
+          <div style={{ position: 'fixed', top: '1rem', insetInlineEnd: '1rem', zIndex: 50 }}>
+            <ThemeToggle />
+          </div>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
