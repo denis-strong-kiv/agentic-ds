@@ -1,0 +1,114 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Docs/Getting Started" />
+
+# Getting Started
+
+Welcome to the **Travel Design System** — a multi-brand, OKLCH-powered component library built on Radix UI Primitives.
+
+---
+
+## Install
+
+From your monorepo workspace:
+
+```bash
+npx turbo run build --filter=@travel/ui
+npx turbo run build --filter=@travel/tokens
+```
+
+Or from an app:
+
+```bash
+npm install @travel/ui @travel/tokens
+```
+
+---
+
+## Setup BrandProvider
+
+Wrap your application (or page) with `BrandProvider` to inject the active brand's CSS custom properties:
+
+```tsx
+// app/layout.tsx
+import { BrandProvider } from '@travel/ui/brand';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <BrandProvider brandId="default" mode="light">
+          {children}
+        </BrandProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### BrandProvider Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `brandId` | `string` | `"default"` | Brand identifier from your brands API |
+| `mode` | `"light" \| "dark"` | `"light"` | Color mode |
+| `children` | `ReactNode` | — | App content |
+
+The provider fetches resolved CSS from `/api/resolve?brand=<id>&mode=<mode>` and injects it as a `<style>` block into `<head>`, setting `data-brand` and `data-mode` on `<html>`.
+
+---
+
+## Importing Components
+
+All components are exported from `@travel/ui`:
+
+```tsx
+import { Button, Input, Card, Badge, Tabs } from '@travel/ui/components/ui';
+import { FlightCard, HotelCard, SearchForm, BookingStepper } from '@travel/ui/components/travel';
+```
+
+---
+
+## Quick Example
+
+```tsx
+import { Button, Card } from '@travel/ui/components/ui';
+import { SearchForm } from '@travel/ui/components/travel';
+import { BrandProvider } from '@travel/ui/brand';
+
+export default function HomePage() {
+  return (
+    <BrandProvider brandId="default" mode="light">
+      <main>
+        <SearchForm
+          onSearch={(query) => console.log(query)}
+          defaultTab="flights"
+        />
+        <Card variant="elevated">
+          <Button variant="primary" size="lg">Book Now</Button>
+        </Card>
+      </main>
+    </BrandProvider>
+  );
+}
+```
+
+---
+
+## Multi-Brand Setup
+
+Each brand is configured in the database with:
+- **Two color seeds:** `primarySeed` (L, C, H) + `accentSeed` (L, C, H)
+- **Shape preset:** `sharp | rounded | pill`
+- **Temperature:** `neutralTemperature` + `semanticTemperature` (`warm | cool | neutral`)
+
+The token engine derives 8 full palettes × 11 steps × 2 modes = 176 color values automatically from the two seed inputs.
+
+---
+
+## Storybook Toolbar
+
+Use the toolbar controls to preview:
+- **Brand** — switch between Default, Luxury Airways, Adventure Co, Eco Getaways
+- **Color Mode** — Light / Dark
+- **Locale** — LTR / RTL (Arabic)

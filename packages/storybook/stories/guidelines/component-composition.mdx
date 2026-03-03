@@ -1,0 +1,176 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guidelines/Component Composition" />
+
+# Component Composition
+
+How to assemble travel UI components from the design system primitives.
+
+---
+
+## Layer Model
+
+The design system has two component tiers:
+
+```
+Layer 2 — Travel Domain Components
+  SearchForm, FlightCard, HotelCard, BookingStepper, ...
+       ↓  built with
+Layer 1 — UI Primitives
+  Button, Input, Select, Card, Badge, Tabs, Dialog, ...
+       ↓  built with
+Radix UI Primitives (unstyled, accessible)
+```
+
+Always build new features from existing Layer 1 or Layer 2 components. Only create a new Layer 1 primitive when the interaction pattern does not exist in Radix UI.
+
+---
+
+## Page Layout Pattern
+
+```tsx
+// Recommended page structure for a travel booking flow
+<BrandProvider brandId={brandId} mode={colorMode}>
+  <main>
+    {/* Hero / search */}
+    <section>
+      <SearchForm onSearch={handleSearch} defaultTab="flights" />
+    </section>
+
+    {/* Results */}
+    <section>
+      {flights.map(f => (
+        <FlightCard key={f.id} {...f} onSelect={handleSelect} />
+      ))}
+    </section>
+
+    {/* Booking flow */}
+    <BookingStepper steps={steps} currentStep={step} />
+  </main>
+</BrandProvider>
+```
+
+---
+
+## Composing Primitives
+
+### Card + Badge + Button
+
+```tsx
+import { Card, Badge, Button } from '@travel/ui/components/ui';
+
+function DealCard({ title, price, badge }: DealCardProps) {
+  return (
+    <Card variant="elevated">
+      <div className="flex items-start justify-between">
+        <div>
+          <h3>{title}</h3>
+          <Badge variant="deal">{badge}</Badge>
+        </div>
+        <span className="text-2xl font-bold">${price}</span>
+      </div>
+      <Button variant="primary" size="sm" className="mt-4 w-full">
+        Book Now
+      </Button>
+    </Card>
+  );
+}
+```
+
+### Dialog + Form
+
+```tsx
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@travel/ui/components/ui';
+import { PassengerForm } from '@travel/ui/components/travel';
+
+function PassengerDialog({ open, onOpenChange, onSubmit }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="lg">
+        <DialogHeader>
+          <DialogTitle>Passenger Details</DialogTitle>
+        </DialogHeader>
+        <PassengerForm onSubmit={onSubmit} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+---
+
+## Variant Selection Guide
+
+### Button
+
+| Variant | Context |
+|---|---|
+| `primary` | One per screen — main CTA (Book, Search, Confirm) |
+| `secondary` | Secondary action (Save, Add, Update) |
+| `outline` | Low-emphasis (Back, Cancel, Edit) |
+| `ghost` | Icon buttons, table row actions |
+| `destructive` | Irreversible actions (Delete, Remove) |
+| `link` | Navigation, contextual links |
+
+### Card
+
+| Variant | Context |
+|---|---|
+| `elevated` | Featured items, result cards, main content |
+| `outlined` | Side panels, secondary content, lists |
+
+### Badge
+
+| Variant | Context |
+|---|---|
+| `deal` | Discounted prices, limited offers |
+| `new` | Newly listed routes or properties |
+| `popular` | Most-booked options |
+| `default` | Neutral metadata labels |
+
+---
+
+## Accessibility Patterns
+
+All Radix UI-based primitives include keyboard navigation and ARIA attributes automatically. Follow these patterns to preserve accessibility:
+
+**Dialogs:**
+- Always include `DialogTitle` (or `DialogHeader` > `DialogTitle`) for screen readers
+- Focus is trapped automatically within the dialog
+- ESC key closes with `onOpenChange(false)`
+
+**Forms:**
+- Use `<label>` or the `label` prop on Input components — never rely on placeholder text alone
+- Group related inputs with `<fieldset>` + `<legend>`
+- Show error messages adjacent to the input using the `error` prop
+
+**Buttons:**
+- Icon-only buttons must have `aria-label`
+- Loading states should use `aria-busy` and disable the button
+
+```tsx
+// ✓ Accessible icon button
+<Button variant="ghost" aria-label="Remove passenger">
+  <TrashIcon />
+</Button>
+
+// ✓ Loading button
+<Button variant="primary" disabled aria-busy>
+  <Spinner /> Searching…
+</Button>
+```
+
+---
+
+## Responsive Composition
+
+Use Tailwind responsive prefixes with token-based classes:
+
+```tsx
+// Mobile → Tablet → Desktop grid
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {hotels.map(h => <HotelCard key={h.id} {...h} />)}
+</div>
+```
+
+The travel components themselves are internally responsive — `FlightCard`, `HotelCard`, and `SearchForm` switch to a stacked layout on mobile automatically.

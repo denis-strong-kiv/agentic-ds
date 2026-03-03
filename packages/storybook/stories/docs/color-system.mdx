@@ -1,0 +1,169 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Docs/Color System" />
+
+# Color System
+
+All brand colors are generated algorithmically in the **OKLCH** perceptual color space from just two seed hues.
+
+---
+
+## Why OKLCH?
+
+OKLCH (`L` lightness, `C` chroma, `H` hue) is perceptually uniform — meaning equal numeric differences produce equal perceived differences. This makes it ideal for:
+
+- **Predictable lightness steps** — each palette step looks equally spaced
+- **Consistent chroma** — colors at the same chroma feel equally saturated across hues
+- **Safe dark mode inversion** — lightness axis can be mirrored without hue shift artifacts
+
+```css
+/* Example OKLCH values */
+--color-primary-default: oklch(0.50 0.22 250);  /* Blue */
+--color-accent-default:  oklch(0.62 0.20 55);   /* Orange */
+--color-success-default: oklch(0.65 0.17 145);  /* Green */
+```
+
+---
+
+## Two-Seed Model
+
+Every brand is defined by **two seed colors**:
+
+| Seed | Purpose | Derives |
+|---|---|---|
+| `primarySeed` | Core brand color | primary, secondary, neutral palettes |
+| `accentSeed` | Highlight / contrast color | accent palette, CTA elements |
+
+From these two seeds, the engine derives **8 full palettes**:
+
+```
+primarySeed  →  primary (11 steps)
+             →  secondary (shifted ±30° hue, lower chroma)
+             →  neutral (nearly achromatic, temperature-shifted)
+
+accentSeed   →  accent (11 steps)
+
+systemHues   →  success (hue ~145)
+             →  warning (hue ~75)
+             →  error   (hue ~20)
+             →  info    (hue ~235)
+```
+
+Temperature modifiers can shift the neutral hue toward warm (30–60°) or cool (220–260°).
+
+---
+
+## Palette Steps
+
+Each palette has 11 lightness steps:
+
+| Step | Lightness | Typical Use |
+|---|---|---|
+| 50 | L 0.95–0.97 | Subtle background tint |
+| 100 | L 0.90–0.93 | Hover background |
+| 200 | L 0.83–0.87 | Active background |
+| 300 | L 0.73–0.78 | Border, muted fill |
+| 400 | L 0.63–0.67 | Placeholder, inactive |
+| 500 | L 0.50–0.55 | **Primary action** |
+| 600 | L 0.40–0.45 | Hover on action |
+| 700 | L 0.32–0.37 | Active / pressed |
+| 800 | L 0.22–0.27 | On colored bg |
+| 900 | L 0.14–0.18 | High-contrast text |
+| 950 | L 0.08–0.11 | Max contrast |
+
+---
+
+## Light & Dark Mode
+
+The engine generates both modes from the same seeds:
+
+**Light mode:** Uses step 500 for primary actions, step 50–100 for backgrounds, step 900 for text.
+
+**Dark mode:** Backgrounds invert to step 900–950 range, primary actions shift to step 400 for better contrast against dark surfaces, text uses step 50–100.
+
+```ts
+// Token resolver determines per-mode assignments
+const lightPrimary = scale[5];   // index 5 = step 500
+const darkPrimary  = scale[4];   // index 4 = step 400 (lighter for dark bg)
+```
+
+---
+
+## WCAG Contrast Targets
+
+The system targets:
+
+| Pair | Target | WCAG Level |
+|---|---|---|
+| `--color-primary-foreground` on `--color-primary-default` | ≥ 4.5:1 | AA |
+| `--color-foreground-default` on `--color-background-default` | ≥ 7:1 | AAA |
+| `--color-foreground-muted` on `--color-background-default` | ≥ 4.5:1 | AA |
+| Error / success icons on white | ≥ 3:1 | AA Large |
+
+See the [Contrast Checker](?path=/story/showcase-contrast-checker--default-brand) for live audit results.
+
+---
+
+## Brand Configuration
+
+To define a new brand, provide an `OklchSeed` for each of the two seeds:
+
+```ts
+interface OklchSeed {
+  l: number;  // 0–1  lightness
+  c: number;  // 0–0.4 chroma
+  h: number;  // 0–360 hue angle
+}
+
+interface BrandConfig {
+  id: string;
+  name: string;
+  primarySeed: OklchSeed;
+  accentSeed: OklchSeed;
+  shape: 'sharp' | 'rounded' | 'pill';
+  neutralTemperature: 'warm' | 'cool' | 'neutral';
+  semanticTemperature: 'warm' | 'cool' | 'neutral';
+}
+```
+
+### Example Brand Definitions
+
+```ts
+// Luxury Airways — deep navy + champagne gold
+const luxuryConfig: BrandConfig = {
+  id: 'luxury',
+  name: 'Luxury Airways',
+  primarySeed: { l: 0.32, c: 0.12, h: 255 },
+  accentSeed:  { l: 0.72, c: 0.16, h: 85 },
+  shape: 'sharp',
+  neutralTemperature: 'cool',
+  semanticTemperature: 'neutral',
+};
+
+// Eco Getaways — teal + amber
+const ecoConfig: BrandConfig = {
+  id: 'eco',
+  name: 'Eco Getaways',
+  primarySeed: { l: 0.52, c: 0.16, h: 195 },
+  accentSeed:  { l: 0.68, c: 0.17, h: 75 },
+  shape: 'pill',
+  neutralTemperature: 'warm',
+  semanticTemperature: 'warm',
+};
+```
+
+---
+
+## Using in CSS
+
+The active brand's resolved tokens are injected into `:root` by `BrandProvider`. All component styles use CSS custom property references:
+
+```css
+.card {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--shape-radius-card);
+}
+```
+
+Switching brands requires only a `BrandProvider` prop change — no class toggling, no re-renders of the component tree.

@@ -1,6 +1,44 @@
 import type { Preview } from '@storybook/react';
+import React, { useEffect } from 'react';
+import { brandTokens, type BrandId, type ColorMode } from '../stories/tokens/brand-tokens.js';
+
+// ─── Brand + Mode Decorator ───────────────────────────────────────────────────
+// Injects brand CSS custom properties into a scoped wrapper element.
+// Also sets data-mode and dir on the wrapper so dark/RTL layouts work.
+const BrandDecorator = (Story: React.FC, context: { globals: Record<string, string> }) => {
+  const brand = (context.globals.brand ?? 'default') as BrandId;
+  const mode = (context.globals.colorMode ?? 'light') as ColorMode;
+  const locale = context.globals.locale ?? 'en';
+  const isRTL = locale === 'ar';
+
+  const tokens = brandTokens[brand]?.[mode] ?? brandTokens.default.light;
+  const styleId = 'sb-brand-tokens';
+
+  useEffect(() => {
+    let style = document.getElementById(styleId) as HTMLStyleElement | null;
+    if (!style) {
+      style = document.createElement('style');
+      style.id = styleId;
+      document.head.appendChild(style);
+    }
+    const vars = Object.entries(tokens).map(([k, v]) => `  ${k}: ${v};`).join('\n');
+    style.textContent = `:root {\n${vars}\n}`;
+
+    document.documentElement.setAttribute('data-mode', mode);
+    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+    document.documentElement.style.backgroundColor = tokens['--color-background-default'] ?? '';
+    document.documentElement.style.color = tokens['--color-foreground-default'] ?? '';
+  }, [brand, mode, locale]);
+
+  return React.createElement(
+    'div',
+    { style: { padding: '1.5rem', minHeight: '100%', background: tokens['--color-background-default'], color: tokens['--color-foreground-default'] } },
+    React.createElement(Story),
+  );
+};
 
 const preview: Preview = {
+  decorators: [BrandDecorator],
   parameters: {
     controls: {
       matchers: {

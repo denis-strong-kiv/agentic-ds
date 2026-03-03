@@ -1,0 +1,113 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guidelines/Color Usage" />
+
+# Color Usage
+
+Rules and patterns for applying brand colors consistently across the travel design system.
+
+---
+
+## Core Principles
+
+1. **Always use semantic tokens** — never use primitive token values (oklch values) directly in component code.
+2. **One primary action per view** — don't compete for attention with multiple primary-colored elements.
+3. **Accent is for delight** — reserve `--color-accent-*` for deals, highlights, and CTAs that require extra emphasis.
+4. **Meaning through semantics** — use `--color-success-*`, `--color-error-*`, etc. for status; never use brand primary to indicate error.
+
+---
+
+## Primary Color
+
+Use `--color-primary-default` for the **single most important action** on a screen.
+
+✓ **Do:**
+- Primary "Book Now" / "Search" / "Confirm" button
+- Active tab indicator
+- Selected state in a stepper
+
+✗ **Don't:**
+- Multiple primary buttons in the same viewport
+- Informational text color (use `--color-foreground-default`)
+- Success indications (use `--color-success-default`)
+
+---
+
+## Accent Color
+
+`--color-accent-default` creates visual contrast against the primary for promotions and secondary CTAs.
+
+✓ **Do:**
+- "DEAL" / "SALE" / discount badges
+- Promotional banners
+- Best-value callouts on flight/hotel cards
+- Hover accent ring on featured items
+
+✗ **Don't:**
+- Body text or icons (insufficient contrast across all brands)
+- Navigation elements (causes confusion with primary actions)
+
+---
+
+## Semantic Colors
+
+| Color | When to use | When NOT to use |
+|---|---|---|
+| `--color-success-*` | Booking confirmed, payment success, seat available | Positive price comparisons |
+| `--color-warning-*` | Last 2 seats, price increase alert, expiring offer | Marketing highlights |
+| `--color-error-*` | Form validation errors, payment failure, sold out | Negative pricing (use muted text) |
+| `--color-info-*` | Travel advisories, helpful tips, passport reminders | Decorative |
+
+---
+
+## Background Hierarchy
+
+Use backgrounds to create visual depth without borders:
+
+```
+--color-background-default    ← Page canvas
+  --color-background-subtle   ← Section backgrounds, hover zones
+    --color-surface-card      ← Cards, panels
+      --color-surface-popover ← Dropdowns, tooltips, modals
+```
+
+---
+
+## Text Colors
+
+| Token | Usage |
+|---|---|
+| `--color-foreground-default` | All primary body text, headings |
+| `--color-foreground-muted` | Secondary labels, metadata, captions |
+| `--color-foreground-subtle` | Placeholder text, disabled states, hints |
+
+Never use primary/accent colors for long-form text — only for interactive labels within buttons/links.
+
+---
+
+## Dark Mode
+
+The `BrandProvider` handles dark mode toggling. Component code should never hardcode light/dark values.
+
+```tsx
+// ✓ Token-based — works in both modes automatically
+<div style={{ background: 'var(--color-surface-card)' }}>...</div>
+
+// ✗ Hardcoded — breaks in dark mode
+<div style={{ background: '#ffffff' }}>...</div>
+```
+
+---
+
+## Brand Switching
+
+Different brands intentionally produce different emotional tones from the same component structure:
+
+| Brand | Primary feel | Shape | Temperature |
+|---|---|---|---|
+| TravelCo (default) | Trustworthy, modern | Rounded | Neutral |
+| Luxury Airways | Premium, exclusive | Sharp | Cool |
+| Adventure Co | Bold, energetic | Rounded | Neutral |
+| Eco Getaways | Organic, friendly | Pill | Warm |
+
+No CSS overrides are needed when switching brands — the CSS custom properties cascade automatically.
