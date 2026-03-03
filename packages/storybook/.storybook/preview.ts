@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { brandTokens, type BrandId, type ColorMode } from '../stories/tokens/brand-tokens.js';
 
 // ─── Brand + Mode Decorator ───────────────────────────────────────────────────
@@ -14,7 +14,7 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
   const tokens = brandTokens[brand]?.[mode] ?? brandTokens.default.light;
   const styleId = 'sb-brand-tokens';
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let style = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!style) {
       style = document.createElement('style');
@@ -22,7 +22,9 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
       document.head.appendChild(style);
     }
     const vars = Object.entries(tokens).map(([k, v]) => `  ${k}: ${v};`).join('\n');
-    style.textContent = `:root {\n${vars}\n}`;
+    // Include a transition so color changes animate rather than snap
+    const transition = '  transition: background-color 150ms, color 150ms;';
+    style.textContent = `:root {\n${vars}\n${transition}\n}`;
 
     document.documentElement.setAttribute('data-mode', mode);
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
@@ -32,7 +34,15 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
 
   return React.createElement(
     'div',
-    { style: { padding: '1.5rem', minHeight: '100%', background: tokens['--color-background-default'], color: tokens['--color-foreground-default'] } },
+    {
+      style: {
+        padding: '1.5rem',
+        minHeight: '100%',
+        background: tokens['--color-background-default'],
+        color: tokens['--color-foreground-default'],
+        transition: 'background-color 150ms, color 150ms',
+      },
+    },
     React.createElement(Story),
   );
 };
