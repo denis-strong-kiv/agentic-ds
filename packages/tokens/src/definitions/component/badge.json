@@ -1,0 +1,31 @@
+{
+  "$schema": "component-tokens",
+  "badge": {
+    "default": {
+      "background": { "value": "{color.background.subtle}",  "type": "color" },
+      "foreground": { "value": "{color.foreground.default}", "type": "color" },
+      "border":     { "value": "{color.border.default}",     "type": "color" }
+    },
+    "primary": {
+      "background": { "value": "{color.primary.default}",    "type": "color" },
+      "foreground": { "value": "{color.primary.foreground}",  "type": "color" },
+      "border":     { "value": "transparent",                 "type": "color" }
+    },
+    "success": {
+      "background": { "value": "{color.success.subtle}",     "type": "color" },
+      "foreground": { "value": "{color.success.default}",    "type": "color" },
+      "border":     { "value": "transparent",                 "type": "color" }
+    },
+    "warning": {
+      "background": { "value": "{color.warning.subtle}",     "type": "color" },
+      "foreground": { "value": "{color.warning.default}",    "type": "color" },
+      "border":     { "value": "transparent",                 "type": "color" }
+    },
+    "error": {
+      "background": { "value": "{color.error.subtle}",       "type": "color" },
+      "foreground": { "value": "{color.error.default}",      "type": "color" },
+      "border":     { "value": "transparent",                 "type": "color" }
+    },
+    "radius": { "value": "{shape.badge}", "type": "borderRadius" }
+  }
+}

@@ -1,0 +1,107 @@
+/* ─── Travel Design System — Token-Driven Tailwind v4 Theme ──────────────────
+ *
+ * This file maps brand token CSS custom properties into Tailwind v4 @theme.
+ * All values reference CSS custom properties set by the active brand via
+ * BrandProvider / the runtime resolve API.
+ *
+ * Light/dark modes are handled via data attributes:
+ *   [data-brand="acme"][data-mode="light"] { --color-primary-default: oklch(...) }
+ *   [data-brand="acme"][data-mode="dark"]  { --color-primary-default: oklch(...) }
+ */
+
+@import "tailwindcss";
+
+@theme {
+  /* ── Color tokens ─────────────────────────────────────────────────────────── */
+
+  /* Backgrounds */
+  --color-background: var(--color-background-default);
+  --color-background-subtle: var(--color-background-subtle);
+
+  /* Surfaces */
+  --color-surface-card: var(--color-surface-card);
+  --color-surface-popover: var(--color-surface-popover);
+  --color-surface-overlay: var(--color-surface-overlay);
+
+  /* Borders */
+  --color-border: var(--color-border-default);
+  --color-border-muted: var(--color-border-muted);
+
+  /* Foreground */
+  --color-foreground: var(--color-foreground-default);
+  --color-foreground-muted: var(--color-foreground-muted);
+  --color-foreground-subtle: var(--color-foreground-subtle);
+
+  /* Primary */
+  --color-primary: var(--color-primary-default);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-active: var(--color-primary-active);
+  --color-primary-foreground: var(--color-primary-foreground);
+
+  /* Accent */
+  --color-accent: var(--color-accent-default);
+  --color-accent-foreground: var(--color-accent-foreground);
+
+  /* Secondary */
+  --color-secondary: var(--color-secondary-default);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+
+  /* Semantic */
+  --color-success: var(--color-success-default);
+  --color-success-foreground: var(--color-success-foreground);
+  --color-success-subtle: var(--color-success-subtle);
+
+  --color-warning: var(--color-warning-default);
+  --color-warning-foreground: var(--color-warning-foreground);
+  --color-warning-subtle: var(--color-warning-subtle);
+
+  --color-error: var(--color-error-default);
+  --color-error-foreground: var(--color-error-foreground);
+  --color-error-subtle: var(--color-error-subtle);
+
+  --color-info: var(--color-info-default);
+  --color-info-foreground: var(--color-info-foreground);
+  --color-info-subtle: var(--color-info-subtle);
+
+  /* ── Shape tokens ──────────────────────────────────────────────────────────── */
+  --radius-button: var(--shape-preset-button);
+  --radius-card: var(--shape-preset-card);
+  --radius-input: var(--shape-preset-input);
+  --radius-badge: var(--shape-preset-badge);
+  --radius-dialog: var(--shape-preset-dialog);
+
+  /* ── Typography ───────────────────────────────────────────────────────────── */
+  --font-display: var(--font-display), system-ui, sans-serif;
+  --font-heading: var(--font-heading), system-ui, sans-serif;
+  --font-body: var(--font-body), system-ui, sans-serif;
+
+  /* ── Motion ───────────────────────────────────────────────────────────────── */
+  --ease-out: var(--easing-ease-out);
+  --ease-in-out: var(--easing-ease-in-out);
+  --ease-spring: var(--easing-spring);
+  --duration-fast: var(--duration-fast);
+  --duration-normal: var(--duration-normal);
+  --duration-slow: var(--duration-slow);
+
+  /* ── Shadows ──────────────────────────────────────────────────────────────── */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}
+
+/* ── Accordion animation ─────────────────────────────────────────────────────── */
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}

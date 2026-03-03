@@ -1,0 +1,10 @@
+{
+  "$schema": "spacing-semantic",
+  "space": {
+    "page":    { "value": "{spacing.8}",  "type": "spacing", "$description": "Horizontal page padding (2rem)" },
+    "section": { "value": "{spacing.16}", "type": "spacing", "$description": "Vertical section gap (4rem)" },
+    "card":    { "value": "{spacing.6}",  "type": "spacing", "$description": "Card internal padding (1.5rem)" },
+    "inline":  { "value": "{spacing.3}",  "type": "spacing", "$description": "Inline gap between elements (0.75rem)" },
+    "stack":   { "value": "{spacing.4}",  "type": "spacing", "$description": "Vertical stack gap (1rem)" }
+  }
+}

@@ -34,7 +34,7 @@
 
 **Purpose**: Monorepo structure, tooling, and dependency installation
 
-- [ ] T001 Initialize monorepo structure using Turborepo at repository root with the following workspaces:
+- [X] T001 Initialize monorepo structure using Turborepo at repository root with the following workspaces:
   - `packages/tokens/` — Token definitions, OKLCH engine, Style Dictionary config
   - `packages/ui/` — Custom component library built on Radix UI Primitives
   - `packages/storybook/` — Storybook 9 documentation site
@@ -42,14 +42,14 @@
   - `apps/api/` — Cloudflare Worker (existing `src/index.ts` moves here)
   - Root `turbo.json` with `build`, `dev`, `lint`, `test`, `storybook` pipelines
 
-- [ ] T002 [P] Initialize `apps/web/` — Next.js 15 project with App Router:
+- [X] T002 [P] Initialize `apps/web/` — Next.js 15 project with App Router:
   - TypeScript strict mode
   - Tailwind CSS v4 with CSS-first `@theme` configuration
   - `next.config.ts` with Cloudflare-compatible settings
   - ESLint + Prettier config extending workspace root
   - `app/layout.tsx` with brand context provider placeholder
 
-- [ ] T003 [P] Initialize `packages/tokens/` — TypeScript library:
+- [X] T003 [P] Initialize `packages/tokens/` — TypeScript library:
   - `tsconfig.json` with `declaration: true` for type exports
   - Style Dictionary v4 as build dependency
   - `src/oklch/` directory for color engine
@@ -57,7 +57,7 @@
   - `src/output/` directory for generated CSS/JSON artifacts
   - Export map in `package.json` for `@travel/tokens`
 
-- [ ] T004 [P] Initialize `packages/ui/` — Custom UI kit built on Radix Primitives:
+- [X] T004 [P] Initialize `packages/ui/` — Custom UI kit built on Radix Primitives:
   - Install Radix UI primitive packages as dependencies:
     - `@radix-ui/react-dialog`, `@radix-ui/react-popover`, `@radix-ui/react-select`
     - `@radix-ui/react-dropdown-menu`, `@radix-ui/react-tooltip`, `@radix-ui/react-tabs`
@@ -79,7 +79,7 @@
   - Export map in `package.json` for `@travel/ui`
   - **No shadcn/ui** — all components are hand-authored from Radix primitives; zero pre-styled defaults
 
-- [ ] T005 [P] Initialize `packages/storybook/` — Storybook 9:
+- [X] T005 [P] Initialize `packages/storybook/` — Storybook 9:
   - `npx storybook@latest init` with React + Vite builder
   - Configure to consume `@travel/ui` and `@travel/tokens`
   - Theme switcher addon for light/dark and multi-brand preview
@@ -87,14 +87,14 @@
   - Viewport addon with travel-relevant breakpoints (mobile, tablet, desktop, wide)
   - `.storybook/preview.ts` importing global token CSS
 
-- [ ] T006 [P] Configure shared tooling at monorepo root:
+- [X] T006 [P] Configure shared tooling at monorepo root:
   - ESLint flat config with TypeScript, React, accessibility rules
   - Prettier with consistent formatting
   - `.gitignore` updates for monorepo (`dist/`, `.turbo/`, `.next/`)
   - Husky + lint-staged for pre-commit hooks
   - `tsconfig.base.json` shared across all packages
 
-- [ ] T007 [P] Configure testing infrastructure:
+- [X] T007 [P] Configure testing infrastructure:
   - Vitest as workspace-level test runner
   - `vitest.workspace.ts` covering all packages
   - React Testing Library for component tests in `packages/ui/`
@@ -110,7 +110,7 @@
 
 **⚠️ CRITICAL**: No user story work or component development can begin until this phase is complete
 
-- [ ] T008 Implement OKLCH color engine in `packages/tokens/src/oklch/engine.ts`:
+- [X] T008 Implement OKLCH color engine in `packages/tokens/src/oklch/engine.ts`:
   - `generateColorScale(seed: OKLCHColor, mode: 'light' | 'dark'): ColorScale`
     - Steps: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
     - Light mode: L curves from 0.97 (step 50) → 0.25 (step 950), chroma modulated per step
@@ -135,7 +135,7 @@
     - pill: radius-button 9999px, radius-card 24px, radius-input 9999px, radius-badge 9999px
   - All functions pure, zero side effects, fully testable
 
-- [ ] T009 [P] Define OKLCH TypeScript types in `packages/tokens/src/oklch/types.ts`:
+- [X] T009 [P] Define OKLCH TypeScript types in `packages/tokens/src/oklch/types.ts`:
   - `OKLCHColor { lightness: number; chroma: number; hue: number }` — validation: L ∈ [0,1], C ≥ 0, H ∈ [0,360)
   - `ColorScaleStep = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950`
   - `ColorScale = Record<ColorScaleStep, OKLCHColor>`
@@ -149,14 +149,14 @@
   - `ShapeTokens` — keyed shape radius values: `{ button, card, input, badge, dialog, sm, md, lg }`
   - `ResolvedBrandTokens` — full brand palette + shape tokens + font declarations ready for CSS generation
 
-- [ ] T010 [P] Implement OKLCH utilities in `packages/tokens/src/oklch/utils.ts`:
+- [X] T010 [P] Implement OKLCH utilities in `packages/tokens/src/oklch/utils.ts`:
   - `oklchToCSS(color: OKLCHColor): string` → `oklch(0.55 0.18 250)`
   - `oklchToHex(color: OKLCHColor): string` → `#0066FF` (for legacy/fallback)
   - `validateOKLCH(color: OKLCHColor): ValidationResult` — L ∈ [0,1], C ≥ 0, H ∈ [0,360)
   - `contrastRatio(fg: OKLCHColor, bg: OKLCHColor): number` — WCAG luminance-based
   - `meetsContrastAA(fg: OKLCHColor, bg: OKLCHColor, size: 'normal' | 'large'): boolean`
 
-- [ ] T011 [P] Implement OKLCH engine unit tests in `packages/tokens/src/oklch/__tests__/engine.test.ts`:
+- [X] T011 [P] Implement OKLCH engine unit tests in `packages/tokens/src/oklch/__tests__/engine.test.ts`:
   - `generateColorScale`: produces 11 steps; lightness monotonic; gamut-clamped; boundary seeds accepted
   - `deriveFullPalette`: produces exactly 8 named palettes each with light + dark scales (176 total color values)
   - Secondary scale hue is average of primary + accent hues
@@ -167,7 +167,7 @@
   - `deriveShapeTokens`: sharp → button radius ≤ 2px; rounded → button 6–12px; pill → button 9999px
   - `contrastRatio` and `meetsContrastAA` match known WCAG reference values
 
-- [ ] T012 Define platform-default primitive tokens in `packages/tokens/src/definitions/primitives/`:
+- [X] T012 Define platform-default primitive tokens in `packages/tokens/src/definitions/primitives/`:
   - `spacing.json` — scale: 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10, 12, 16, 20, 24 (in rem)
   - `shape.json` — three presets (sharp / rounded / pill) each declaring component-level radius tokens:
     - keys: `button`, `card`, `input`, `badge`, `dialog`, `sm`, `md`, `lg`, `full`
@@ -180,7 +180,7 @@
   - `elevation.json` — shadow definitions (sm, md, lg, xl, 2xl) using OKLCH-aware shadow colors (neutral hue-tinted)
   - `breakpoints.json` — sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px)
 
-- [ ] T013 Define semantic token schema in `packages/tokens/src/definitions/semantic/`:
+- [X] T013 Define semantic token schema in `packages/tokens/src/definitions/semantic/`:
   - `color-semantic.json` — mode-aware semantic mappings sourced from the 8 derived palettes:
     - **Surface tokens** (from `neutral` palette):
       - `color.background.default` → neutral-50 (light) / neutral-950 (dark)
@@ -214,7 +214,7 @@
   - `typography-semantic.json` — `text.heading.{1-6}` references `--font-heading`; `text.display` references `--font-display`; `text.body.{sm,md,lg}` references `--font-body`
   - `spacing-semantic.json` — `space.page`, `space.section`, `space.card`, `space.inline`, `space.stack`
 
-- [ ] T014 Define component token schema in `packages/tokens/src/definitions/component/`:
+- [X] T014 Define component token schema in `packages/tokens/src/definitions/component/`:
   - `button.json` — `button.{variant}.{background,foreground,border,shadow}.{default,hover,active,disabled,focus}`
   - `input.json` — `input.{background,foreground,border,placeholder}.{default,focus,error,disabled}`
   - `card.json` — `card.{background,border,shadow,foreground,header,footer}`
@@ -222,7 +222,7 @@
   - `navigation.json` — `nav.{background,foreground,border,active,hover}`
   - All reference semantic tokens by name — no hard-coded values
 
-- [ ] T015 Implement Style Dictionary v4 build pipeline in `packages/tokens/src/build/`:
+- [X] T015 Implement Style Dictionary v4 build pipeline in `packages/tokens/src/build/`:
   - `config.ts` — Style Dictionary configuration consuming token JSONs
   - `transforms/oklch.ts` — custom transform to output OKLCH CSS values
   - `formats/css-custom-properties.ts` — generates `:root` and `.dark` CSS files with all resolved tokens
@@ -231,7 +231,7 @@
   - `formats/json-flat.ts` — generates flat JSON for runtime brand resolution API
   - Build script in `package.json`: `"build": "tsx src/build/run.ts"`
 
-- [ ] T016 Implement three-tier token resolution engine in `packages/tokens/src/resolver/`:
+- [X] T016 Implement three-tier token resolution engine in `packages/tokens/src/resolver/`:
   - `resolver.ts` — `resolveToken(name: string, brand: BrandConfig, mode: ColorMode): ResolvedValue`
   - Traverses component → semantic → primitive/generated hierarchy
   - Detects and rejects circular references (FR-007)
@@ -239,14 +239,14 @@
   - Supports per-brand component token overrides (FR-012)
   - Returns resolved OKLCH CSS string or primitive value
 
-- [ ] T017 Implement token validation engine in `packages/tokens/src/validator/`:
+- [X] T017 Implement token validation engine in `packages/tokens/src/validator/`:
   - `validator.ts` — `validateBrandTokens(brand: BrandConfig): ValidationReport`
   - Checks: OKLCH range validity, broken references, circular references
   - WCAG AA contrast checking on designated fg/bg pairs in both modes
   - Returns structured report per FR-015
   - `types.ts` — `ValidationReport`, `ValidationError`, `ContrastResult`
 
-- [ ] T018 Implement brand configuration types in `packages/tokens/src/brand/types.ts`:
+- [X] T018 Implement brand configuration types in `packages/tokens/src/brand/types.ts`:
   - `BrandConfig`:
     - `id: string` — URL-safe unique identifier
     - `displayName: string`
@@ -260,7 +260,7 @@
   - `BrandRegistry` — runtime brand storage interface (list, get, set, delete by id)
   - `ResolvedTokenOutput` — flattened artifact for a brand + mode: all CSS custom properties + shape tokens + font declarations ready for injection
 
-- [ ] T019 [P] Write foundation integration test in `packages/tokens/src/__tests__/integration.test.ts`:
+- [X] T019 [P] Write foundation integration test in `packages/tokens/src/__tests__/integration.test.ts`:
   - Register test brand with two seeds + warm/cool/neutral temperature variants + all three shape options
   - Assert `deriveFullPalette` produces all 8 named palettes × 2 modes (176 color values total)
   - Assert neutral scale tinting: warm uses accentSeed hue, cool uses primarySeed hue, neutral has chroma 0
@@ -282,7 +282,7 @@
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Implement brand registration API endpoint in `apps/api/src/routes/brands.ts`:
+- [X] T020 [US1] Implement brand registration API endpoint in `apps/api/src/routes/brands.ts`:
   - `POST /api/brands` — register new brand with full `BrandConfig`:
     - Required: `id`, `displayName`, `primarySeed`, `accentSeed`, `neutralTemperature`, `semanticTemperature`, `shape`, `fonts` (all three)
     - Optional: `overrides` (component token overrides)
@@ -294,7 +294,7 @@
   - Store resolved output in `brand_tokens_cache` for immediate serving
   - Store full config in D1 for future re-derivation on updates
 
-- [ ] T021 [P] [US1] Create brand database schema migration in `apps/api/src/schema/`:
+- [X] T021 [P] [US1] Create brand database schema migration in `apps/api/src/schema/`:
   - `brands` table:
     - `id TEXT PK`, `display_name TEXT`
     - `primary_l REAL`, `primary_c REAL`, `primary_h REAL` — primarySeed channels
@@ -307,7 +307,7 @@
   - `brand_tokens_cache` table: `brand_id TEXT FK`, `mode TEXT`, `tokens_json TEXT`, `generated_at TEXT`
   - Compound PK on brand_tokens_cache (brand_id, mode)
 
-- [ ] T022 [US1] Implement brand CRUD operations in `apps/api/src/services/brand-service.ts`:
+- [X] T022 [US1] Implement brand CRUD operations in `apps/api/src/services/brand-service.ts`:
   - `registerBrand(config: BrandConfig): Promise<Brand>`
   - `getBrand(id: string): Promise<Brand | null>`
   - `updateBrand(id: string, updates: Partial<BrandConfig>): Promise<Brand>`
@@ -315,13 +315,13 @@
   - `deleteBrand(id: string): Promise<void>`
   - On create/update: trigger scale generation + cache invalidation
 
-- [ ] T023 [US1] Implement brand retrieval endpoints in `apps/api/src/routes/brands.ts`:
+- [X] T023 [US1] Implement brand retrieval endpoints in `apps/api/src/routes/brands.ts`:
   - `GET /api/brands` — paginated list (FR-001b), supports 500+ brands (FR-001a)
   - `GET /api/brands/:id` — single brand config + metadata
   - `PUT /api/brands/:id` — update brand (triggers scale regeneration per FR-011)
   - `DELETE /api/brands/:id` — remove brand
 
-- [ ] T024 [US1] Wire brand API routes into existing Worker fetch handler in `apps/api/src/index.ts`:
+- [X] T024 [US1] Wire brand API routes into existing Worker fetch handler in `apps/api/src/index.ts`:
   - Add `/api/brands/*` route patterns
   - Preserve existing route ordering rules from CLAUDE.md
   - Error responses with clear messages per FR-014
@@ -338,19 +338,19 @@
 
 ### Implementation for User Story 2
 
-- [ ] T025 [US2] Implement token authoring API in `apps/api/src/routes/tokens.ts`:
+- [X] T025 [US2] Implement token authoring API in `apps/api/src/routes/tokens.ts`:
   - `GET /api/brands/:id/tokens` — full three-tier token tree for a brand
   - `GET /api/brands/:id/tokens/resolved?mode=light|dark` — fully resolved flat output (FR-010)
   - `PUT /api/brands/:id/tokens/component-overrides` — per-brand component token overrides (FR-012)
 
-- [ ] T026 [P] [US2] Implement token cascade integration in `apps/api/src/services/token-service.ts`:
+- [X] T026 [P] [US2] Implement token cascade integration in `apps/api/src/services/token-service.ts`:
   - Load shared semantic + component definitions from `packages/tokens`
   - Apply brand-specific overrides
   - Resolve through three tiers using `packages/tokens/resolver`
   - Generate CSS custom properties output
   - Generate Tailwind-compatible output
 
-- [ ] T027 [US2] Implement seed color change cascade in `apps/api/src/services/brand-service.ts`:
+- [X] T027 [US2] Implement seed color change cascade in `apps/api/src/services/brand-service.ts`:
   - On seed update: regenerate both light + dark scales
   - Re-resolve all semantic tokens that reference scale steps
   - Re-resolve all component tokens that reference semantic tokens
@@ -369,14 +369,14 @@
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Implement validation API endpoint in `apps/api/src/routes/validation.ts`:
+- [X] T028 [US3] Implement validation API endpoint in `apps/api/src/routes/validation.ts`:
   - `POST /api/brands/:id/validate` — returns structured `ValidationReport`
   - Invokes `packages/tokens/validator` against brand's token set
   - Reports: broken refs, circular refs, OKLCH range errors, contrast failures
   - Evaluates contrast in BOTH light and dark modes independently (FR-015)
   - Returns clear actionable descriptions per failing pair
 
-- [ ] T029 [P] [US3] Implement WCAG AA contrast pair registry in `packages/tokens/src/validator/contrast-pairs.ts`:
+- [X] T029 [P] [US3] Implement WCAG AA contrast pair registry in `packages/tokens/src/validator/contrast-pairs.ts`:
   - Define which semantic token pairs must meet contrast requirements
   - `color.foreground.default` / `color.background.default` — 4.5:1
   - `color.primary.foreground` / `color.primary.default` — 4.5:1
@@ -396,26 +396,26 @@
 
 ### Implementation for User Story 4
 
-- [ ] T030 [US4] Implement runtime resolution endpoint in `apps/api/src/routes/resolve.ts`:
+- [X] T030 [US4] Implement runtime resolution endpoint in `apps/api/src/routes/resolve.ts`:
   - `GET /api/resolve?brand=<key>&mode=<light|dark>` — returns resolved CSS custom properties
   - Brand key is required — missing/unknown key returns error, never fallback (FR-013, FR-014)
   - Serves from KV cache when available (60s TTL)
   - Returns appropriate `Content-Type` for CSS or JSON output
 
-- [ ] T031 [US4] Implement brand CSS generation in `apps/api/src/services/css-service.ts`:
+- [X] T031 [US4] Implement brand CSS generation in `apps/api/src/services/css-service.ts`:
   - Generate complete CSS custom properties block for a brand + mode
   - Include all three tiers resolved to final values
   - Include font-face declarations for brand fonts
   - Output consumable by Tailwind v4 `@theme` without modification (SC-003)
 
-- [ ] T032 [US4] Implement client-side brand loader in `packages/ui/src/brand/`:
+- [X] T032 [US4] Implement client-side brand loader in `packages/ui/src/brand/`:
   - `BrandProvider.tsx` — React context provider that fetches + applies brand tokens
   - `useBrand()` hook — access current brand config
   - `useBrandTokens()` hook — access resolved tokens
   - Injects CSS custom properties into `<html>` element before paint (SC-007)
   - No FOUC — tokens applied via `<link>` in `<head>` or inline `<style>` in SSR
 
-- [ ] T033 [US4] Implement Next.js middleware for brand resolution in `apps/web/middleware.ts`:
+- [X] T033 [US4] Implement Next.js middleware for brand resolution in `apps/web/middleware.ts`:
   - Extract brand key from subdomain, path segment, or header
   - Set brand context for SSR
   - Prefetch brand tokens CSS at edge
@@ -439,7 +439,7 @@
 
 ### Core UI primitives (Layer 1)
 
-- [ ] T034 [P] Build custom form components in `packages/ui/src/components/ui/` from Radix Primitives:
+- [X] T034 [P] Build custom form components in `packages/ui/src/components/ui/` from Radix Primitives:
   - `button.tsx` — **no Radix needed** (native `<button>`); CVA variants: primary, secondary, outline, ghost, destructive, link; sizes sm/md/lg/icon; loading state with spinner slot; focus ring via token
   - `input.tsx` — **native `<input>`** wrapped with token-styled border/background; error state, disabled, sizes, left/right icon slots; error message via `aria-describedby`
   - `textarea.tsx` — native `<textarea>`; token styling; auto-resize option; character count
@@ -451,7 +451,7 @@
   - `slider.tsx` — `@radix-ui/react-slider`; price range variant; custom thumb + track styling
   - All components: basic implementation — styled to token system, ready for per-brand customization later
 
-- [ ] T035 [P] Build custom layout components in `packages/ui/src/components/ui/`:
+- [X] T035 [P] Build custom layout components in `packages/ui/src/components/ui/`:
   - `card.tsx` — **no Radix**; `div`-based with header/content/footer sub-components; CVA: elevated, outlined variants; token-driven radius via `--shape-card`
   - `separator.tsx` — `@radix-ui/react-separator`; horizontal + vertical; token color
   - `scroll-area.tsx` — `@radix-ui/react-scroll-area`; custom scrollbar track + thumb via tokens
@@ -461,7 +461,7 @@
   - `avatar.tsx` — `@radix-ui/react-avatar`; custom image + fallback + status indicator slots
   - All: basic implementation, token-styled, ready for customization
 
-- [ ] T036 [P] Build custom overlay components in `packages/ui/src/components/ui/` from Radix Primitives:
+- [X] T036 [P] Build custom overlay components in `packages/ui/src/components/ui/` from Radix Primitives:
   - `dialog.tsx` — `@radix-ui/react-dialog`; custom Overlay + Content; CVA sizes sm/md/lg/xl/full; mobile sheet variant; close button
   - `drawer.tsx` — `@radix-ui/react-dialog` (Portal + custom positioned Content); slide-in left/right/bottom via CSS transform + token motion
   - `sheet.tsx` — `@radix-ui/react-dialog`; full-height side panel variant; backdrop + content
@@ -472,28 +472,28 @@
   - `alert-dialog.tsx` — `@radix-ui/react-alert-dialog`; Confirm + Cancel action slots; cannot dismiss via overlay
   - All: basic implementation, ready for brand customization
 
-- [ ] T037 [P] Build custom feedback components in `packages/ui/src/components/ui/`:
+- [X] T037 [P] Build custom feedback components in `packages/ui/src/components/ui/`:
   - `alert.tsx` — **no Radix**; `div`-based; CVA variants: info/success/warning/error; icon slot; dismissible option
   - `toast.tsx` — `@radix-ui/react-toast`; custom viewport + item; auto-dismiss; action button slot; swipe to dismiss
   - `progress.tsx` — `@radix-ui/react-progress`; linear variant; token-colored indicator; `aria-valuenow` managed by Radix
   - `accordion.tsx` — `@radix-ui/react-accordion`; single + multiple modes; custom trigger chevron; animated content height via CSS
   - All: basic implementation, ready for brand customization
 
-- [ ] T038 [P] Build custom navigation components in `packages/ui/src/components/ui/` from Radix Primitives:
+- [X] T038 [P] Build custom navigation components in `packages/ui/src/components/ui/` from Radix Primitives:
   - `tabs.tsx` — `@radix-ui/react-tabs`; custom List + Trigger + Content; CVA: horizontal/vertical; icon slot; badge count slot
   - `navigation-menu.tsx` — `@radix-ui/react-navigation-menu`; custom `Content` for mega-menu layouts; viewport portal
   - `breadcrumb.tsx` — **no Radix**; `nav`/`ol`-based; collapsible middle items; last item non-link
   - `pagination.tsx` — **no Radix**; `nav`-based; page number buttons; prev/next; active state via CVA
   - All: basic implementation, ready for brand customization
 
-- [ ] T039 [P] Build custom data components in `packages/ui/src/components/ui/` from Radix Primitives:
+- [X] T039 [P] Build custom data components in `packages/ui/src/components/ui/` from Radix Primitives:
   - `table.tsx` — **no Radix**; semantic `<table>`; sortable header (click callback); sticky columns via CSS; responsive collapse
   - `calendar.tsx` — **no Radix** (custom grid over native dates); date range selection; blocked dates; price overlay slot; month navigation; `aria-label` per day cell
   - `date-picker.tsx` — `@radix-ui/react-popover` + `calendar` component; single + range modes; flexible/nearby dates toggle
   - `combobox.tsx` — `@radix-ui/react-popover` + custom filtered list; searchable; async loading state; clears on Escape; IATA code display slot
   - All: basic implementation, ready for brand customization
 
-- [ ] T040 Wire Tailwind v4 `@theme` in `packages/ui/src/styles/theme.css`:
+- [X] T040 Wire Tailwind v4 `@theme` in `packages/ui/src/styles/theme.css`:
   - Import resolved token CSS custom properties
   - Map all tokens to Tailwind `@theme` directives
   - Define `light` and `dark` mode custom property blocks
@@ -509,7 +509,7 @@
 
 **Depends on**: Phase 7 (Base Components) — components must exist before testing
 
-- [ ] T077 [P] Write unit tests for form components in `packages/ui/src/components/ui/__tests__/`:
+- [X] T077 [P] Write unit tests for form components in `packages/ui/src/components/ui/__tests__/`:
   - `button.test.tsx` — renders all variants (primary, secondary, outline, ghost, destructive, link) and sizes (sm, md, lg, icon); click handler fires; disabled state prevents click; loading state shows spinner; focus ring visible
   - `input.test.tsx` — renders default, error, disabled states; value change fires onChange; left/right slot icons render; error message associated via `aria-describedby`
   - `textarea.test.tsx` — auto-resize triggers on content; character count updates; disabled prevents input
@@ -519,7 +519,7 @@
   - `switch.test.tsx` — toggles on click and Space; `aria-checked` updates; label positioning
   - `slider.test.tsx` — value changes on drag; keyboard (ArrowLeft/Right); min/max respected; range mode
 
-- [ ] T078 [P] Write unit tests for layout components in `packages/ui/src/components/ui/__tests__/`:
+- [X] T078 [P] Write unit tests for layout components in `packages/ui/src/components/ui/__tests__/`:
   - `card.test.tsx` — renders header, content, footer slots; elevated vs. outlined variants apply correct classes
   - `badge.test.tsx` — renders all variants including travel-specific (deal, new, popular); text truncation
   - `avatar.test.tsx` — shows image when loaded; falls back to initials; shows status indicator
@@ -528,7 +528,7 @@
   - `scroll-area.test.tsx` — renders children; scrollbar visible on overflow
   - `aspect-ratio.test.tsx` — maintains specified ratio; travel presets (16:9, 4:3, 1:1, 3:2)
 
-- [ ] T079 [P] Write unit tests for overlay components in `packages/ui/src/components/ui/__tests__/`:
+- [X] T079 [P] Write unit tests for overlay components in `packages/ui/src/components/ui/__tests__/`:
   - `dialog.test.tsx` — opens/closes; Escape key closes; focus trapped inside; sizes sm/md/lg/xl/full; `aria-modal="true"`; overlay click closes (when configured)
   - `drawer.test.tsx` — opens from left/right/bottom; swipe-to-close on mobile; focus trap
   - `sheet.test.tsx` — side panel opens; content renders; close button works
@@ -538,7 +538,7 @@
   - `command.test.tsx` — search filters items; keyboard selection; empty state renders
   - `alert-dialog.test.tsx` — confirmation and cancel actions fire; cannot dismiss via overlay click
 
-- [ ] T080 [P] Write unit tests for feedback + navigation components in `packages/ui/src/components/ui/__tests__/`:
+- [X] T080 [P] Write unit tests for feedback + navigation components in `packages/ui/src/components/ui/__tests__/`:
   - `alert.test.tsx` — renders info, success, warning, error variants; icon correct per variant; dismissible option
   - `toast.test.tsx` — shows notification; auto-dismisses after timeout; action button fires callback; swipe to dismiss
   - `progress.test.tsx` — linear and circular variants; value updates aria-valuenow; indeterminate animation
@@ -548,13 +548,13 @@
   - `breadcrumb.test.tsx` — renders path; collapsible middle items; last item not a link
   - `pagination.test.tsx` — page numbers render; prev/next buttons; active page highlighted; callback fires with page number
 
-- [ ] T081 [P] Write unit tests for data components in `packages/ui/src/components/ui/__tests__/`:
+- [X] T081 [P] Write unit tests for data components in `packages/ui/src/components/ui/__tests__/`:
   - `table.test.tsx` — renders rows/columns; sortable header click fires callback; sticky column stays; responsive collapse hides columns
   - `calendar.test.tsx` — date range selection; blocked dates not selectable; price overlay renders; month navigation
   - `date-picker.test.tsx` — opens calendar; single date selects; range mode selects start/end; flexible dates toggle
   - `combobox.test.tsx` — search filters options; keyboard ArrowDown/Up + Enter selects; clearable; async loading state
 
-- [ ] T082 Write brand token integration tests in `packages/ui/src/components/__tests__/brand-integration.test.tsx`:
+- [X] T082 Write brand token integration tests in `packages/ui/src/components/__tests__/brand-integration.test.tsx`:
   - Render `Button` under two different brand `BrandProvider` configs
   - Verify CSS custom properties differ between brands
   - Switch from light to dark mode — verify token values update
@@ -581,7 +581,7 @@
 
 ### Search Components
 
-- [ ] T041 [P] Implement `SearchForm` in `packages/ui/src/components/travel/search-form.tsx`:
+- [X] T041 [P] Implement `SearchForm` in `packages/ui/src/components/travel/search-form.tsx`:
   - Tabbed interface: Flights | Hotels | Cars | Activities | Packages
   - Airport/city `Combobox` with IATA codes and fuzzy search
   - `DatePicker` range for travel dates (flexible dates option)
@@ -590,7 +590,7 @@
   - Trip type toggle (One-way, Round-trip, Multi-city)
   - Responsive: horizontal on desktop, stacked on mobile
 
-- [ ] T042 [P] Implement `FilterPanel` in `packages/ui/src/components/travel/filter-panel.tsx`:
+- [X] T042 [P] Implement `FilterPanel` in `packages/ui/src/components/travel/filter-panel.tsx`:
   - Price range `Slider` with histogram
   - Airline/hotel chain `Checkbox` groups with logos
   - Star rating filter
@@ -602,7 +602,7 @@
 
 ### Result Components
 
-- [ ] T043 [P] Implement `FlightCard` in `packages/ui/src/components/travel/flight-card.tsx`:
+- [X] T043 [P] Implement `FlightCard` in `packages/ui/src/components/travel/flight-card.tsx`:
   - Airline logo + name
   - Departure/arrival times with airport codes
   - Duration + stops visualization (timeline dots)
@@ -612,7 +612,7 @@
   - "Select" CTA `Button`
   - Responsive: card → list-item on mobile
 
-- [ ] T044 [P] Implement `HotelCard` in `packages/ui/src/components/travel/hotel-card.tsx`:
+- [X] T044 [P] Implement `HotelCard` in `packages/ui/src/components/travel/hotel-card.tsx`:
   - Image carousel (3-5 images) with `AspectRatio`
   - Hotel name + star rating
   - Location with distance to center/landmark
@@ -622,7 +622,7 @@
   - "View Deal" CTA
   - Favorite/wishlist heart toggle
 
-- [ ] T045 [P] Implement `CarCard` in `packages/ui/src/components/travel/car-card.tsx`:
+- [X] T045 [P] Implement `CarCard` in `packages/ui/src/components/travel/car-card.tsx`:
   - Vehicle image with category label (Economy, SUV, Luxury)
   - Car specs: seats, doors, transmission, AC, luggage capacity
   - Pickup/dropoff location
@@ -630,7 +630,7 @@
   - Insurance options toggle
   - Provider logo
 
-- [ ] T046 [P] Implement `ActivityCard` in `packages/ui/src/components/travel/activity-card.tsx`:
+- [X] T046 [P] Implement `ActivityCard` in `packages/ui/src/components/travel/activity-card.tsx`:
   - Cover image with category overlay (Tour, Experience, Transfer)
   - Title + short description
   - Duration + difficulty badges
@@ -641,13 +641,13 @@
 
 ### Booking Flow Components
 
-- [ ] T047 [P] Implement `BookingStepper` in `packages/ui/src/components/travel/booking-stepper.tsx`:
+- [X] T047 [P] Implement `BookingStepper` in `packages/ui/src/components/travel/booking-stepper.tsx`:
   - Steps: Search → Select → Customize → Passenger Details → Payment → Confirmation
   - Progress indicator with completed/active/upcoming states
   - Step labels with icons
   - Mobile-friendly horizontal scroll or vertical accordion
 
-- [ ] T048 [P] Implement `PriceBreakdown` in `packages/ui/src/components/travel/price-breakdown.tsx`:
+- [X] T048 [P] Implement `PriceBreakdown` in `packages/ui/src/components/travel/price-breakdown.tsx`:
   - Line items: base fare, taxes, fees, add-ons
   - Subtotals per passenger type
   - Discount/promo code applied row
@@ -655,7 +655,7 @@
   - Collapsible detail sections
   - Sticky on desktop during checkout scroll
 
-- [ ] T049 [P] Implement `PassengerForm` in `packages/ui/src/components/travel/passenger-form.tsx`:
+- [X] T049 [P] Implement `PassengerForm` in `packages/ui/src/components/travel/passenger-form.tsx`:
   - Title, first name, last name, date of birth
   - Passport/ID number + expiry + nationality
   - Contact email + phone
@@ -664,7 +664,7 @@
   - Form validation with inline errors
   - "Copy from primary traveler" for additional passengers
 
-- [ ] T050 [P] Implement `SeatPicker` in `packages/ui/src/components/travel/seat-picker.tsx`:
+- [X] T050 [P] Implement `SeatPicker` in `packages/ui/src/components/travel/seat-picker.tsx`:
   - Aircraft cabin grid layout
   - Seat status: available, occupied, selected, premium, exit-row
   - Color-coded by fare class
@@ -673,7 +673,7 @@
   - Legend component
   - Accessible keyboard navigation (arrow keys to move, Enter to select)
 
-- [ ] T051 [P] Implement `RoomGallery` in `packages/ui/src/components/travel/room-gallery.tsx`:
+- [X] T051 [P] Implement `RoomGallery` in `packages/ui/src/components/travel/room-gallery.tsx`:
   - Full-screen image gallery with thumbnails
   - Room type selector with price comparison
   - Amenities list with icons
@@ -683,7 +683,7 @@
 
 ### Post-Booking Components
 
-- [ ] T052 [P] Implement `BookingConfirmation` in `packages/ui/src/components/travel/booking-confirmation.tsx`:
+- [X] T052 [P] Implement `BookingConfirmation` in `packages/ui/src/components/travel/booking-confirmation.tsx`:
   - Confirmation number with copy-to-clipboard
   - Itinerary summary (outbound/return flights, hotel dates, car pickup)
   - QR code for mobile boarding pass placeholder
@@ -691,14 +691,14 @@
   - "Share itinerary" button
   - Print-friendly layout
 
-- [ ] T053 [P] Implement `ItineraryTimeline` in `packages/ui/src/components/travel/itinerary-timeline.tsx`:
+- [X] T053 [P] Implement `ItineraryTimeline` in `packages/ui/src/components/travel/itinerary-timeline.tsx`:
   - Vertical timeline with date anchors
   - Flight/hotel/car/activity nodes with icons
   - Duration between events
   - Status badges (Confirmed, Pending, Cancelled)
   - Expandable detail per event
 
-- [ ] T054 [P] Implement `SupportChat` stub in `packages/ui/src/components/travel/support-chat.tsx`:
+- [X] T054 [P] Implement `SupportChat` stub in `packages/ui/src/components/travel/support-chat.tsx`:
   - Floating action button to open
   - Chat bubble UI (user + agent messages)
   - Typing indicator

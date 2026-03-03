@@ -1,0 +1,28 @@
+{
+  "name": "@travel/tokens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./css/*": "./dist/css/*"
+  },
+  "scripts": {
+    "build": "tsx src/build/run.ts && tsc -p tsconfig.build.json",
+    "dev": "tsx watch src/build/run.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "style-dictionary": "^4.3.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
+  }
+}

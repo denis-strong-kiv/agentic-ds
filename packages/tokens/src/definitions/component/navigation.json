@@ -1,0 +1,10 @@
+{
+  "$schema": "component-tokens",
+  "nav": {
+    "background": { "value": "{color.surface.card}",       "type": "color" },
+    "foreground": { "value": "{color.foreground.default}",  "type": "color" },
+    "border":     { "value": "{color.border.default}",      "type": "color" },
+    "active":     { "value": "{color.primary.default}",     "type": "color" },
+    "hover":      { "value": "{color.background.subtle}",   "type": "color" }
+  }
+}

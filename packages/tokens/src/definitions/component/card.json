@@ -1,0 +1,12 @@
+{
+  "$schema": "component-tokens",
+  "card": {
+    "background": { "value": "{color.surface.card}",      "type": "color" },
+    "border":     { "value": "{color.border.default}",    "type": "color" },
+    "shadow":     { "value": "{shadow.sm}",               "type": "boxShadow" },
+    "foreground": { "value": "{color.foreground.default}", "type": "color" },
+    "header":     { "value": "{color.background.subtle}", "type": "color" },
+    "footer":     { "value": "{color.background.subtle}", "type": "color" },
+    "radius":     { "value": "{shape.card}",              "type": "borderRadius" }
+  }
+}

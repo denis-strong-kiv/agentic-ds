@@ -1,0 +1,11 @@
+{
+  "$schema": "shape-semantic",
+  "$description": "Shape semantic tokens reference the active brand shape preset. Resolved at runtime.",
+  "shape": {
+    "button": { "value": "var(--shape-preset-button)", "type": "borderRadius" },
+    "card":   { "value": "var(--shape-preset-card)",   "type": "borderRadius" },
+    "input":  { "value": "var(--shape-preset-input)",  "type": "borderRadius" },
+    "badge":  { "value": "var(--shape-preset-badge)",  "type": "borderRadius" },
+    "dialog": { "value": "var(--shape-preset-dialog)", "type": "borderRadius" }
+  }
+}

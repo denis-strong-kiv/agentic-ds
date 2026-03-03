@@ -1,0 +1,25 @@
+{
+  "$schema": "component-tokens",
+  "input": {
+    "background": {
+      "default":  { "value": "{color.surface.card}",      "type": "color" },
+      "focus":    { "value": "{color.surface.card}",      "type": "color" },
+      "error":    { "value": "{color.error.subtle}",      "type": "color" },
+      "disabled": { "value": "{color.background.subtle}", "type": "color" }
+    },
+    "foreground": {
+      "default":  { "value": "{color.foreground.default}", "type": "color" },
+      "disabled": { "value": "{color.foreground.muted}",   "type": "color" }
+    },
+    "border": {
+      "default":  { "value": "{color.border.default}",    "type": "color" },
+      "focus":    { "value": "{color.primary.default}",   "type": "color" },
+      "error":    { "value": "{color.error.default}",     "type": "color" },
+      "disabled": { "value": "{color.border.muted}",      "type": "color" }
+    },
+    "placeholder": {
+      "default":  { "value": "{color.foreground.subtle}", "type": "color" }
+    },
+    "radius": { "value": "{shape.input}", "type": "borderRadius" }
+  }
+}

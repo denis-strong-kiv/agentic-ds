@@ -1,0 +1,39 @@
+{
+  "shape": {
+    "preset": {
+      "sharp": {
+        "button":  { "value": "2px",    "type": "borderRadius" },
+        "card":    { "value": "2px",    "type": "borderRadius" },
+        "input":   { "value": "1px",    "type": "borderRadius" },
+        "badge":   { "value": "1px",    "type": "borderRadius" },
+        "dialog":  { "value": "4px",    "type": "borderRadius" },
+        "sm":      { "value": "1px",    "type": "borderRadius" },
+        "md":      { "value": "2px",    "type": "borderRadius" },
+        "lg":      { "value": "4px",    "type": "borderRadius" },
+        "full":    { "value": "9999px", "type": "borderRadius" }
+      },
+      "rounded": {
+        "button":  { "value": "8px",    "type": "borderRadius" },
+        "card":    { "value": "12px",   "type": "borderRadius" },
+        "input":   { "value": "6px",    "type": "borderRadius" },
+        "badge":   { "value": "6px",    "type": "borderRadius" },
+        "dialog":  { "value": "16px",   "type": "borderRadius" },
+        "sm":      { "value": "4px",    "type": "borderRadius" },
+        "md":      { "value": "8px",    "type": "borderRadius" },
+        "lg":      { "value": "16px",   "type": "borderRadius" },
+        "full":    { "value": "9999px", "type": "borderRadius" }
+      },
+      "pill": {
+        "button":  { "value": "9999px", "type": "borderRadius" },
+        "card":    { "value": "24px",   "type": "borderRadius" },
+        "input":   { "value": "9999px", "type": "borderRadius" },
+        "badge":   { "value": "9999px", "type": "borderRadius" },
+        "dialog":  { "value": "24px",   "type": "borderRadius" },
+        "sm":      { "value": "4px",    "type": "borderRadius" },
+        "md":      { "value": "12px",   "type": "borderRadius" },
+        "lg":      { "value": "24px",   "type": "borderRadius" },
+        "full":    { "value": "9999px", "type": "borderRadius" }
+      }
+    }
+  }
+}

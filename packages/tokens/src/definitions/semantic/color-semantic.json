@@ -1,0 +1,61 @@
+{
+  "$schema": "color-semantic",
+  "$description": "Mode-aware semantic color tokens. lightValue and darkValue are step references into the derived palette (e.g. 'neutral.50'). Resolved at runtime per brand.",
+  "color": {
+    "background": {
+      "default": { "lightValue": "neutral.50",   "darkValue": "neutral.950", "type": "color" },
+      "subtle":   { "lightValue": "neutral.100",  "darkValue": "neutral.900", "type": "color" }
+    },
+    "surface": {
+      "card":    { "lightValue": "neutral.100",  "darkValue": "neutral.900", "type": "color" },
+      "popover": { "lightValue": "neutral.50",   "darkValue": "neutral.900", "type": "color" },
+      "overlay": { "lightValue": "neutral.950",  "darkValue": "neutral.950", "alpha": 0.8, "type": "color" }
+    },
+    "border": {
+      "default": { "lightValue": "neutral.200",  "darkValue": "neutral.800", "type": "color" },
+      "muted":   { "lightValue": "neutral.100",  "darkValue": "neutral.900", "type": "color" }
+    },
+    "foreground": {
+      "default": { "lightValue": "neutral.900",  "darkValue": "neutral.50",  "type": "color" },
+      "muted":   { "lightValue": "neutral.500",  "darkValue": "neutral.400", "type": "color" },
+      "subtle":  { "lightValue": "neutral.400",  "darkValue": "neutral.500", "type": "color" }
+    },
+    "primary": {
+      "default":    { "lightValue": "primary.500", "darkValue": "primary.400",  "type": "color" },
+      "hover":      { "lightValue": "primary.600", "darkValue": "primary.500",  "type": "color" },
+      "active":     { "lightValue": "primary.700", "darkValue": "primary.600",  "type": "color" },
+      "foreground": { "lightValue": "primary.50",  "darkValue": "primary.50",   "type": "color" }
+    },
+    "accent": {
+      "default":    { "lightValue": "accent.500",  "darkValue": "accent.400",   "type": "color" },
+      "hover":      { "lightValue": "accent.600",  "darkValue": "accent.500",   "type": "color" },
+      "active":     { "lightValue": "accent.700",  "darkValue": "accent.600",   "type": "color" },
+      "foreground": { "lightValue": "accent.50",   "darkValue": "accent.50",    "type": "color" }
+    },
+    "secondary": {
+      "default":    { "lightValue": "secondary.400", "darkValue": "secondary.500", "type": "color" },
+      "hover":      { "lightValue": "secondary.500", "darkValue": "secondary.600", "type": "color" },
+      "foreground": { "lightValue": "secondary.50",  "darkValue": "secondary.50",  "type": "color" }
+    },
+    "success": {
+      "default":    { "lightValue": "success.500", "darkValue": "success.400", "type": "color" },
+      "foreground": { "lightValue": "success.50",  "darkValue": "success.50",  "type": "color" },
+      "subtle":     { "lightValue": "success.100", "darkValue": "success.900", "type": "color" }
+    },
+    "warning": {
+      "default":    { "lightValue": "warning.500", "darkValue": "warning.400", "type": "color" },
+      "foreground": { "lightValue": "warning.50",  "darkValue": "warning.50",  "type": "color" },
+      "subtle":     { "lightValue": "warning.100", "darkValue": "warning.900", "type": "color" }
+    },
+    "error": {
+      "default":    { "lightValue": "error.500", "darkValue": "error.400", "type": "color" },
+      "foreground": { "lightValue": "error.50",  "darkValue": "error.50",  "type": "color" },
+      "subtle":     { "lightValue": "error.100", "darkValue": "error.900", "type": "color" }
+    },
+    "info": {
+      "default":    { "lightValue": "info.500", "darkValue": "info.400", "type": "color" },
+      "foreground": { "lightValue": "info.50",  "darkValue": "info.50",  "type": "color" },
+      "subtle":     { "lightValue": "info.100", "darkValue": "info.900", "type": "color" }
+    }
+  }
+}

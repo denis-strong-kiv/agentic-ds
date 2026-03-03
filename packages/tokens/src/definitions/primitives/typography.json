@@ -1,0 +1,33 @@
+{
+  "fontSize": {
+    "xs":   { "value": "0.75rem",  "type": "fontSize" },
+    "sm":   { "value": "0.875rem", "type": "fontSize" },
+    "md":   { "value": "1rem",     "type": "fontSize" },
+    "lg":   { "value": "1.125rem", "type": "fontSize" },
+    "xl":   { "value": "1.25rem",  "type": "fontSize" },
+    "2xl":  { "value": "1.5rem",   "type": "fontSize" },
+    "3xl":  { "value": "1.875rem", "type": "fontSize" },
+    "4xl":  { "value": "2.25rem",  "type": "fontSize" }
+  },
+  "lineHeight": {
+    "tight":   { "value": "1.25",  "type": "lineHeights" },
+    "snug":    { "value": "1.375", "type": "lineHeights" },
+    "normal":  { "value": "1.5",   "type": "lineHeights" },
+    "relaxed": { "value": "1.625", "type": "lineHeights" },
+    "loose":   { "value": "2",     "type": "lineHeights" }
+  },
+  "fontWeight": {
+    "regular":   { "value": "400", "type": "fontWeights" },
+    "medium":    { "value": "500", "type": "fontWeights" },
+    "semibold":  { "value": "600", "type": "fontWeights" },
+    "bold":      { "value": "700", "type": "fontWeights" }
+  },
+  "letterSpacing": {
+    "tighter": { "value": "-0.05em",  "type": "letterSpacing" },
+    "tight":   { "value": "-0.025em", "type": "letterSpacing" },
+    "normal":  { "value": "0em",      "type": "letterSpacing" },
+    "wide":    { "value": "0.025em",  "type": "letterSpacing" },
+    "wider":   { "value": "0.05em",   "type": "letterSpacing" },
+    "widest":  { "value": "0.1em",    "type": "letterSpacing" }
+  }
+}
