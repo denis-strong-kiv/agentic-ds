@@ -22,7 +22,7 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
       >
         {children}
         {required && (
-          <span className="ml-1 text-[var(--color-error-default)]" aria-hidden="true">
+          <span className="ms-1 text-[var(--color-error-default)]" aria-hidden="true">
             *
           </span>
         )}

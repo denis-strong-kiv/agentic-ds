@@ -6,8 +6,8 @@ const alertVariants = cva(
   [
     'relative w-full rounded-[var(--shape-preset-card)]',
     'border p-4',
-    '[&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px]',
-    '[&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:h-4 [&>svg]:w-4',
+    '[&>svg~*]:ps-7 [&>svg+div]:translate-y-[-3px]',
+    '[&>svg]:absolute [&>svg]:start-4 [&>svg]:top-4 [&>svg]:h-4 [&>svg]:w-4',
   ],
   {
     variants: {

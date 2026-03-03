@@ -16,7 +16,7 @@ describe('Skeleton', () => {
 
   it('renders with pulse animation by default', () => {
     render(<Skeleton data-testid="skeleton" />);
-    expect(screen.getByTestId('skeleton').className).toContain('animate-pulse');
+    expect(screen.getByTestId('skeleton').className).toContain('skeleton-pulse');
   });
 
   it('renders with shimmer animation', () => {
@@ -27,7 +27,7 @@ describe('Skeleton', () => {
   it('renders with no animation when animation="none"', () => {
     render(<Skeleton animation="none" data-testid="skeleton" />);
     const el = screen.getByTestId('skeleton');
-    expect(el.className).not.toContain('animate-pulse');
+    expect(el.className).not.toContain('skeleton-pulse');
     expect(el.className).not.toContain('overflow-hidden');
   });
 

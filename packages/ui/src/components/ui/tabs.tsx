@@ -58,7 +58,7 @@ const TabsTrigger = React.forwardRef<
     {icon && <span className="flex-shrink-0">{icon}</span>}
     {children}
     {badge !== undefined && (
-      <span className="ml-1 rounded-full bg-[var(--color-primary-default)] px-1.5 py-0.5 text-xs text-[var(--color-primary-foreground)]">
+      <span className="ms-1 rounded-full bg-[var(--color-primary-default)] px-1.5 py-0.5 text-xs text-[var(--color-primary-foreground)]">
         {badge}
       </span>
     )}

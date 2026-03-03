@@ -7,12 +7,13 @@ const skeletonVariants = cva(
   {
     variants: {
       animation: {
-        pulse: 'animate-pulse',
+        pulse: 'motion-safe:animate-[skeleton-pulse_1.5s_var(--easing-ease-in-out,cubic-bezier(0.4,0,0.2,1))_infinite]',
         shimmer: [
           'relative overflow-hidden',
           'before:absolute before:inset-0',
-          'before:-translate-x-full before:animate-[shimmer_1.5s_infinite]',
           'before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent',
+          'before:bg-[length:200%_100%]',
+          'motion-safe:before:animate-[skeleton-shimmer_1.8s_linear_infinite]',
         ],
         none: '',
       },

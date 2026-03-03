@@ -55,7 +55,7 @@ const DropdownMenuItem = React.forwardRef<
 >(({ className, inset, icon, shortcut, children, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
-    className={cn(itemClasses, inset && 'pl-8', className)}
+    className={cn(itemClasses, inset && 'ps-8', className)}
     {...props}
   >
     {icon && <span className="text-[var(--color-foreground-muted)]">{icon}</span>}

@@ -80,7 +80,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     <th
       ref={ref}
       className={cn(
-        'h-10 px-4 text-left align-middle font-medium text-[var(--color-foreground-muted)]',
+        'h-10 px-4 text-start align-middle font-medium text-[var(--color-foreground-muted)]',
         '[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
         sortable && 'cursor-pointer select-none hover:text-[var(--color-foreground-default)]',
         className,
@@ -92,7 +92,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
       <span className="flex items-center gap-2">
         {children}
         {sortable && (
-          <span className="ml-1">
+          <span className="ms-1">
             {sortDirection === 'asc' ? '↑' : sortDirection === 'desc' ? '↓' : '↕'}
           </span>
         )}

@@ -10,8 +10,16 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        elevated: 'border-transparent shadow-[var(--shadow-md)]',
-        outlined: 'border-[var(--color-border-default)] shadow-[var(--shadow-sm)]',
+        elevated: [
+          'border-transparent shadow-[var(--shadow-md)]',
+          'transition-shadow duration-[var(--duration-normal)] ease-[var(--easing-ease-out)]',
+          'hover:shadow-[var(--shadow-lg)]',
+        ],
+        outlined: [
+          'border-[var(--color-border-default)] shadow-[var(--shadow-sm)]',
+          'transition-shadow duration-[var(--duration-normal)] ease-[var(--easing-ease-out)]',
+          'hover:shadow-[var(--shadow-md)] hover:border-[var(--color-border-default)]',
+        ],
       },
     },
     defaultVariants: { variant: 'outlined' },

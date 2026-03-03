@@ -1,0 +1,117 @@
+/* ─── Travel Design System — Motion & Keyframes ──────────────────────────────
+ *
+ * Defines @keyframes for all animation tokens.
+ * Import alongside theme.css in your app's entry CSS.
+ *
+ * Reduced motion: all animations are wrapped with @media (prefers-reduced-motion: no-preference)
+ * so users who opt out see instant transitions instead.
+ */
+
+/* ─── Fade ────────────────────────────────────────────────────────────────── */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ─── Slide ───────────────────────────────────────────────────────────────── */
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-from-start {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-from-end {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Scale ───────────────────────────────────────────────────────────────── */
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scale-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.95); }
+}
+
+/* ─── Skeleton ────────────────────────────────────────────────────────────── */
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes skeleton-shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
+/* ─── Spinner ─────────────────────────────────────────────────────────────── */
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── Bounce tick (checkbox/switch) ──────────────────────────────────────── */
+
+@keyframes check-pop {
+  0%   { transform: scale(0.6); }
+  60%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ─── Reduced motion overrides ───────────────────────────────────────────── */
+/*
+ * When prefers-reduced-motion: reduce, collapse all animations to instant
+ * opacity transitions only. No movement, no scale, no slide.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Tailwind v4 animation utilities ─────────────────────────────────────── */
+/*
+ * Register named animations so Tailwind's animate-* utilities work.
+ * Use motion-safe:animate-* variants to respect reduced-motion automatically.
+ */
+
+@theme {
+  --animate-fade-in:           fade-in var(--duration-normal, 200ms) var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1)) both;
+  --animate-fade-out:          fade-out var(--duration-normal, 200ms) var(--easing-ease-in, cubic-bezier(0.4, 0, 1, 1)) both;
+  --animate-slide-up:          slide-up var(--duration-normal, 200ms) var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1)) both;
+  --animate-slide-down:        slide-down var(--duration-normal, 200ms) var(--easing-ease-out, cubic-bezier(0, 0, 0.2, 1)) both;
+  --animate-scale-in:          scale-in var(--duration-fast, 100ms) var(--easing-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) both;
+  --animate-scale-out:         scale-out var(--duration-fast, 100ms) var(--easing-ease-in, cubic-bezier(0.4, 0, 1, 1)) both;
+  --animate-skeleton-pulse:    skeleton-pulse 1.5s var(--easing-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+  --animate-skeleton-shimmer:  skeleton-shimmer 1.8s linear infinite;
+  --animate-spin:              spin 1s linear infinite;
+  --animate-check-pop:         check-pop var(--duration-fast, 100ms) var(--easing-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) both;
+}

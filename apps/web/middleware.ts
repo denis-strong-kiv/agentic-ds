@@ -1,8 +1,16 @@
-// ─── Brand Resolution Middleware ──────────────────────────────────────────────
-// Extracts brand key from subdomain, path segment, or header.
-// Sets brand context headers for SSR and prefetches brand tokens CSS.
+// ─── Combined i18n + Brand Resolution Middleware ─────────────────────────────
+// 1. next-intl handles locale detection and URL-prefix routing (/ar/...)
+// 2. Brand resolution extracts brand key from subdomain/path/header and
+//    injects x-brand / x-color-mode headers for SSR consumption.
 
+import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
+import { routing } from './i18n/routing';
+
+// ─── Locale middleware (next-intl) ────────────────────────────────────────────
+const intlMiddleware = createMiddleware(routing);
+
+// ─── Brand helpers ────────────────────────────────────────────────────────────
 
 /** Extract brand key from the request using multiple strategies. */
 function extractBrandKey(request: NextRequest): string {
@@ -10,8 +18,8 @@ function extractBrandKey(request: NextRequest): string {
   const headerBrand = request.headers.get('x-brand');
   if (headerBrand) return headerBrand;
 
-  // 2. Path segment: /b/<brand-id>/...
-  const pathMatch = request.nextUrl.pathname.match(/^\/b\/([a-z0-9-]+)\//);
+  // 2. Path segment after locale prefix: /[locale]/b/<brand-id>/...
+  const pathMatch = request.nextUrl.pathname.match(/\/b\/([a-z0-9-]+)\//);
   if (pathMatch) return pathMatch[1];
 
   // 3. Subdomain: brand.example.com
@@ -27,33 +35,33 @@ function extractBrandKey(request: NextRequest): string {
 
 /** Extract preferred color mode from request. */
 function extractColorMode(request: NextRequest): 'light' | 'dark' {
-  // Honour explicit cookie set by client-side toggle
   const cookieMode = request.cookies.get('color-mode')?.value;
   if (cookieMode === 'dark') return 'dark';
   if (cookieMode === 'light') return 'light';
 
-  // Fall back to Sec-CH-Prefers-Color-Scheme client hint
   const hint = request.headers.get('sec-ch-prefers-color-scheme');
   if (hint === 'dark') return 'dark';
 
   return 'light';
 }
 
+// ─── Combined middleware ──────────────────────────────────────────────────────
+
 export function middleware(request: NextRequest): NextResponse {
+  // Run next-intl locale routing first
+  const intlResponse = intlMiddleware(request) as NextResponse;
+
+  // Overlay brand context headers
   const brandKey = extractBrandKey(request);
   const colorMode = extractColorMode(request);
+  intlResponse.headers.set('x-brand', brandKey);
+  intlResponse.headers.set('x-color-mode', colorMode);
 
-  const response = NextResponse.next();
-
-  // Pass brand context to SSR via headers
-  response.headers.set('x-brand', brandKey);
-  response.headers.set('x-color-mode', colorMode);
-
-  return response;
+  return intlResponse;
 }
 
 export const config = {
-  // Run on all paths except Next.js internals and static files
+  // Match all paths except Next.js internals and static assets
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|public/).*)',
   ],

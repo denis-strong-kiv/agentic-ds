@@ -55,7 +55,7 @@ const NavigationMenuTrigger = React.forwardRef<
   >
     {children}
     <svg
-      className="relative top-px ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
+        className="relative top-px ms-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

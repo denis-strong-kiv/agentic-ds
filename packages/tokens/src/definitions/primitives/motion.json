@@ -1,14 +1,26 @@
 {
   "duration": {
-    "fast":   { "value": "100ms", "type": "duration" },
-    "normal": { "value": "200ms", "type": "duration" },
-    "slow":   { "value": "300ms", "type": "duration" },
-    "slower": { "value": "500ms", "type": "duration" }
+    "instant": { "value": "0ms",    "type": "duration" },
+    "fast":    { "value": "100ms",  "type": "duration" },
+    "normal":  { "value": "200ms",  "type": "duration" },
+    "slow":    { "value": "300ms",  "type": "duration" },
+    "slower":  { "value": "500ms",  "type": "duration" }
   },
   "easing": {
-    "ease-out":    { "value": "cubic-bezier(0, 0, 0.2, 1)",    "type": "cubicBezier" },
-    "ease-in":     { "value": "cubic-bezier(0.4, 0, 1, 1)",    "type": "cubicBezier" },
-    "ease-in-out": { "value": "cubic-bezier(0.4, 0, 0.2, 1)",  "type": "cubicBezier" },
-    "spring":      { "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "type": "cubicBezier" }
+    "ease-out":    { "value": "cubic-bezier(0, 0, 0.2, 1)",       "type": "cubicBezier" },
+    "ease-in":     { "value": "cubic-bezier(0.4, 0, 1, 1)",       "type": "cubicBezier" },
+    "ease-in-out": { "value": "cubic-bezier(0.4, 0, 0.2, 1)",     "type": "cubicBezier" },
+    "spring":      { "value": "cubic-bezier(0.34, 1.56, 0.64, 1)","type": "cubicBezier" }
+  },
+  "animation": {
+    "fade-in":         { "value": "fade-in var(--duration-normal) var(--easing-ease-out) both",    "type": "other" },
+    "fade-out":        { "value": "fade-out var(--duration-normal) var(--easing-ease-in) both",    "type": "other" },
+    "slide-up":        { "value": "slide-up var(--duration-normal) var(--easing-ease-out) both",   "type": "other" },
+    "slide-down":      { "value": "slide-down var(--duration-normal) var(--easing-ease-out) both", "type": "other" },
+    "scale-in":        { "value": "scale-in var(--duration-fast) var(--easing-spring) both",       "type": "other" },
+    "scale-out":       { "value": "scale-out var(--duration-fast) var(--easing-ease-in) both",     "type": "other" },
+    "skeleton-pulse":  { "value": "skeleton-pulse 1.5s var(--easing-ease-in-out) infinite",        "type": "other" },
+    "skeleton-shimmer":{ "value": "skeleton-shimmer 1.8s linear infinite",                         "type": "other" }
   }
 }
+

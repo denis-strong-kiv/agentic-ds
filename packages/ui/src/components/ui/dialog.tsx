@@ -75,7 +75,7 @@ const DialogContent = React.forwardRef<
       {!hideClose && (
         <DialogPrimitive.Close
           className={cn(
-            'absolute right-4 top-4 rounded-sm opacity-70',
+            'absolute end-4 top-4 rounded-sm opacity-70',
             'ring-offset-background',
             'transition-opacity hover:opacity-100',
             'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-default)] focus:ring-offset-2',

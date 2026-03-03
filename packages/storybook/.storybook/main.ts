@@ -24,6 +24,7 @@ const config: StorybookConfig = {
       // Allow deep imports: @travel/ui/components/ui/button → packages/ui/src/components/ui/button
       '@travel/ui/components': path.join(uiSrc, 'components'),
       '@travel/ui/brand': path.join(uiSrc, 'brand'),
+      '@travel/ui/hooks': path.join(uiSrc, 'hooks'),
       '@travel/ui/utils': path.join(uiSrc, 'utils'),
       // Keep the root import working too
       '@travel/ui': path.join(uiSrc, 'index.ts'),

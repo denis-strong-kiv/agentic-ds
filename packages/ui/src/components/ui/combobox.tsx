@@ -70,7 +70,7 @@ export function Combobox({
           aria-expanded={open}
           aria-haspopup="listbox"
         >
-          <span className="flex flex-col text-left">
+          <span className="flex flex-col text-start">
             <span>{selected ? selected.label : placeholder}</span>
             {selected?.sublabel && (
               <span className="text-xs text-[var(--color-foreground-muted)]">{selected.sublabel}</span>
@@ -96,7 +96,7 @@ export function Combobox({
         >
           {/* Search input */}
           <div className="flex items-center border-b border-[var(--color-border-muted)] px-3">
-            <svg className="mr-2 h-4 w-4 shrink-0 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="me-2 h-4 w-4 shrink-0 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="11" cy="11" r="8" />
               <path d="M21 21l-4.35-4.35" />
             </svg>
