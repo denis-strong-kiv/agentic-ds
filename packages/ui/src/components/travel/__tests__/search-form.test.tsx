@@ -1,141 +1,201 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { SearchForm } from '../search-form.js';
-import type { SearchPayload } from '../search-form.js';
+import { TravelSearchForm } from '../search-form.js';
+import type { TravelSearchPayload } from '../search-form.js';
 
+const AIRPORTS = [
+  { iata: 'JFK', city: 'New York', country: 'United States' },
+  { iata: 'LHR', city: 'London', country: 'United Kingdom' },
+  { iata: 'DXB', city: 'Dubai', country: 'United Arab Emirates' },
+];
 
-describe('SearchForm', () => {
-  it('renders all vertical tabs', () => {
-    render(<SearchForm />);
+describe('TravelSearchForm', () => {
+  // ── Tab bar ──────────────────────────────────────────────────────────────
+
+  it('renders Flights and Hotels tabs', () => {
+    render(<TravelSearchForm />);
     expect(screen.getByRole('tab', { name: /flights/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /hotels/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /cars/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /activities/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /packages/i })).toBeInTheDocument();
   });
 
   it('defaults to flights tab', () => {
-    render(<SearchForm />);
-    expect(screen.getByRole('tab', { name: /flights/i })).toHaveAttribute('data-state', 'active');
-    expect(screen.getByText('Search Flights')).toBeInTheDocument();
+    render(<TravelSearchForm />);
+    expect(screen.getByRole('tab', { name: /flights/i })).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('switches to hotels tab', async () => {
+  it('respects defaultTab prop', () => {
+    render(<TravelSearchForm defaultTab="hotels" />);
+    expect(screen.getByRole('tab', { name: /hotels/i })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('switches to hotels tab on click', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
+    render(<TravelSearchForm />);
     await user.click(screen.getByRole('tab', { name: /hotels/i }));
-    expect(screen.getByText('Search Hotels')).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /hotels/i })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByPlaceholderText('Where to?')).toBeInTheDocument();
   });
 
-  it('switches to cars tab', async () => {
+  // ── Trip type ────────────────────────────────────────────────────────────
+
+  it('shows trip type radios on flights tab', () => {
+    render(<TravelSearchForm />);
+    expect(screen.getByRole('radio', { name: /round-trip/i })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: /one-way/i })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: /multi-city/i })).toBeInTheDocument();
+  });
+
+  it('round-trip is selected by default', () => {
+    render(<TravelSearchForm />);
+    expect(screen.getByRole('radio', { name: /round-trip/i })).toBeChecked();
+  });
+
+  it('switches trip type to one-way', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    await user.click(screen.getByRole('tab', { name: /cars/i }));
-    expect(screen.getByText('Search Cars')).toBeInTheDocument();
+    render(<TravelSearchForm />);
+    await user.click(screen.getByRole('radio', { name: /one-way/i }));
+    expect(screen.getByRole('radio', { name: /one-way/i })).toBeChecked();
   });
 
-  it('switches to activities tab', async () => {
+  it('switches trip type to multi-city', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    await user.click(screen.getByRole('tab', { name: /activities/i }));
-    expect(screen.getByText('Search Activities')).toBeInTheDocument();
+    render(<TravelSearchForm />);
+    await user.click(screen.getByRole('radio', { name: /multi-city/i }));
+    expect(screen.getByRole('radio', { name: /multi-city/i })).toBeChecked();
   });
 
-  it('shows packages coming soon message', async () => {
+  // ── Airport field ────────────────────────────────────────────────────────
+
+  it('opens airport dropdown on click', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    await user.click(screen.getByRole('tab', { name: /packages/i }));
-    expect(screen.getByText(/Package search coming soon/i)).toBeInTheDocument();
+    render(<TravelSearchForm airportOptions={AIRPORTS} />);
+    await user.click(screen.getByRole('button', { name: /^From$/i }));
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
-  it('renders trip type toggles on flights tab', () => {
-    render(<SearchForm />);
-    expect(screen.getByText('round trip')).toBeInTheDocument();
-    expect(screen.getByText('one way')).toBeInTheDocument();
-    expect(screen.getByText('multi city')).toBeInTheDocument();
-  });
-
-  it('changes trip type on click', async () => {
+  it('filters airports by city name', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    const oneWayBtn = screen.getByText('one way');
-    await user.click(oneWayBtn);
-    // Button should have primary styling class applied
-    expect(oneWayBtn).toHaveClass('bg-[var(--color-primary-default)]');
+    render(<TravelSearchForm airportOptions={AIRPORTS} />);
+    await user.click(screen.getByRole('button', { name: /^From$/i }));
+    await user.type(screen.getByRole('combobox'), 'London');
+    expect(screen.getByText('London')).toBeInTheDocument();
+    expect(screen.queryByText('New York')).not.toBeInTheDocument();
   });
 
-  it('opens passenger selector popover', async () => {
+  it('selects airport from dropdown', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    const passengerBtn = screen.getByRole('button', { name: /passenger/i });
-    await user.click(passengerBtn);
-    expect(screen.getByRole('dialog', { name: /passenger selection/i })).toBeInTheDocument();
+    render(<TravelSearchForm airportOptions={AIRPORTS} />);
+    await user.click(screen.getByRole('button', { name: /^From$/i }));
+    await user.click(screen.getByRole('option', { name: /new york/i }));
+    // Button label should now mention selected airport
+    expect(screen.getByRole('button', { name: /New York JFK/i })).toBeInTheDocument();
   });
 
-  it('increments adult count in passenger selector', async () => {
+  // ── Swap button ──────────────────────────────────────────────────────────
+
+  it('renders swap origin/destination button', () => {
+    render(<TravelSearchForm />);
+    expect(screen.getByRole('button', { name: /swap origin and destination/i })).toBeInTheDocument();
+  });
+
+  // ── Passenger selector ───────────────────────────────────────────────────
+
+  it('shows passenger field with default label', () => {
+    render(<TravelSearchForm />);
+    expect(screen.getByRole('button', { name: /1 Passenger, Economy/i })).toBeInTheDocument();
+  });
+
+  it('opens passenger popover', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    // Open passenger popover
-    await user.click(screen.getByRole('button', { name: /passenger/i }));
-    // Increase adults
+    render(<TravelSearchForm />);
+    await user.click(screen.getByRole('button', { name: /1 Passenger, Economy/i }));
+    expect(screen.getByText('Adults')).toBeInTheDocument();
+    expect(screen.getByText('Children')).toBeInTheDocument();
+    expect(screen.getByText('Infants')).toBeInTheDocument();
+  });
+
+  it('increments adult count', async () => {
+    const user = userEvent.setup();
+    render(<TravelSearchForm />);
+    await user.click(screen.getByRole('button', { name: /1 Passenger, Economy/i }));
     await user.click(screen.getByRole('button', { name: /increase adults/i }));
-    // The label should update
-    expect(screen.getByRole('button', { name: /passenger/i })).toHaveTextContent('2 Passengers');
+    expect(screen.getByRole('button', { name: /2 Passengers, Economy/i })).toBeInTheDocument();
   });
 
-  it('decrements child count (at min, stays 0)', async () => {
+  it('decrease children is disabled at zero', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    await user.click(screen.getByRole('button', { name: /passenger/i }));
-    const decreaseChildren = screen.getByRole('button', { name: /decrease children/i });
-    // Already at 0, should be disabled
-    expect(decreaseChildren).toBeDisabled();
+    render(<TravelSearchForm />);
+    await user.click(screen.getByRole('button', { name: /1 Passenger, Economy/i }));
+    expect(screen.getByRole('button', { name: /decrease children/i })).toBeDisabled();
   });
 
-  it('closes passenger popover via Done', async () => {
+  it('closes passenger popover on Done', async () => {
     const user = userEvent.setup();
-    render(<SearchForm />);
-    await user.click(screen.getByRole('button', { name: /passenger/i }));
-    expect(screen.getByRole('dialog', { name: /passenger selection/i })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Done' }));
-    expect(screen.queryByRole('dialog', { name: /passenger selection/i })).not.toBeInTheDocument();
+    render(<TravelSearchForm />);
+    await user.click(screen.getByRole('button', { name: /1 Passenger, Economy/i }));
+    expect(screen.getByText('Adults')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /^Done$/i }));
+    expect(screen.queryByText('Cabin class')).not.toBeInTheDocument();
   });
 
-  it('calls onSearch with flight payload', async () => {
+  // ── Hotels occupancy ─────────────────────────────────────────────────────
+
+  it('shows occupancy field on hotels tab', async () => {
     const user = userEvent.setup();
-    const handleSearch = vi.fn<(payload: SearchPayload) => void>();
-    render(<SearchForm onSearch={handleSearch} />);
-    await user.click(screen.getByText('Search Flights'));
-    expect(handleSearch).toHaveBeenCalledOnce();
-    const payload = handleSearch.mock.calls[0][0] as SearchPayload;
-    expect(payload.vertical).toBe('flights');
+    render(<TravelSearchForm defaultTab="hotels" />);
+    expect(screen.getByRole('button', { name: /2 Guests, 1 Room/i })).toBeInTheDocument();
+  });
+
+  it('opens occupancy popover on hotels tab', async () => {
+    const user = userEvent.setup();
+    render(<TravelSearchForm defaultTab="hotels" />);
+    await user.click(screen.getByRole('button', { name: /2 Guests, 1 Room/i }));
+    expect(screen.getByText('Rooms')).toBeInTheDocument();
+  });
+
+  // ── Search callback ──────────────────────────────────────────────────────
+
+  it('calls onSearch with flights payload', async () => {
+    const user = userEvent.setup();
+    const onSearch = vi.fn<(p: TravelSearchPayload) => void>();
+    render(<TravelSearchForm onSearch={onSearch} />);
+    await user.click(screen.getByRole('button', { name: /^Search$/i }));
+    expect(onSearch).toHaveBeenCalledOnce();
+    expect(onSearch.mock.calls[0][0].tab).toBe('flights');
   });
 
   it('calls onSearch with hotels payload', async () => {
     const user = userEvent.setup();
-    const handleSearch = vi.fn<(payload: SearchPayload) => void>();
-    render(<SearchForm onSearch={handleSearch} />);
-    await user.click(screen.getByRole('tab', { name: /hotels/i }));
-    await user.click(screen.getByText('Search Hotels'));
-    expect(handleSearch).toHaveBeenCalledOnce();
-    const payload = handleSearch.mock.calls[0][0] as SearchPayload;
-    expect(payload.vertical).toBe('hotels');
+    const onSearch = vi.fn<(p: TravelSearchPayload) => void>();
+    render(<TravelSearchForm defaultTab="hotels" onSearch={onSearch} />);
+    await user.click(screen.getByRole('button', { name: /^Search$/i }));
+    expect(onSearch).toHaveBeenCalledOnce();
+    expect(onSearch.mock.calls[0][0].tab).toBe('hotels');
   });
 
-  it('calls onSearch with cars payload', async () => {
+  it('flight payload contains round-trip by default', async () => {
     const user = userEvent.setup();
-    const handleSearch = vi.fn<(payload: SearchPayload) => void>();
-    render(<SearchForm onSearch={handleSearch} />);
-    await user.click(screen.getByRole('tab', { name: /cars/i }));
-    await user.click(screen.getByText('Search Cars'));
-    expect(handleSearch).toHaveBeenCalledOnce();
-    const payload = handleSearch.mock.calls[0][0] as SearchPayload;
-    expect(payload.vertical).toBe('cars');
+    const onSearch = vi.fn<(p: TravelSearchPayload) => void>();
+    render(<TravelSearchForm onSearch={onSearch} />);
+    await user.click(screen.getByRole('button', { name: /^Search$/i }));
+    const payload = onSearch.mock.calls[0][0];
+    expect(payload.tab).toBe('flights');
+    if (payload.tab === 'flights') {
+      expect(payload.tripType).toBe('round-trip');
+    }
   });
 
-  it('respects defaultVertical prop', () => {
-    render(<SearchForm defaultVertical="hotels" />);
-    expect(screen.getByText('Search Hotels')).toBeInTheDocument();
+  it('flight payload has one-way tripType when one-way is selected', async () => {
+    const user = userEvent.setup();
+    const onSearch = vi.fn<(p: TravelSearchPayload) => void>();
+    render(<TravelSearchForm onSearch={onSearch} />);
+    await user.click(screen.getByRole('radio', { name: /one-way/i }));
+    await user.click(screen.getByRole('button', { name: /^Search$/i }));
+    const payload = onSearch.mock.calls[0][0];
+    if (payload.tab === 'flights') {
+      expect(payload.tripType).toBe('one-way');
+      expect(payload.returnDate).toBeNull();
+    }
   });
 });
