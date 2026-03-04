@@ -72,10 +72,10 @@ const defaultLight: Record<string, string> = {
   '--color-success-default': 'oklch(0.52 0.17 145)',
   '--color-success-foreground': 'oklch(0.98 0.02 145)',
   '--color-success-subtle': 'oklch(0.94 0.04 145)',
-  // Warning
-  '--color-warning-default': 'oklch(0.62 0.17 85)',
-  '--color-warning-foreground': 'oklch(0.15 0.04 70)',
-  '--color-warning-subtle': 'oklch(0.96 0.04 85)',
+  // Warning — hue 95 = clean warm yellow (avoids muddy yellow-green zone ~80-88)
+  '--color-warning-default': 'oklch(0.62 0.20 95)',
+  '--color-warning-foreground': 'oklch(0.22 0.07 80)',
+  '--color-warning-subtle': 'oklch(0.96 0.06 95)',
   // Error
   '--color-error-default': 'oklch(0.56 0.20 25)',
   '--color-error-foreground': 'oklch(0.98 0.02 25)',
@@ -121,9 +121,9 @@ const defaultDark: Record<string, string> = {
   '--color-success-default': 'oklch(0.65 0.16 145)',
   '--color-success-foreground': 'oklch(0.12 0.04 145)',
   '--color-success-subtle': 'oklch(0.20 0.06 145)',
-  '--color-warning-default': 'oklch(0.72 0.15 85)',
-  '--color-warning-foreground': 'oklch(0.12 0.04 85)',
-  '--color-warning-subtle': 'oklch(0.20 0.06 85)',
+  '--color-warning-default': 'oklch(0.75 0.19 95)',
+  '--color-warning-foreground': 'oklch(0.15 0.06 80)',
+  '--color-warning-subtle': 'oklch(0.22 0.07 95)',
   '--color-error-default': 'oklch(0.68 0.18 25)',
   '--color-error-foreground': 'oklch(0.12 0.04 25)',
   '--color-error-subtle': 'oklch(0.20 0.06 25)',

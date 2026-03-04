@@ -228,8 +228,9 @@ export function deriveFullPalette(config: BrandColorConfig): BrandPalette {
       dark: generateColorScale(semanticSeed(145, semanticTemperature, 10), 'dark'),
     },
     warning: {
-      light: generateColorScale(semanticSeed(85, semanticTemperature, 10), 'light'),
-      dark: generateColorScale(semanticSeed(85, semanticTemperature, 10), 'dark'),
+      // Hue 95 = clean warm yellow; avoids the muddy yellow-green zone around 80-88
+      light: generateColorScale(semanticSeed(95, semanticTemperature, 10), 'light'),
+      dark: generateColorScale(semanticSeed(95, semanticTemperature, 10), 'dark'),
     },
     error: {
       light: generateColorScale(semanticSeed(25, semanticTemperature, 10), 'light'),
