@@ -255,7 +255,7 @@ function AirportField({
   }
 
   return (
-    <SearchField id={id} className={cn('flex-1', className)}>
+    <SearchField id={id} className={cn('flex-1 min-w-[200px]', className)}>
       <button
         type="button"
         aria-label={value ? `${value.city} ${value.iata} — change ${placeholder}` : placeholder}
@@ -414,7 +414,7 @@ function PassengerField({
 }) {
   const [open, setOpen] = React.useState(false);
   const total = value.adults + value.children + value.infants;
-  const label = `${total} Passenger${total !== 1 ? 's' : ''}, ${CABIN_LABELS[value.cabinClass]}`;
+  const label = `${total}, ${CABIN_LABELS[value.cabinClass]}`;
 
   return (
     <SearchField id={id} className={cn('shrink-0 min-w-[170px]', className)}>
