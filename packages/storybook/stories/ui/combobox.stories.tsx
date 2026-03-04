@@ -7,75 +7,88 @@ const meta: Meta<typeof Combobox> = {
   component: Combobox,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
-  decorators: [Story => <div className="w-64"><Story /></div>],
+  decorators: [Story => <div className="w-72"><Story /></div>],
 };
 export default meta;
 type Story = StoryObj<typeof Combobox>;
 
-const CURRENCY_OPTIONS = [
-  { value: 'usd', label: 'USD — US Dollar' },
-  { value: 'eur', label: 'EUR — Euro' },
-  { value: 'gbp', label: 'GBP — British Pound' },
-  { value: 'jpy', label: 'JPY — Japanese Yen' },
-  { value: 'aud', label: 'AUD — Australian Dollar' },
-  { value: 'cad', label: 'CAD — Canadian Dollar' },
-  { value: 'chf', label: 'CHF — Swiss Franc' },
-];
-
-const LANGUAGE_OPTIONS = [
-  { value: 'en', label: 'English' },
-  { value: 'ar', label: 'Arabic' },
-  { value: 'fr', label: 'French' },
-  { value: 'de', label: 'German' },
-  { value: 'es', label: 'Spanish' },
-  { value: 'pt', label: 'Portuguese' },
-  { value: 'ja', label: 'Japanese', disabled: true },
-  { value: 'zh', label: 'Chinese (Simplified)', disabled: true },
+const AIRLINES = [
+  { value: 'AA', label: 'American Airlines' },
+  { value: 'AC', label: 'Air Canada' },
+  { value: 'AF', label: 'Air France' },
+  { value: 'AI', label: 'Air India' },
+  { value: 'AZ', label: 'ITA Airways' },
+  { value: 'BA', label: 'British Airways' },
+  { value: 'BR', label: 'EVA Air' },
+  { value: 'CA', label: 'Air China' },
+  { value: 'CI', label: 'China Airlines' },
+  { value: 'CX', label: 'Cathay Pacific' },
+  { value: 'DL', label: 'Delta Air Lines' },
+  { value: 'EK', label: 'Emirates' },
+  { value: 'ET', label: 'Ethiopian Airlines' },
+  { value: 'EY', label: 'Etihad Airways' },
+  { value: 'FZ', label: 'flydubai' },
+  { value: 'GA', label: 'Garuda Indonesia' },
+  { value: 'IB', label: 'Iberia' },
+  { value: 'JL', label: 'Japan Airlines' },
+  { value: 'KE', label: 'Korean Air' },
+  { value: 'KL', label: 'KLM Royal Dutch Airlines' },
+  { value: 'LH', label: 'Lufthansa' },
+  { value: 'LX', label: 'Swiss International Air Lines' },
+  { value: 'MH', label: 'Malaysia Airlines' },
+  { value: 'MU', label: 'China Eastern Airlines' },
+  { value: 'NH', label: 'All Nippon Airways' },
+  { value: 'NZ', label: 'Air New Zealand' },
+  { value: 'OS', label: 'Austrian Airlines' },
+  { value: 'OZ', label: 'Asiana Airlines' },
+  { value: 'QF', label: 'Qantas' },
+  { value: 'QR', label: 'Qatar Airways' },
+  { value: 'RJ', label: 'Royal Jordanian', disabled: true },
+  { value: 'SA', label: 'South African Airways', disabled: true },
+  { value: 'SK', label: 'Scandinavian Airlines' },
+  { value: 'SQ', label: 'Singapore Airlines' },
+  { value: 'TG', label: 'Thai Airways' },
+  { value: 'TK', label: 'Turkish Airlines' },
+  { value: 'UA', label: 'United Airlines' },
+  { value: 'UL', label: 'SriLankan Airlines' },
+  { value: 'VS', label: 'Virgin Atlantic' },
+  { value: 'WY', label: 'Oman Air' },
 ];
 
 export const Default: Story = {
-  name: 'Currency picker',
+  name: 'Airline picker',
   args: {
-    options: CURRENCY_OPTIONS,
-    placeholder: 'Select currency',
-    'aria-label': 'Currency',
+    options: AIRLINES,
+    placeholder: 'Search airline…',
+    'aria-label': 'Airline',
   },
 };
 
 export const WithValue: Story = {
-  name: 'Pre-selected value',
+  name: 'Pre-selected airline',
   args: {
-    options: CURRENCY_OPTIONS,
-    value: 'eur',
-    'aria-label': 'Currency',
-  },
-};
-
-export const LanguagePicker: Story = {
-  name: 'Language picker',
-  args: {
-    options: LANGUAGE_OPTIONS,
-    placeholder: 'Select language',
-    'aria-label': 'Language',
+    options: AIRLINES,
+    value: 'SQ',
+    'aria-label': 'Airline',
   },
 };
 
 export const WithDisabledOptions: Story = {
-  name: 'With disabled options',
+  name: 'Some routes unavailable',
   args: {
-    options: LANGUAGE_OPTIONS,
-    value: 'en',
-    'aria-label': 'Language',
+    options: AIRLINES,
+    placeholder: 'Search airline…',
+    'aria-label': 'Airline',
   },
 };
 
 export const Disabled: Story = {
   name: 'Disabled',
   args: {
-    options: CURRENCY_OPTIONS,
-    value: 'usd',
+    options: AIRLINES,
+    value: 'EK',
     disabled: true,
-    'aria-label': 'Currency',
+    'aria-label': 'Airline',
   },
 };
 
@@ -83,11 +96,11 @@ export const InForm: Story = {
   name: 'In a form',
   render: () => (
     <div className="flex flex-col gap-1.5">
-      <Label htmlFor="currency" required>Currency</Label>
+      <Label htmlFor="airline" required>Preferred airline</Label>
       <Combobox
-        options={CURRENCY_OPTIONS}
-        placeholder="Select currency"
-        aria-label="Currency"
+        options={AIRLINES}
+        placeholder="Search airline…"
+        aria-label="Preferred airline"
       />
     </div>
   ),
