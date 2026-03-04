@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '../../utils/cn.js';
+import { Icon } from './icon.js';
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -36,15 +38,7 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <svg
-        className="h-4 w-4 shrink-0 transition-transform duration-[var(--duration-normal)]"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        <path d="M6 9l6 6 6-6" />
-      </svg>
+      <Icon icon={ChevronDown} size="sm" className="shrink-0 transition-transform duration-[var(--duration-normal)]" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));

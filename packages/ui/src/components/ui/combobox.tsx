@@ -1,7 +1,9 @@
 'use client';
 
 import * as React from 'react';
+import { ChevronDown, Check } from 'lucide-react';
 import { cn } from '../../utils/cn.js';
+import { Icon } from './icon.js';
 
 export interface ComboboxOption {
   value: string;
@@ -167,16 +169,7 @@ export function Combobox({
           }}
           className="flex h-full items-center px-2 text-[var(--color-foreground-muted)]"
         >
-          <svg
-            className={cn('h-4 w-4 transition-transform duration-150', open && 'rotate-180')}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden="true"
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
+          <Icon icon={ChevronDown} size="sm" className={cn('transition-transform duration-150', open && 'rotate-180')} />
         </button>
       </div>
 
@@ -219,16 +212,7 @@ export function Combobox({
               >
                 {option.label}
                 {option.value === value && (
-                  <svg
-                    className="h-4 w-4 shrink-0 text-[var(--color-primary-default)]"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    aria-hidden="true"
-                  >
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
+                  <Icon icon={Check} size="sm" className="shrink-0 text-[var(--color-primary-default)]" />
                 )}
               </li>
             ))

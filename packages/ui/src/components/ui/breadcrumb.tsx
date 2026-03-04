@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '../../utils/cn.js';
+import { Icon } from './icon.js';
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
@@ -55,13 +57,11 @@ const BreadcrumbSeparator = ({ children, className, ...props }: React.ComponentP
   <li
     role="presentation"
     aria-hidden="true"
-    className={cn('[&>svg]:h-3.5 [&>svg]:w-3.5', className)}
+    className={cn(className)}
     {...props}
   >
     {children ?? (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M9 18l6-6-6-6" />
-      </svg>
+      <Icon icon={ChevronRight} size="sm" />
     )}
   </li>
 );
@@ -74,11 +74,7 @@ const BreadcrumbEllipsis = ({ className, ...props }: React.ComponentProps<'span'
     className={cn('flex h-9 w-9 items-center justify-center', className)}
     {...props}
   >
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-      <circle cx="5" cy="12" r="1" />
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="19" cy="12" r="1" />
-    </svg>
+    <Icon icon={MoreHorizontal} size="sm" />
     <span className="sr-only">More</span>
   </span>
 );

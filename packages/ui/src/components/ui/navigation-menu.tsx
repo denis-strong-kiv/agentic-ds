@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '../../utils/cn.js';
+import { Icon } from './icon.js';
 
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
@@ -54,15 +56,7 @@ const NavigationMenuTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <svg
-        className="relative top-px ms-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
+    <Icon icon={ChevronDown} size="xs" className="relative top-px ms-1 transition duration-200 group-data-[state=open]:rotate-180" />
   </NavigationMenuPrimitive.Trigger>
 ));
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName;

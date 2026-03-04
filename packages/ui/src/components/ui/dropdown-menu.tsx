@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import { Check, Circle, ChevronRight } from 'lucide-react';
 import { cn } from '../../utils/cn.js';
+import { Icon } from './icon.js';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -80,9 +82,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M20 6L9 17l-5-5" />
-        </svg>
+        <Icon icon={Check} size="sm" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -101,9 +101,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <svg className="h-2.5 w-2.5 fill-current" viewBox="0 0 10 10">
-          <circle cx="5" cy="5" r="5" />
-        </svg>
+        <Icon icon={Circle} size="xs" fill="currentColor" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -145,9 +143,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <svg className="ml-auto h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M9 18l6-6-6-6" />
-    </svg>
+    <Icon icon={ChevronRight} size="sm" className="ml-auto" />
   </DropdownMenuPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;

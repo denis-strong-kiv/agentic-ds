@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { Check, Minus } from 'lucide-react';
 import { cn } from '../../utils/cn.js';
+import { Icon } from './icon.js';
 
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -26,13 +28,9 @@ const Checkbox = React.forwardRef<
   >
     <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
       {props.checked === 'indeterminate' ? (
-        <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-          <path d="M5 12h14" />
-        </svg>
+        <Icon icon={Minus} size="xs" />
       ) : (
-        <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-          <path d="M20 6L9 17l-5-5" />
-        </svg>
+        <Icon icon={Check} size="xs" />
       )}
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>

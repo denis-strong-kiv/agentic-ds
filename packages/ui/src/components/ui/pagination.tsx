@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '../../utils/cn.js';
+import { Icon } from './icon.js';
 import { buttonVariants } from './button.js';
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
@@ -42,9 +44,7 @@ PaginationLink.displayName = 'PaginationLink';
 
 const PaginationPrevious = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink aria-label="Go to previous page" className={cn('gap-1 pl-2.5', className)} {...props}>
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M15 18l-6-6 6-6" />
-    </svg>
+    <Icon icon={ChevronLeft} size="sm" />
     <span>Previous</span>
   </PaginationLink>
 );
@@ -53,9 +53,7 @@ PaginationPrevious.displayName = 'PaginationPrevious';
 const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink aria-label="Go to next page" className={cn('gap-1 pr-2.5', className)} {...props}>
     <span>Next</span>
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M9 18l6-6-6-6" />
-    </svg>
+    <Icon icon={ChevronRight} size="sm" />
   </PaginationLink>
 );
 PaginationNext.displayName = 'PaginationNext';
@@ -66,11 +64,7 @@ const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'
     className={cn('flex h-9 w-9 items-center justify-center text-[var(--color-foreground-muted)]', className)}
     {...props}
   >
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-      <circle cx="5" cy="12" r="1" />
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="19" cy="12" r="1" />
-    </svg>
+    <Icon icon={MoreHorizontal} size="sm" />
     <span className="sr-only">More pages</span>
   </span>
 );
