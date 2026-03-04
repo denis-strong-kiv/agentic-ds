@@ -142,7 +142,7 @@ function SearchField({
 // ─── Shared field button styles ───────────────────────────────────────────────
 
 const fieldBtn = cn(
-  'flex min-w-0 flex-1 items-center gap-2 rounded-full px-3 py-4 text-start',
+  'flex min-w-0 flex-1 items-center gap-3 rounded-full px-4 py-3 text-start',
   'transition-colors duration-[var(--duration-fast,100ms)]',
   'hover:bg-[var(--color-background-subtle)]',
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-primary-default)]',
@@ -263,20 +263,23 @@ function AirportField({
         className={fieldBtn}
       >
         {icon && <Icon icon={icon} size="md" className="shrink-0 text-[var(--color-foreground-muted)]" aria-hidden />}
-        <div className="flex min-w-0 items-baseline gap-1.5">
-          <span
-            className={cn(
-              'truncate text-sm font-medium',
-              value ? 'text-[var(--color-foreground-default)]' : 'text-[var(--color-foreground-subtle)]',
-            )}
-          >
-            {value ? value.city : placeholder}
-          </span>
-          {value && (
-            <span className="shrink-0 text-xs font-medium uppercase text-[var(--color-foreground-subtle)]">
-              {value.iata}
+        <div className="flex min-w-0 flex-col">
+          <span className="text-[11px] font-medium text-[var(--color-foreground-muted)]">{placeholder}</span>
+          <div className="flex min-w-0 items-baseline gap-1">
+            <span
+              className={cn(
+                'truncate text-sm font-semibold leading-tight',
+                value ? 'text-[var(--color-foreground-default)]' : 'text-[var(--color-foreground-subtle)]',
+              )}
+            >
+              {value ? value.city : 'Add airport'}
             </span>
-          )}
+            {value && (
+              <span className="shrink-0 text-xs font-medium uppercase text-[var(--color-foreground-subtle)]">
+                {value.iata}
+              </span>
+            )}
+          </div>
         </div>
       </button>
 
@@ -376,14 +379,17 @@ function DateField({
             className={fieldBtn}
           >
             <Icon icon={CalendarDays} size="md" className="shrink-0 text-[var(--color-foreground-muted)]" aria-hidden />
-            <span
-              className={cn(
-                'truncate text-sm font-medium',
-                value ? 'text-[var(--color-foreground-default)]' : 'text-[var(--color-foreground-subtle)]',
-              )}
-            >
-              {value ? formatDate(value) : placeholder}
-            </span>
+            <div className="flex min-w-0 flex-col">
+              <span className="text-[11px] font-medium text-[var(--color-foreground-muted)]">{placeholder}</span>
+              <span
+                className={cn(
+                  'truncate text-sm font-semibold leading-tight',
+                  value ? 'text-[var(--color-foreground-default)]' : 'text-[var(--color-foreground-subtle)]',
+                )}
+              >
+                {value ? formatDate(value) : 'Add date'}
+              </span>
+            </div>
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
@@ -414,7 +420,11 @@ function PassengerField({
 }) {
   const [open, setOpen] = React.useState(false);
   const total = value.adults + value.children + value.infants;
-  const label = `${total}, ${CABIN_LABELS[value.cabinClass]}`;
+  const parts: string[] = [];
+  if (value.adults > 0) parts.push(`${value.adults} Adult${value.adults !== 1 ? 's' : ''}`);
+  if (value.children > 0) parts.push(`${value.children} Child${value.children !== 1 ? 'ren' : ''}`);
+  if (value.infants > 0) parts.push(`${value.infants} Infant${value.infants !== 1 ? 's' : ''}`);
+  const label = parts.join(', ') || `${total} Passenger${total !== 1 ? 's' : ''}`;
 
   return (
     <SearchField id={id} className={cn('flex-[1_0_0] min-w-0', className)}>
@@ -428,9 +438,12 @@ function PassengerField({
             className={fieldBtn}
           >
             <Icon icon={Users} size="md" className="shrink-0 text-[var(--color-foreground-muted)]" aria-hidden />
-            <span className="truncate text-sm font-medium text-[var(--color-foreground-default)]">
-              {label}
-            </span>
+            <div className="flex min-w-0 flex-col">
+              <span className="text-[11px] font-medium text-[var(--color-foreground-muted)]">Passengers</span>
+              <span className="truncate text-sm font-semibold leading-tight text-[var(--color-foreground-default)]">
+                {label}
+              </span>
+            </div>
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-72 p-0" align="end">
@@ -503,8 +516,8 @@ function OccupancyField({
   className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
-  const total = value.adults + value.children;
-  const label = `${total} Guest${total !== 1 ? 's' : ''}, ${value.rooms} Room${value.rooms !== 1 ? 's' : ''}`;
+  const guestTotal = value.adults + value.children;
+  const label = `${guestTotal} Guest${guestTotal !== 1 ? 's' : ''}, ${value.rooms} Room${value.rooms !== 1 ? 's' : ''}`;
 
   return (
     <SearchField id={id} className={cn('flex-[1_0_0] min-w-0', className)}>
@@ -518,9 +531,12 @@ function OccupancyField({
             className={fieldBtn}
           >
             <Icon icon={BedDouble} size="md" className="shrink-0 text-[var(--color-foreground-muted)]" aria-hidden />
-            <span className="truncate text-sm font-medium text-[var(--color-foreground-default)]">
-              {label}
-            </span>
+            <div className="flex min-w-0 flex-col">
+              <span className="text-[11px] font-medium text-[var(--color-foreground-muted)]">Guests & Rooms</span>
+              <span className="truncate text-sm font-semibold leading-tight text-[var(--color-foreground-default)]">
+                {label}
+              </span>
+            </div>
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-72 p-0" align="end">
@@ -576,19 +592,22 @@ function HotelDestinationField({
       onMouseLeave={() => setActive(null)}
     >
       <div className="flex min-w-0 flex-1 items-center rounded-full px-4 transition-colors hover:bg-[var(--color-background-subtle)]">
-        <input
-          type="text"
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          placeholder="Where to?"
-          aria-label="Hotel destination"
-          onFocus={() => setActive(id)}
-          onBlur={() => setActive(null)}
-          className={cn(
-            'min-w-0 flex-1 bg-transparent py-4 text-sm font-medium outline-none',
-            'text-[var(--color-foreground-default)] placeholder:text-[var(--color-foreground-subtle)]',
-          )}
-        />
+        <div className="flex min-w-0 flex-1 flex-col py-3">
+          <span className="text-[11px] font-medium text-[var(--color-foreground-muted)]">Where to?</span>
+          <input
+            type="text"
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder="City, hotel or airport"
+            aria-label="Hotel destination"
+            onFocus={() => setActive(id)}
+            onBlur={() => setActive(null)}
+            className={cn(
+              'min-w-0 flex-1 bg-transparent text-sm font-semibold leading-tight outline-none',
+              'text-[var(--color-foreground-default)] placeholder:text-[var(--color-foreground-subtle)]',
+            )}
+          />
+        </div>
       </div>
     </div>
   );
@@ -709,77 +728,75 @@ export function TravelSearchForm({
     <ActiveFieldCtx.Provider value={{ active: activeField, setActive: setActiveField }}>
       <div className={cn('flex flex-col gap-2', className)}>
 
-        {/* ── Tab bar ─────────────────────────────────────────────────────── */}
-        <div className="flex gap-1" role="tablist" aria-label="Travel type">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                'flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium',
-                'transition-colors duration-[var(--duration-fast,100ms)]',
-                activeTab === tab.id
-                  ? 'bg-[var(--color-surface-card)] text-[var(--color-foreground-default)] shadow-sm'
-                  : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
-              )}
-            >
-              <Icon icon={tab.icon} size="sm" aria-hidden />
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* ── Trip type radios (flights only, animated) ────────────────────── */}
-        <div
-          className={cn(
-            'grid transition-all duration-[var(--duration-normal,200ms)] ease-out motion-safe:transition-all',
-            activeTab === 'flights' ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
-          )}
-        >
-          <div className="overflow-hidden">
-            <div className="flex gap-1 pb-2 ps-1" role="radiogroup" aria-label="Trip type">
-              {TRIP_TYPES.map(type => (
-                <label
-                  key={type.id}
-                  className={cn(
-                    'flex cursor-pointer items-center gap-2 rounded-full px-3 py-1',
-                    'text-[13px] font-medium transition-colors duration-[var(--duration-fast,100ms)]',
-                    tripType === type.id
-                      ? 'text-[var(--color-foreground-default)]'
-                      : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
-                  )}
-                >
-                  {/* Custom radio indicator */}
-                  <span
-                    className={cn(
-                      'flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2',
-                      'transition-colors duration-[var(--duration-fast,100ms)]',
-                      tripType === type.id
-                        ? 'border-[var(--color-primary-default)]'
-                        : 'border-[var(--color-border-default)]',
-                    )}
-                    aria-hidden="true"
-                  >
-                    {tripType === type.id && (
-                      <span className="h-2 w-2 rounded-full bg-[var(--color-primary-default)]" />
-                    )}
-                  </span>
-                  <input
-                    type="radio"
-                    name="tripType"
-                    value={type.id}
-                    checked={tripType === type.id}
-                    onChange={() => setTripType(type.id)}
-                    className="sr-only"
-                  />
-                  {type.label}
-                </label>
-              ))}
-            </div>
+        {/* ── Tab bar + trip type on one row (matches SkyMonde layout) ─────── */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Service tabs */}
+          <div className="flex gap-1" role="tablist" aria-label="Travel type">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  'flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium',
+                  'transition-colors duration-[var(--duration-fast,100ms)]',
+                  activeTab === tab.id
+                    ? 'bg-[var(--color-surface-card)] text-[var(--color-foreground-default)] shadow-sm'
+                    : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
+                )}
+              >
+                <Icon icon={tab.icon} size="sm" aria-hidden />
+                {tab.label}
+              </button>
+            ))}
           </div>
+
+          {/* Vertical divider + trip type (flights only) */}
+          {activeTab === 'flights' && (
+            <>
+              <span className="h-4 w-px shrink-0 bg-[var(--color-border-default)]" aria-hidden="true" />
+              <div className="flex gap-0.5" role="radiogroup" aria-label="Trip type">
+                {TRIP_TYPES.map(type => (
+                  <label
+                    key={type.id}
+                    className={cn(
+                      'flex cursor-pointer items-center gap-2 rounded-full px-3 py-1',
+                      'text-[13px] font-medium transition-colors duration-[var(--duration-fast,100ms)]',
+                      tripType === type.id
+                        ? 'text-[var(--color-foreground-default)]'
+                        : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full border-2',
+                        'transition-colors duration-[var(--duration-fast,100ms)]',
+                        tripType === type.id
+                          ? 'border-[var(--color-primary-default)]'
+                          : 'border-[var(--color-border-default)]',
+                      )}
+                      aria-hidden="true"
+                    >
+                      {tripType === type.id && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-primary-default)]" />
+                      )}
+                    </span>
+                    <input
+                      type="radio"
+                      name="tripType"
+                      value={type.id}
+                      checked={tripType === type.id}
+                      onChange={() => setTripType(type.id)}
+                      className="sr-only"
+                    />
+                    {type.label}
+                  </label>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* ── Form pill ─────────────────────────────────────────────────────── */}

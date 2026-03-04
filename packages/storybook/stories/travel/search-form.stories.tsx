@@ -37,7 +37,20 @@ const meta: Meta<typeof TravelSearchForm> = {
   parameters: { layout: 'fullscreen' },
   decorators: [
     (Story: ComponentType) => (
-      <div style={{ padding: '2rem 3rem' }}>
+      <div
+        style={{
+          minHeight: '320px',
+          background: 'linear-gradient(135deg, #0f2b5b 0%, #1a4a8a 60%, #1e5fa8 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          padding: '3rem 4rem',
+        }}
+      >
+        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+          Explore the globe
+        </p>
         <Story />
       </div>
     ),
