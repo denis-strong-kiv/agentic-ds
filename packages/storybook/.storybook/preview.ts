@@ -2,7 +2,7 @@ import '../../../packages/ui/src/styles/theme.css';
 import '../../../packages/ui/src/styles/motion.css';
 
 import type { Preview } from '@storybook/react';
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { brandTokens, type BrandId, type ColorMode } from '../stories/tokens/brand-tokens.js';
 
 // ─── Brand + Mode Decorator ───────────────────────────────────────────────────
@@ -18,10 +18,10 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
 
   const tokens = brandTokens[brand]?.[mode] ?? brandTokens.default.light;
 
-  useLayoutEffect(() => {
-    document.documentElement.setAttribute('data-mode', mode);
-    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
-  }, [brand, mode, locale]);
+  // Set synchronously — idempotent DOM attribute writes, no cleanup needed.
+  // Avoids useLayoutEffect which fails in vitest's browser context (null dispatcher).
+  document.documentElement.setAttribute('data-mode', mode);
+  document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
 
   return React.createElement(
     'div',
