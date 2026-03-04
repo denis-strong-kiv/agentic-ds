@@ -12,13 +12,6 @@ const meta: Meta<typeof Combobox> = {
 export default meta;
 type Story = StoryObj<typeof Combobox>;
 
-const CABIN_OPTIONS = [
-  { value: 'economy', label: 'Economy' },
-  { value: 'premium', label: 'Premium Economy' },
-  { value: 'business', label: 'Business' },
-  { value: 'first', label: 'First Class' },
-];
-
 const CURRENCY_OPTIONS = [
   { value: 'usd', label: 'USD — US Dollar' },
   { value: 'eur', label: 'EUR — Euro' },
@@ -41,25 +34,7 @@ const LANGUAGE_OPTIONS = [
 ];
 
 export const Default: Story = {
-  name: 'Cabin class selector',
-  args: {
-    options: CABIN_OPTIONS,
-    placeholder: 'Select cabin class',
-    'aria-label': 'Cabin class',
-  },
-};
-
-export const WithValue: Story = {
-  name: 'Pre-selected value',
-  args: {
-    options: CABIN_OPTIONS,
-    value: 'business',
-    'aria-label': 'Cabin class',
-  },
-};
-
-export const ManyOptions: Story = {
-  name: 'Many options (type to filter)',
+  name: 'Currency picker',
   args: {
     options: CURRENCY_OPTIONS,
     placeholder: 'Select currency',
@@ -67,8 +42,17 @@ export const ManyOptions: Story = {
   },
 };
 
-export const WithDisabledOptions: Story = {
-  name: 'With disabled options',
+export const WithValue: Story = {
+  name: 'Pre-selected value',
+  args: {
+    options: CURRENCY_OPTIONS,
+    value: 'eur',
+    'aria-label': 'Currency',
+  },
+};
+
+export const LanguagePicker: Story = {
+  name: 'Language picker',
   args: {
     options: LANGUAGE_OPTIONS,
     placeholder: 'Select language',
@@ -76,13 +60,22 @@ export const WithDisabledOptions: Story = {
   },
 };
 
+export const WithDisabledOptions: Story = {
+  name: 'With disabled options',
+  args: {
+    options: LANGUAGE_OPTIONS,
+    value: 'en',
+    'aria-label': 'Language',
+  },
+};
+
 export const Disabled: Story = {
   name: 'Disabled',
   args: {
-    options: CABIN_OPTIONS,
-    value: 'economy',
+    options: CURRENCY_OPTIONS,
+    value: 'usd',
     disabled: true,
-    'aria-label': 'Cabin class',
+    'aria-label': 'Currency',
   },
 };
 
@@ -90,11 +83,11 @@ export const InForm: Story = {
   name: 'In a form',
   render: () => (
     <div className="flex flex-col gap-1.5">
-      <Label htmlFor="cabin" required>Cabin class</Label>
+      <Label htmlFor="currency" required>Currency</Label>
       <Combobox
-        options={CABIN_OPTIONS}
-        placeholder="Select cabin class"
-        aria-label="Cabin class"
+        options={CURRENCY_OPTIONS}
+        placeholder="Select currency"
+        aria-label="Currency"
       />
     </div>
   ),
