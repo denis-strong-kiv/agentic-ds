@@ -42,7 +42,7 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
           {images.length > 0 ? (
             <img
               src={images[current]}
-              alt={`${alt} — image ${current + 1}`}
+              alt={`${alt} (${current + 1})`}
               className="h-full w-full object-cover rounded-[var(--shape-preset-card)]"
             />
           ) : (
@@ -115,7 +115,7 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
             {images.length > 0 && (
               <img
                 src={images[current]}
-                alt={`${alt} — image ${current + 1}`}
+                alt={`${alt} (${current + 1})`}
                 className="max-h-full max-w-full object-contain"
               />
             )}

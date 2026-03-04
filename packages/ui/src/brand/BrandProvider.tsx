@@ -65,6 +65,7 @@ export function BrandProvider({
       document.head.appendChild(style);
       styleRef.current = style;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional mount-only: inject SSR CSS once; re-running would duplicate the style tag
   }, []);
 
   // Fetch brand tokens CSS

@@ -70,7 +70,7 @@ function ImageCarousel({ images, alt }: { images: string[]; alt: string }) {
       <div className="relative h-full w-full overflow-hidden rounded-t-[var(--shape-preset-card)]">
         <img
           src={images[current]}
-          alt={`${alt} — image ${current + 1} of ${images.length}`}
+          alt={`${alt} (${current + 1} of ${images.length})`}
           className="h-full w-full object-cover"
         />
         {images.length > 1 && (

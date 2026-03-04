@@ -110,6 +110,7 @@ export function Combobox({
                 'outline-none placeholder:text-[var(--color-foreground-subtle)]',
                 'disabled:cursor-not-allowed disabled:opacity-50',
               )}
+              // eslint-disable-next-line jsx-a11y/no-autofocus -- moving focus to search input on open is correct ARIA combobox pattern
               autoFocus
             />
           </div>
@@ -127,6 +128,7 @@ export function Combobox({
               </li>
             )}
             {!isLoading && filtered.map(option => (
+              // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard nav handled by input onKeyDown (handleKeyDown)
               <li
                 key={option.value}
                 role="option"

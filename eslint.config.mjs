@@ -33,12 +33,21 @@ export default [
       'react-hooks': reactHooksPlugin,
       'jsx-a11y': a11yPlugin,
     },
+    settings: {
+      react: { version: 'detect' },
+    },
     rules: {
       ...tsPlugin.configs['recommended'].rules,
       ...reactPlugin.configs['recommended'].rules,
       ...reactHooksPlugin.configs['recommended'].rules,
       ...a11yPlugin.configs['recommended'].rules,
       'react/react-in-jsx-scope': 'off',
+      // Redundant in TypeScript projects — types serve as prop documentation
+      'react/prop-types': 'off',
+      // False positives for forwardRef wrapper components that pass children via {...props} spread;
+      // TypeScript enforces correct usage and axe-core catches actual violations at runtime.
+      'jsx-a11y/heading-has-content': 'off',
+      'jsx-a11y/anchor-has-content': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'error',
     },
