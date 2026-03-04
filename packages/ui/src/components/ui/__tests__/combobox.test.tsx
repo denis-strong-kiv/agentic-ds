@@ -4,116 +4,117 @@ import { describe, it, expect, vi } from 'vitest';
 import { Combobox } from '../combobox.js';
 
 const options = [
-  { value: 'jfk', label: 'JFK', sublabel: 'John F. Kennedy International' },
-  { value: 'lax', label: 'LAX', sublabel: 'Los Angeles International' },
-  { value: 'ord', label: 'ORD', sublabel: 'O\'Hare International', disabled: true },
+  { value: 'economy', label: 'Economy' },
+  { value: 'premium', label: 'Premium Economy' },
+  { value: 'business', label: 'Business' },
+  { value: 'first', label: 'First Class', disabled: true },
 ];
 
+function cb(props = {}) {
+  return render(
+    <Combobox options={options} aria-label="Cabin class" {...props} />,
+  );
+}
+
 describe('Combobox', () => {
-  it('renders the trigger with placeholder when no value', () => {
-    render(<Combobox options={options} placeholder="Select airport" />);
-    expect(screen.getByText('Select airport')).toBeInTheDocument();
+  it('renders with placeholder when no value', () => {
+    cb({ placeholder: 'Select cabin' });
+    expect(screen.getByRole('combobox')).toHaveAttribute('placeholder', 'Select cabin');
   });
 
-  it('renders selected value label', () => {
-    render(<Combobox options={options} value="jfk" />);
-    expect(screen.getByText('JFK')).toBeInTheDocument();
+  it('displays selected option label', () => {
+    cb({ value: 'business' });
+    expect(screen.getByRole('combobox')).toHaveValue('Business');
   });
 
-  it('renders selected value sublabel', () => {
-    render(<Combobox options={options} value="jfk" />);
-    expect(screen.getByText('John F. Kennedy International')).toBeInTheDocument();
-  });
-
-  it('opens dropdown when trigger is clicked', async () => {
+  it('opens dropdown on focus', async () => {
     const user = userEvent.setup();
-    render(<Combobox options={options} />);
-    await user.click(screen.getByRole('button'));
+    cb();
+    await user.click(screen.getByRole('combobox'));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
   it('shows all options when opened', async () => {
     const user = userEvent.setup();
-    render(<Combobox options={options} />);
-    await user.click(screen.getByRole('button'));
-    expect(screen.getByRole('option', { name: /JFK/ })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: /LAX/ })).toBeInTheDocument();
+    cb();
+    await user.click(screen.getByRole('combobox'));
+    expect(screen.getByRole('option', { name: 'Economy' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Business' })).toBeInTheDocument();
   });
 
-  it('filters options based on search query', async () => {
+  it('filters options as user types', async () => {
     const user = userEvent.setup();
-    render(<Combobox options={options} />);
-    await user.click(screen.getByRole('button'));
-    await user.type(screen.getByRole('textbox'), 'los');
-    expect(screen.getByRole('option', { name: /LAX/ })).toBeInTheDocument();
-    expect(screen.queryByRole('option', { name: /JFK/ })).not.toBeInTheDocument();
+    cb();
+    await user.click(screen.getByRole('combobox'));
+    await user.type(screen.getByRole('combobox'), 'bus');
+    expect(screen.getByRole('option', { name: 'Business' })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Economy' })).not.toBeInTheDocument();
   });
 
-  it('filters by sublabel', async () => {
+  it('shows "No options found" when nothing matches', async () => {
     const user = userEvent.setup();
-    render(<Combobox options={options} />);
-    await user.click(screen.getByRole('button'));
-    await user.type(screen.getByRole('textbox'), 'Kennedy');
-    expect(screen.getByRole('option', { name: /JFK/ })).toBeInTheDocument();
-    expect(screen.queryByRole('option', { name: /LAX/ })).not.toBeInTheDocument();
+    cb();
+    await user.click(screen.getByRole('combobox'));
+    await user.type(screen.getByRole('combobox'), 'zzz');
+    expect(screen.getByText('No options found.')).toBeInTheDocument();
   });
 
-  it('shows "No results found" when search has no matches', async () => {
-    const user = userEvent.setup();
-    render(<Combobox options={options} />);
-    await user.click(screen.getByRole('button'));
-    await user.type(screen.getByRole('textbox'), 'xyz_no_match');
-    expect(screen.getByText('No results found.')).toBeInTheDocument();
-  });
-
-  it('calls onChange when an option is selected', async () => {
+  it('calls onChange and closes dropdown when option is selected', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Combobox options={options} onChange={onChange} />);
-    await user.click(screen.getByRole('button'));
-    await user.click(screen.getByRole('option', { name: /JFK/ }));
-    expect(onChange).toHaveBeenCalledWith('jfk');
-  });
-
-  it('closes dropdown after selection', async () => {
-    const user = userEvent.setup();
-    render(<Combobox options={options} />);
-    await user.click(screen.getByRole('button'));
-    await user.click(screen.getByRole('option', { name: /JFK/ }));
+    cb({ onChange });
+    await user.click(screen.getByRole('combobox'));
+    await user.click(screen.getByRole('option', { name: 'Economy' }));
+    expect(onChange).toHaveBeenCalledWith('economy');
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  it('closes dropdown on Escape key', async () => {
+  it('updates input to selected label after selection', async () => {
     const user = userEvent.setup();
-    render(<Combobox options={options} />);
-    await user.click(screen.getByRole('button'));
-    expect(screen.getByRole('listbox')).toBeInTheDocument();
-    await user.keyboard('{Escape}');
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    cb({ onChange: vi.fn() });
+    await user.click(screen.getByRole('combobox'));
+    await user.click(screen.getByRole('option', { name: 'Business' }));
+    expect(screen.getByRole('combobox')).toHaveValue('Business');
   });
 
-  it('does not call onChange when disabled option is clicked', async () => {
+  it('marks selected option with aria-selected', async () => {
+    const user = userEvent.setup();
+    cb({ value: 'premium' });
+    await user.click(screen.getByRole('combobox'));
+    expect(screen.getByRole('option', { name: 'Premium Economy' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('option', { name: 'Economy' })).toHaveAttribute('aria-selected', 'false');
+  });
+
+  it('does not call onChange for a disabled option', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Combobox options={options} onChange={onChange} />);
-    await user.click(screen.getByRole('button'));
-    const ordOption = screen.getByRole('option', { name: /ORD/ });
-    await user.click(ordOption);
+    cb({ onChange });
+    await user.click(screen.getByRole('combobox'));
+    await user.click(screen.getByRole('option', { name: 'First Class' }));
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('shows loading state when isLoading is true', async () => {
+  it('closes dropdown on Escape and reverts input', async () => {
     const user = userEvent.setup();
-    render(<Combobox options={[]} isLoading />);
-    await user.click(screen.getByRole('button'));
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    cb({ value: 'economy' });
+    await user.click(screen.getByRole('combobox'));
+    await user.type(screen.getByRole('combobox'), 'bus');
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toHaveValue('Economy');
   });
 
-  it('shows checkmark next to selected option', async () => {
+  it('navigates options with ArrowDown / Enter', async () => {
     const user = userEvent.setup();
-    render(<Combobox options={options} value="lax" />);
-    await user.click(screen.getByRole('button'));
-    const laxOption = screen.getByRole('option', { name: /LAX/ });
-    expect(laxOption).toHaveAttribute('aria-selected', 'true');
+    const onChange = vi.fn();
+    cb({ onChange });
+    await user.click(screen.getByRole('combobox'));
+    await user.keyboard('{ArrowDown}{ArrowDown}{Enter}');
+    expect(onChange).toHaveBeenCalledWith('premium');
+  });
+
+  it('is disabled when disabled prop is set', () => {
+    cb({ disabled: true });
+    expect(screen.getByRole('combobox')).toBeDisabled();
   });
 });

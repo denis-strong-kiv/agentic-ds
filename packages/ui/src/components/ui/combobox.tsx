@@ -1,14 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { cn } from '../../utils/cn.js';
 
 export interface ComboboxOption {
   value: string;
   label: string;
-  /** Sub-label (e.g. airport name for IATA code display) */
-  sublabel?: string;
   disabled?: boolean;
 }
 
@@ -17,156 +14,227 @@ export interface ComboboxProps {
   value?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
-  searchPlaceholder?: string;
-  /** True while options are being fetched asynchronously */
-  isLoading?: boolean;
+  disabled?: boolean;
   className?: string;
+  'aria-label'?: string;
 }
 
 export function Combobox({
   options,
   value,
   onChange,
-  placeholder = 'Select option...',
-  searchPlaceholder = 'Search...',
-  isLoading,
+  placeholder = 'Select...',
+  disabled,
   className,
+  'aria-label': ariaLabel,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [query, setQuery] = React.useState('');
-
-  const filtered = React.useMemo(
-    () =>
-      query
-        ? options.filter(
-            o =>
-              o.label.toLowerCase().includes(query.toLowerCase()) ||
-              o.value.toLowerCase().includes(query.toLowerCase()) ||
-              o.sublabel?.toLowerCase().includes(query.toLowerCase()),
-          )
-        : options,
-    [options, query],
-  );
+  const [inputValue, setInputValue] = React.useState('');
+  const [isFiltering, setIsFiltering] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(-1);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const listboxId = React.useId();
 
   const selected = options.find(o => o.value === value);
 
+  // Sync displayed text when external value changes (and user isn't mid-type)
+  React.useEffect(() => {
+    if (!isFiltering) {
+      setInputValue(selected?.label ?? '');
+    }
+  }, [value, selected, isFiltering]);
+
+  // Show all options until user actually types something different
+  const filtered = React.useMemo(() => {
+    if (!isFiltering || inputValue === '') return options;
+    return options.filter(o =>
+      o.label.toLowerCase().includes(inputValue.toLowerCase()),
+    );
+  }, [options, inputValue, isFiltering]);
+
+  function selectOption(option: ComboboxOption) {
+    if (option.disabled) return;
+    onChange?.(option.value);
+    setInputValue(option.label);
+    setIsFiltering(false);
+    setOpen(false);
+    setActiveIndex(-1);
+  }
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value);
+    setIsFiltering(true);
+    setOpen(true);
+    setActiveIndex(-1);
+  }
+
+  function handleFocus() {
+    setIsFiltering(false);
+    setOpen(true);
+    // Select all so the user can immediately start typing to replace
+    inputRef.current?.select();
+  }
+
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Escape') setOpen(false);
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!open) {
+        setOpen(true);
+        setIsFiltering(false);
+        setActiveIndex(0);
+      } else {
+        setActiveIndex(i => (i + 1 < filtered.length ? i + 1 : i));
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex(i => (i > 0 ? i - 1 : 0));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const candidate = filtered[activeIndex];
+      if (open && candidate && !candidate.disabled) {
+        selectOption(candidate);
+      } else if (open && filtered.length === 1 && !filtered[0].disabled) {
+        selectOption(filtered[0]);
+      }
+    } else if (e.key === 'Escape') {
+      setOpen(false);
+      setInputValue(selected?.label ?? '');
+      setIsFiltering(false);
+      setActiveIndex(-1);
+    } else if (e.key === 'Tab') {
+      setOpen(false);
+      setInputValue(selected?.label ?? '');
+      setIsFiltering(false);
+    }
+  }
+
+  function handleBlur(e: React.FocusEvent) {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setOpen(false);
+      setInputValue(selected?.label ?? '');
+      setIsFiltering(false);
+      setActiveIndex(-1);
+    }
   }
 
   return (
-    <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
-      <PopoverPrimitive.Trigger asChild>
-        <button
-          className={cn(
-            'flex h-10 w-full items-center justify-between rounded-[var(--shape-preset-input)]',
-            'border border-[var(--color-border-default)]',
-            'bg-[var(--color-surface-card)] px-3 py-2 text-sm',
-            'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-default)]',
-            !selected && 'text-[var(--color-foreground-subtle)]',
-            selected && 'text-[var(--color-foreground-default)]',
-            className,
-          )}
+    <div className={cn('relative', className)} onBlur={handleBlur}>
+      <div
+        className={cn(
+          'flex h-10 items-center rounded-[var(--shape-preset-input)]',
+          'border border-[var(--color-border-default)]',
+          'bg-[var(--color-surface-card)] transition-shadow',
+          'focus-within:border-[var(--color-primary-default)]',
+          'focus-within:ring-2 focus-within:ring-[var(--color-primary-default)]',
+          disabled && 'opacity-50',
+        )}
+      >
+        <input
+          ref={inputRef}
+          role="combobox"
           aria-expanded={open}
-          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          aria-controls={open ? listboxId : undefined}
+          aria-activedescendant={
+            open && activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined
+          }
+          aria-label={ariaLabel}
+          value={inputValue}
+          onChange={handleInputChange}
+          onFocus={handleFocus}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={cn(
+            'flex-1 h-full bg-transparent px-3 text-sm outline-none',
+            'text-[var(--color-foreground-default)]',
+            'placeholder:text-[var(--color-foreground-subtle)]',
+            disabled && 'cursor-not-allowed',
+          )}
+        />
+        {/* Chevron — mouseDown prevents blur on input */}
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-hidden="true"
+          disabled={disabled}
+          onMouseDown={e => {
+            e.preventDefault();
+            if (!disabled) {
+              setOpen(o => !o);
+              setIsFiltering(false);
+            }
+          }}
+          className="flex h-full items-center px-2 text-[var(--color-foreground-muted)]"
         >
-          <span className="flex flex-col text-start">
-            <span>{selected ? selected.label : placeholder}</span>
-            {selected?.sublabel && (
-              <span className="text-xs text-[var(--color-foreground-muted)]">{selected.sublabel}</span>
-            )}
-          </span>
-          <svg className="h-4 w-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg
+            className={cn('h-4 w-4 transition-transform duration-150', open && 'rotate-180')}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
             <path d="M6 9l6 6 6-6" />
           </svg>
         </button>
-      </PopoverPrimitive.Trigger>
+      </div>
 
-      <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Content
+      {open && (
+        <ul
+          id={listboxId}
+          role="listbox"
           className={cn(
-            'z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden',
-            'rounded-[var(--shape-preset-card)] border border-[var(--color-border-default)]',
+            'absolute z-50 mt-1 w-full overflow-auto py-1',
+            'max-h-60 rounded-[var(--shape-preset-card)]',
+            'border border-[var(--color-border-default)]',
             'bg-[var(--color-surface-popover)] shadow-[var(--shadow-md)]',
-            'data-[state=open]:animate-in data-[state=closed]:animate-out',
-            'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+            'animate-in fade-in-0 zoom-in-95',
           )}
-          align="start"
-          sideOffset={4}
         >
-          {/* Search input */}
-          <div className="flex items-center border-b border-[var(--color-border-muted)] px-3">
-            <svg className="me-2 h-4 w-4 shrink-0 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-            <input
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={searchPlaceholder}
-              className={cn(
-                'flex h-10 w-full rounded-md bg-transparent py-3 text-sm',
-                'outline-none placeholder:text-[var(--color-foreground-subtle)]',
-                'disabled:cursor-not-allowed disabled:opacity-50',
-              )}
-              // eslint-disable-next-line jsx-a11y/no-autofocus -- moving focus to search input on open is correct ARIA combobox pattern
-              autoFocus
-            />
-          </div>
-
-          {/* Options list */}
-          <ul role="listbox" className="max-h-64 overflow-y-auto p-1">
-            {isLoading && (
-              <li className="px-2 py-4 text-center text-sm text-[var(--color-foreground-muted)]">
-                Loading...
-              </li>
-            )}
-            {!isLoading && filtered.length === 0 && (
-              <li className="px-2 py-4 text-center text-sm text-[var(--color-foreground-muted)]">
-                No results found.
-              </li>
-            )}
-            {!isLoading && filtered.map(option => (
-              // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard nav handled by input onKeyDown (handleKeyDown)
+          {filtered.length === 0 ? (
+            <li className="px-3 py-2 text-sm text-[var(--color-foreground-muted)]">
+              No options found.
+            </li>
+          ) : (
+            filtered.map((option, i) => (
               <li
                 key={option.value}
+                id={`${listboxId}-${i}`}
                 role="option"
                 aria-selected={option.value === value}
-                aria-disabled={option.disabled}
-                onClick={() => {
-                  if (!option.disabled) {
-                    onChange?.(option.value);
-                    setOpen(false);
-                    setQuery('');
-                  }
+                aria-disabled={option.disabled || undefined}
+                onMouseDown={e => {
+                  e.preventDefault();
+                  if (!option.disabled) selectOption(option);
                 }}
+                onMouseEnter={() => { if (!option.disabled) setActiveIndex(i); }}
                 className={cn(
-                  'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm',
+                  'flex cursor-pointer select-none items-center justify-between px-3 py-2 text-sm',
                   'text-[var(--color-foreground-default)]',
-                  !option.disabled && 'hover:bg-[var(--color-background-subtle)] cursor-pointer',
-                  option.disabled && 'opacity-50',
-                  option.value === value && 'bg-[var(--color-background-subtle)] font-medium',
+                  activeIndex === i && !option.disabled && 'bg-[var(--color-background-subtle)]',
+                  option.value === value && 'font-medium',
+                  option.disabled && 'cursor-not-allowed opacity-40',
                 )}
               >
-                <span className="flex-1">
-                  {option.label}
-                  {option.sublabel && (
-                    <span className="block text-xs text-[var(--color-foreground-muted)]">
-                      {option.sublabel}
-                    </span>
-                  )}
-                </span>
+                {option.label}
                 {option.value === value && (
-                  <svg className="h-4 w-4 text-[var(--color-primary-default)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    className="h-4 w-4 shrink-0 text-[var(--color-primary-default)]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    aria-hidden="true"
+                  >
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 )}
               </li>
-            ))}
-          </ul>
-        </PopoverPrimitive.Content>
-      </PopoverPrimitive.Portal>
-    </PopoverPrimitive.Root>
+            ))
+          )}
+        </ul>
+      )}
+    </div>
   );
 }
