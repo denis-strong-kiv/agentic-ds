@@ -23,6 +23,13 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
   document.documentElement.setAttribute('data-mode', mode);
   document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
 
+  // Apply tokens to :root so portal content (Radix tooltips, dropdowns, popovers, etc.)
+  // inherits them. Portals render into document.body — outside the decorator div —
+  // so inline styles on the wrapper are not inherited by portal children.
+  Object.entries(tokens).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(key, value);
+  });
+
   // Paint the iframe body so the canvas outside the decorator div also responds to mode.
   document.body.style.background = tokens['--color-background-default'] ?? '';
 
