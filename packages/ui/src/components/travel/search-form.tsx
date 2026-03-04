@@ -255,7 +255,7 @@ function AirportField({
   }
 
   return (
-    <SearchField id={id} className={cn('flex-1 min-w-[200px]', className)}>
+    <SearchField id={id} className={cn('flex-1 min-w-0 overflow-hidden', className)}>
       <button
         type="button"
         aria-label={value ? `${value.city} ${value.iata} — change ${placeholder}` : placeholder}
@@ -367,7 +367,11 @@ function DateField({
 }) {
   const [open, setOpen] = React.useState(false);
   return (
-    <SearchField id={id} className={cn('shrink-0 w-[130px]', className)}>
+    <SearchField id={id} className={cn(
+      'flex-[1_0_0] min-w-0 rounded-full',
+      'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
+      className,
+    )}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
@@ -417,7 +421,11 @@ function PassengerField({
   const label = `${total}, ${CABIN_LABELS[value.cabinClass]}`;
 
   return (
-    <SearchField id={id} className={cn('shrink-0 min-w-[170px]', className)}>
+    <SearchField id={id} className={cn(
+      'flex-[1_0_0] min-w-0 rounded-full',
+      'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
+      className,
+    )}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
@@ -507,7 +515,11 @@ function OccupancyField({
   const label = `${total} Guest${total !== 1 ? 's' : ''}, ${value.rooms} Room${value.rooms !== 1 ? 's' : ''}`;
 
   return (
-    <SearchField id={id} className={cn('shrink-0 min-w-[170px]', className)}>
+    <SearchField id={id} className={cn(
+      'flex-[1_0_0] min-w-0 rounded-full',
+      'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
+      className,
+    )}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
@@ -560,32 +572,27 @@ function OccupancyField({
 // ─── HotelDestinationField ────────────────────────────────────────────────────
 
 function HotelDestinationField({
-  id,
   value,
   onChange,
 }: {
-  id: string;
+  id?: string;
   value: string;
   onChange: (v: string) => void;
 }) {
-  const { setActive } = React.useContext(ActiveFieldCtx);
   return (
-    <div
-      className="relative flex min-w-0 flex-1 items-stretch"
-      onMouseEnter={() => setActive(id)}
-      onMouseLeave={() => setActive(null)}
-    >
-      <div className="flex min-w-0 flex-1 items-center rounded-full px-5 py-4 transition-colors hover:bg-[var(--color-background-subtle)]">
+    <div className={cn(
+      'flex flex-[2_0_0] min-w-0 items-stretch rounded-full',
+      'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
+    )}>
+      <div className="flex min-w-0 flex-1 items-center rounded-full px-4 transition-colors hover:bg-[var(--color-background-subtle)]">
         <input
           type="text"
           value={value}
           onChange={e => onChange(e.target.value)}
           placeholder="Where to?"
           aria-label="Hotel destination"
-          onFocus={() => setActive(id)}
-          onBlur={() => setActive(null)}
           className={cn(
-            'min-w-0 flex-1 bg-transparent text-sm font-medium outline-none',
+            'min-w-0 flex-1 bg-transparent py-4 text-sm font-medium outline-none',
             'text-[var(--color-foreground-default)] placeholder:text-[var(--color-foreground-subtle)]',
           )}
         />
@@ -594,10 +601,10 @@ function HotelDestinationField({
   );
 }
 
-// ─── SearchPill ───────────────────────────────────────────────────────────────
-// The white rounded-full form container with fields and search button.
+// ─── SearchRow ────────────────────────────────────────────────────────────────
+// Flex row of individual pill-shaped field groups + search button.
 
-function SearchPill({
+function SearchRow({
   onSearch,
   children,
 }: {
@@ -605,29 +612,22 @@ function SearchPill({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className={cn(
-        'flex items-center rounded-full',
-        'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
-      )}
-    >
-      <div className="flex min-w-0 flex-1 items-center">{children}</div>
-      <div className="shrink-0 p-2">
-        <button
-          type="button"
-          onClick={onSearch}
-          className={cn(
-            'flex h-12 items-center gap-2 rounded-full px-5',
-            'bg-[var(--color-primary-default)] text-[var(--color-primary-foreground)]',
-            'text-sm font-semibold',
-            'transition-opacity hover:opacity-90',
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-primary-default)]',
-          )}
-        >
-          <Icon icon={Search} size="sm" aria-hidden />
-          Search
-        </button>
-      </div>
+    <div className="flex items-stretch gap-2">
+      {children}
+      <button
+        type="button"
+        onClick={onSearch}
+        className={cn(
+          'flex shrink-0 items-center gap-2 rounded-full px-5',
+          'bg-[var(--color-primary-default)] text-[var(--color-primary-foreground)]',
+          'text-sm font-semibold',
+          'transition-opacity hover:opacity-90',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-primary-default)]',
+        )}
+      >
+        <Icon icon={Search} size="sm" aria-hidden />
+        Search
+      </button>
     </div>
   );
 }
@@ -783,11 +783,14 @@ export function TravelSearchForm({
           </div>
         </div>
 
-        {/* ── Form pill — cross-fades on tab switch via key ────────────────── */}
+        {/* ── Form row — individual pill groups ────────────────────────────── */}
         {activeTab === 'flights' && tripType !== 'multi-city' && (
-          <SearchPill onSearch={handleSearch}>
-            {/* Origin + Destination */}
-            <div className="relative flex min-w-0 flex-1 items-center">
+          <SearchRow onSearch={handleSearch}>
+            {/* Origin + Destination group pill — widest (flex-[2_0_0]) */}
+            <div className={cn(
+              'relative flex flex-[2_0_0] min-w-0 items-stretch rounded-full',
+              'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
+            )}>
               <AirportField
                 id="origin"
                 value={origin}
@@ -820,9 +823,7 @@ export function TravelSearchForm({
               </button>
             </div>
 
-            <FieldSeparator left="destination" right="departure" />
-
-            {/* Departure date */}
+            {/* Departure date — individual pill */}
             <DateField
               id="departure"
               value={departureDate}
@@ -833,74 +834,65 @@ export function TravelSearchForm({
             {/* Return date — slides in for round-trip */}
             <div
               className={cn(
-                'flex items-center overflow-hidden',
+                'flex-[1_0_0] min-w-0 overflow-hidden',
                 'transition-all duration-[var(--duration-normal,200ms)] ease-out motion-safe:transition-all',
-                tripType === 'round-trip' ? 'max-w-[220px] opacity-100' : 'max-w-0 opacity-0',
+                tripType === 'round-trip' ? 'max-w-[500px] opacity-100' : 'max-w-0 opacity-0',
               )}
             >
-              <FieldSeparator left="departure" right="return" />
               <DateField
                 id="return"
                 value={returnDate}
                 onChange={setReturnDate}
                 placeholder="Return"
                 {...(departureDate ? { minDate: departureDate } : {})}
+                className="w-full"
               />
             </div>
 
-            <FieldSeparator
-              left={tripType === 'round-trip' ? 'return' : 'departure'}
-              right="passengers"
-            />
-
-            {/* Passengers + cabin class */}
+            {/* Passengers — individual pill */}
             <PassengerField id="passengers" value={passengers} onChange={setPassengers} />
-          </SearchPill>
+          </SearchRow>
         )}
 
         {/* ── Multi-city: stacked leg rows ─────────────────────────────────── */}
         {activeTab === 'flights' && tripType === 'multi-city' && (
           <div className="flex flex-col gap-2">
             {legs.map((leg, i) => (
-              <div
-                key={i}
-                className={cn(
-                  'flex min-h-16 items-center rounded-full',
+              <div key={i} className="flex items-stretch gap-2">
+                {/* O+D group pill */}
+                <div className={cn(
+                  'relative flex flex-[2_0_0] min-w-0 items-stretch rounded-full',
                   'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
-                )}
-              >
-                <div className="flex min-w-0 flex-1 items-center">
-                  <div className="relative flex min-w-0 flex-1 items-center">
-                    <AirportField
-                      id={`mc-origin-${i}`}
-                      value={leg.origin}
-                      onChange={v => updateLeg(i, { origin: v })}
-                      placeholder="From"
-                      options={airportOptions}
-                    />
-                    <FieldSeparator left={`mc-origin-${i}`} right={`mc-dest-${i}`} />
-                    <AirportField
-                      id={`mc-dest-${i}`}
-                      value={leg.destination}
-                      onChange={v => updateLeg(i, { destination: v })}
-                      placeholder="To"
-                      options={airportOptions}
-                    />
-                  </div>
-                  <FieldSeparator left={`mc-dest-${i}`} right={`mc-date-${i}`} />
-                  <DateField
-                    id={`mc-date-${i}`}
-                    value={leg.departureDate}
-                    onChange={d => updateLeg(i, { departureDate: d })}
-                    placeholder="Date"
-                    {...(i > 0 && legs[i - 1].departureDate ? { minDate: legs[i - 1].departureDate as Date } : {})}
+                )}>
+                  <AirportField
+                    id={`mc-origin-${i}`}
+                    value={leg.origin}
+                    onChange={v => updateLeg(i, { origin: v })}
+                    placeholder="From"
+                    options={airportOptions}
+                  />
+                  <FieldSeparator left={`mc-origin-${i}`} right={`mc-dest-${i}`} />
+                  <AirportField
+                    id={`mc-dest-${i}`}
+                    value={leg.destination}
+                    onChange={v => updateLeg(i, { destination: v })}
+                    placeholder="To"
+                    options={airportOptions}
                   />
                 </div>
+                {/* Date — individual pill */}
+                <DateField
+                  id={`mc-date-${i}`}
+                  value={leg.departureDate}
+                  onChange={d => updateLeg(i, { departureDate: d })}
+                  placeholder="Date"
+                  {...(i > 0 && legs[i - 1].departureDate ? { minDate: legs[i - 1].departureDate as Date } : {})}
+                />
               </div>
             ))}
 
             {/* Add/Remove + passengers + search */}
-            <div className="flex items-center gap-3 ps-1">
+            <div className="flex items-stretch gap-3 ps-1">
               {legs.length < 4 && (
                 <button
                   type="button"
@@ -919,15 +911,13 @@ export function TravelSearchForm({
                   Remove last
                 </button>
               )}
-              <div className="ms-auto flex items-center gap-2">
-                <div className="rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-card)]">
-                  <PassengerField id="mc-passengers" value={passengers} onChange={setPassengers} />
-                </div>
+              <div className="ms-auto flex items-stretch gap-2">
+                <PassengerField id="mc-passengers" value={passengers} onChange={setPassengers} />
                 <button
                   type="button"
                   onClick={handleSearch}
                   className={cn(
-                    'flex h-12 items-center gap-2 rounded-full px-5',
+                    'flex items-center gap-2 rounded-full px-5',
                     'bg-[var(--color-primary-default)] text-[var(--color-primary-foreground)]',
                     'text-sm font-semibold transition-opacity hover:opacity-90',
                     'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-primary-default)]',
@@ -943,11 +933,12 @@ export function TravelSearchForm({
 
         {/* ── Hotels form ──────────────────────────────────────────────────── */}
         {activeTab === 'hotels' && (
-          <SearchPill onSearch={handleSearch}>
+          <SearchRow onSearch={handleSearch}>
+            {/* Destination — widest pill (flex-[2_0_0] inside the component) */}
             <HotelDestinationField id="hotel-dest" value={hotelDest} onChange={setHotelDest} />
-            <FieldSeparator left="hotel-dest" right="checkin" />
+            {/* Check-in — individual pill */}
             <DateField id="checkin" value={checkIn} onChange={setCheckIn} placeholder="Check-in" />
-            <FieldSeparator left="checkin" right="checkout" />
+            {/* Check-out — individual pill */}
             <DateField
               id="checkout"
               value={checkOut}
@@ -955,9 +946,9 @@ export function TravelSearchForm({
               placeholder="Check-out"
               {...(checkIn ? { minDate: checkIn } : {})}
             />
-            <FieldSeparator left="checkout" right="guests" />
+            {/* Guests & Rooms — individual pill */}
             <OccupancyField id="guests" value={occupancy} onChange={setOccupancy} />
-          </SearchPill>
+          </SearchRow>
         )}
 
       </div>
