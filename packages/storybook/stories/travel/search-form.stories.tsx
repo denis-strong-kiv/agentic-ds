@@ -37,7 +37,7 @@ const meta: Meta<typeof TravelSearchForm> = {
   parameters: { layout: 'fullscreen' },
   decorators: [
     (Story: ComponentType) => (
-      <div style={{ background: 'var(--color-primary-default)', padding: '2rem 3rem' }}>
+      <div style={{ padding: '2rem 3rem' }}>
         <Story />
       </div>
     ),

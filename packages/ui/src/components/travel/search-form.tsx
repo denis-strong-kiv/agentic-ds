@@ -220,6 +220,7 @@ function AirportField({
   placeholder,
   options,
   icon,
+  className,
 }: {
   id: string;
   value: AirportOption | null;
@@ -227,6 +228,7 @@ function AirportField({
   placeholder: string;
   options: AirportOption[];
   icon?: LucideIcon;
+  className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
@@ -253,7 +255,7 @@ function AirportField({
   }
 
   return (
-    <SearchField id={id} className="flex-1">
+    <SearchField id={id} className={cn('flex-1', className)}>
       <button
         type="button"
         aria-label={value ? `${value.city} ${value.iata} — change ${placeholder}` : placeholder}
@@ -354,16 +356,18 @@ function DateField({
   onChange,
   placeholder,
   minDate,
+  className,
 }: {
   id: string;
   value: Date | null;
   onChange: (d: Date | null) => void;
   placeholder: string;
   minDate?: Date;
+  className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   return (
-    <SearchField id={id} className="flex-1">
+    <SearchField id={id} className={cn('shrink-0 w-[130px]', className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
@@ -401,17 +405,19 @@ function PassengerField({
   id,
   value,
   onChange,
+  className,
 }: {
   id: string;
   value: PassengerConfig;
   onChange: (c: PassengerConfig) => void;
+  className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const total = value.adults + value.children + value.infants;
   const label = `${total} Passenger${total !== 1 ? 's' : ''}, ${CABIN_LABELS[value.cabinClass]}`;
 
   return (
-    <SearchField id={id} className="flex-1">
+    <SearchField id={id} className={cn('shrink-0 min-w-[170px]', className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
@@ -489,17 +495,19 @@ function OccupancyField({
   id,
   value,
   onChange,
+  className,
 }: {
   id: string;
   value: OccupancyConfig;
   onChange: (c: OccupancyConfig) => void;
+  className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const total = value.adults + value.children;
   const label = `${total} Guest${total !== 1 ? 's' : ''}, ${value.rooms} Room${value.rooms !== 1 ? 's' : ''}`;
 
   return (
-    <SearchField id={id} className="flex-1">
+    <SearchField id={id} className={cn('shrink-0 min-w-[170px]', className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
@@ -857,7 +865,7 @@ export function TravelSearchForm({
               <div
                 key={i}
                 className={cn(
-                  'flex items-center rounded-full',
+                  'flex min-h-16 items-center rounded-full',
                   'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
                 )}
               >
