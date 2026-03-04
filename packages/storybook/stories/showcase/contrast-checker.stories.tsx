@@ -53,7 +53,7 @@ function ContrastBadge({ label, pass }: { label: string; pass: boolean }) {
       borderRadius: 4,
       fontSize: 11,
       fontWeight: 700,
-      background: pass ? 'oklch(0.62 0.16 145)' : 'oklch(0.55 0.22 20)',
+      background: pass ? 'oklch(0.45 0.16 145)' : 'oklch(0.45 0.22 20)',
       color: '#fff',
       marginRight: 4,
     }}>
@@ -131,7 +131,7 @@ function ContrastRow({ pair }: { pair: TokenPair }) {
   if (fgL === null || bgL === null) {
     return (
       <tr>
-        <td colSpan={5} style={{ padding: '10px 12px', fontSize: 12, color: '#888' }}>
+        <td colSpan={5} style={{ padding: '10px 12px', fontSize: 12, color: 'var(--color-foreground-muted)' }}>
           Cannot parse: {pair.label}
         </td>
       </tr>

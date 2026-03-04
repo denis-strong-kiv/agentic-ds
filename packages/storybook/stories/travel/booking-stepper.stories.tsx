@@ -59,6 +59,7 @@ export const AllStepStates: Story = {
               ...s,
               status: i < activeIdx ? 'completed' : i === activeIdx ? 'active' : 'upcoming',
             }))}
+            aria-label={`Booking progress — step ${activeIdx + 1}: ${allSteps[activeIdx].label}`}
             onStepClick={() => {}}
           />
         </div>

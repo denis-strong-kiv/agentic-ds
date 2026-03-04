@@ -63,7 +63,7 @@ const defaultLight: Record<string, string> = {
   // Foregrounds
   '--color-foreground-default': 'oklch(0.12 0.01 250)',
   '--color-foreground-muted': 'oklch(0.45 0.01 250)',
-  '--color-foreground-subtle': 'oklch(0.60 0.01 250)',
+  '--color-foreground-subtle': 'oklch(0.52 0.01 250)',
   '--color-foreground-on-emphasis': 'oklch(0.98 0.01 250)',
   // Borders
   '--color-border-default': 'oklch(0.88 0.005 250)',
@@ -74,7 +74,7 @@ const defaultLight: Record<string, string> = {
   '--color-success-subtle': 'oklch(0.94 0.04 145)',
   // Warning
   '--color-warning-default': 'oklch(0.62 0.17 85)',
-  '--color-warning-foreground': 'oklch(0.98 0.02 85)',
+  '--color-warning-foreground': 'oklch(0.15 0.04 70)',
   '--color-warning-subtle': 'oklch(0.96 0.04 85)',
   // Error
   '--color-error-default': 'oklch(0.56 0.20 25)',
@@ -225,9 +225,9 @@ const ecoShape = {
 const ecoLight: Record<string, string> = {
   ...defaultLight,
   ...ecoShape,
-  '--color-primary-default': 'oklch(0.52 0.16 195)',
-  '--color-primary-hover': 'oklch(0.46 0.16 195)',
-  '--color-primary-active': 'oklch(0.40 0.16 195)',
+  '--color-primary-default': 'oklch(0.46 0.16 195)',
+  '--color-primary-hover': 'oklch(0.40 0.16 195)',
+  '--color-primary-active': 'oklch(0.34 0.16 195)',
   '--color-primary-foreground': 'oklch(0.98 0.01 195)',
   '--color-accent-default': 'oklch(0.68 0.17 75)',
   '--color-accent-hover': 'oklch(0.62 0.17 75)',

@@ -253,7 +253,7 @@ export function SearchForm({
             ))}
             <div className="ml-auto w-40">
               <Select value={cabinClass} onValueChange={v => setCabinClass(v as CabinClass)}>
-                <SelectTrigger>
+                <SelectTrigger aria-label="Cabin class">
                   <SelectValue placeholder="Cabin class" />
                 </SelectTrigger>
                 <SelectContent>

@@ -18,6 +18,7 @@ export interface BookingStepperProps {
   steps: BookingStep[];
   onStepClick?: (stepId: string) => void;
   className?: string;
+  'aria-label'?: string;
 }
 
 // ─── Default step icons ───────────────────────────────────────────────────────
@@ -30,10 +31,10 @@ const CheckIcon = () => (
 
 // ─── BookingStepper ───────────────────────────────────────────────────────────
 
-export function BookingStepper({ steps, onStepClick, className }: BookingStepperProps) {
+export function BookingStepper({ steps, onStepClick, className, 'aria-label': ariaLabel = 'Booking progress' }: BookingStepperProps) {
   return (
     <nav
-      aria-label="Booking progress"
+      aria-label={ariaLabel}
       className={cn(
         'w-full overflow-x-auto',
         className,
