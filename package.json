@@ -10,7 +10,7 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
-    "test": "turbo test",
+    "test": "FORCE_COLOR=1 turbo test --ui=stream",
     "storybook": "turbo storybook",
     "typecheck": "turbo typecheck"
   },
