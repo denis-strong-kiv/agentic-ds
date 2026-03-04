@@ -81,6 +81,7 @@ const ToastClose = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Close
     ref={ref}
+    aria-label="Dismiss"
     className={cn(
       'absolute right-2 top-2 rounded-md p-1 opacity-0 transition-opacity',
       'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
@@ -91,7 +92,7 @@ const ToastClose = React.forwardRef<
     toast-close=""
     {...props}
   >
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg className="h-4 w-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M18 6L6 18M6 6l12 12" />
     </svg>
   </ToastPrimitive.Close>

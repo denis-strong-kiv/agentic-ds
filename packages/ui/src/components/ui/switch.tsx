@@ -44,7 +44,7 @@ const Switch = React.forwardRef<
   if (!label) return control;
 
   return (
-    <label className={cn('flex items-center gap-3 cursor-pointer', props.disabled && 'cursor-not-allowed opacity-50')}>
+    <label className={cn('flex items-center gap-3 cursor-pointer', props.disabled && 'cursor-not-allowed')}>
       {labelPosition === 'left' && (
         <span className="text-sm font-medium text-[var(--color-foreground-default)]">{label}</span>
       )}

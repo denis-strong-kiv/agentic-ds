@@ -14,7 +14,7 @@ export interface SliderProps extends React.ComponentPropsWithoutRef<typeof Slide
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   SliderProps
->(({ className, showValue, formatValue = String, ...props }, ref) => {
+>(({ className, showValue, formatValue = String, 'aria-label': ariaLabel, ...props }, ref) => {
   const values = props.value ?? props.defaultValue ?? [0];
 
   return (
@@ -30,6 +30,7 @@ const Slider = React.forwardRef<
       )}
       <SliderPrimitive.Root
         ref={ref}
+        aria-label={ariaLabel}
         className={cn(
           'relative flex w-full touch-none select-none items-center',
           className,
@@ -49,6 +50,7 @@ const Slider = React.forwardRef<
         {values.map((_, i) => (
           <SliderPrimitive.Thumb
             key={i}
+            aria-label={values.length > 1 ? (i === 0 ? 'Minimum' : 'Maximum') : ariaLabel}
             className={cn(
               'block h-4 w-4 rounded-full',
               'border border-[var(--color-primary-default)] bg-white',

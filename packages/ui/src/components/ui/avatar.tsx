@@ -68,6 +68,7 @@ export function AvatarStatus({ status, className, ...props }: AvatarStatusProps)
         'border-2 border-[var(--color-surface-card)]',
         className,
       )}
+      role="img"
       style={{ backgroundColor: colorMap[status] }}
       aria-label={status}
       {...props}
