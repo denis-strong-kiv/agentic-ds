@@ -53,6 +53,9 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
 const preview: Preview = {
   decorators: [BrandDecorator],
   parameters: {
+    options: {
+      storySort: { method: 'alphabetical' },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
