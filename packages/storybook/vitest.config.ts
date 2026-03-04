@@ -21,5 +21,13 @@ export default defineConfig({
       instances: [{ browser: 'chromium' }],
     },
     setupFiles: ['.storybook/vitest.setup.ts'],
+    server: {
+      deps: {
+        // Inline storybook packages so Vite replaces import.meta.env refs
+        // before the module runner proxy intercepts them (avoids "Dynamic
+        // access of import.meta.env is not supported" clone errors).
+        inline: ['@storybook/addon-a11y', '@storybook/addon-vitest'],
+      },
+    },
   },
 });
