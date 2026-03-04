@@ -23,6 +23,9 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
   document.documentElement.setAttribute('data-mode', mode);
   document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
 
+  // Paint the iframe body so the canvas outside the decorator div also responds to mode.
+  document.body.style.background = tokens['--color-background-default'] ?? '';
+
   return React.createElement(
     'div',
     {
@@ -30,8 +33,10 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
       // but browsers and React both support them as inline style values.
       style: {
         ...tokens,
+        background: 'var(--color-background-default)',
+        color: 'var(--color-foreground-default)',
         padding: '1.5rem',
-        minHeight: '100%',
+        minHeight: '100dvh',
       } as React.CSSProperties,
     },
     React.createElement(Story),
