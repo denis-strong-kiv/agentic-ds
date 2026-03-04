@@ -1,10 +1,15 @@
+import '../../../packages/ui/src/styles/theme.css';
+import '../../../packages/ui/src/styles/motion.css';
+
 import type { Preview } from '@storybook/react';
 import React, { useLayoutEffect } from 'react';
 import { brandTokens, type BrandId, type ColorMode } from '../stories/tokens/brand-tokens.js';
 
 // ─── Brand + Mode Decorator ───────────────────────────────────────────────────
-// Injects brand CSS custom properties into a scoped wrapper element.
-// Also sets data-mode and dir on the wrapper so dark/RTL layouts work.
+// Spreads brand CSS custom properties as inline styles on the wrapper element.
+// Inline styles always win over any stylesheet (including Tailwind's injected CSS),
+// eliminating cascade ordering race conditions in Vite dev mode.
+// CSS custom properties are inherited, so all children resolve var() correctly.
 const BrandDecorator = (Story: React.FC, context: { globals: Record<string, string> }) => {
   const brand = (context.globals.brand ?? 'default') as BrandId;
   const mode = (context.globals.colorMode ?? 'light') as ColorMode;
@@ -12,36 +17,22 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
   const isRTL = locale === 'ar';
 
   const tokens = brandTokens[brand]?.[mode] ?? brandTokens.default.light;
-  const styleId = 'sb-brand-tokens';
 
   useLayoutEffect(() => {
-    let style = document.getElementById(styleId) as HTMLStyleElement | null;
-    if (!style) {
-      style = document.createElement('style');
-      style.id = styleId;
-      document.head.appendChild(style);
-    }
-    const vars = Object.entries(tokens).map(([k, v]) => `  ${k}: ${v};`).join('\n');
-    // Include a transition so color changes animate rather than snap
-    const transition = '  transition: background-color 150ms, color 150ms;';
-    style.textContent = `:root {\n${vars}\n${transition}\n}`;
-
     document.documentElement.setAttribute('data-mode', mode);
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
-    document.documentElement.style.backgroundColor = tokens['--color-background-default'] ?? '';
-    document.documentElement.style.color = tokens['--color-foreground-default'] ?? '';
   }, [brand, mode, locale]);
 
   return React.createElement(
     'div',
     {
+      // Casting needed: React.CSSProperties doesn't type CSS custom properties,
+      // but browsers and React both support them as inline style values.
       style: {
+        ...tokens,
         padding: '1.5rem',
         minHeight: '100%',
-        background: tokens['--color-background-default'],
-        color: tokens['--color-foreground-default'],
-        transition: 'background-color 150ms, color 150ms',
-      },
+      } as React.CSSProperties,
     },
     React.createElement(Story),
   );

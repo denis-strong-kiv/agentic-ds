@@ -22,6 +22,7 @@ export * from './dropdown-menu';
 export * from './input';
 export * from './label';
 export * from './navigation-menu';
+export * from './notification-badge';
 export * from './pagination';
 export * from './popover';
 export * from './progress';

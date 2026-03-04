@@ -11,6 +11,11 @@
 
 @import "tailwindcss";
 
+/* Explicit source scanning for monorepo — auto-detection may miss files outside
+   the CSS file's own directory when running from a different package (Storybook). */
+@source "../";
+@source "../../../../packages/storybook/stories";
+
 @theme {
   /* ── Color tokens ─────────────────────────────────────────────────────────── */
 

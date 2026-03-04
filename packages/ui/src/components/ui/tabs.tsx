@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn.js';
+import { NotificationBadge } from './notification-badge.js';
 
 const Tabs = TabsPrimitive.Root;
 
@@ -35,7 +36,7 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 export interface TabsTriggerProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
   icon?: React.ReactNode;
-  badge?: number | string;
+  badge?: number;
 }
 
 const TabsTrigger = React.forwardRef<
@@ -58,9 +59,7 @@ const TabsTrigger = React.forwardRef<
     {icon && <span className="flex-shrink-0">{icon}</span>}
     {children}
     {badge !== undefined && (
-      <span className="ms-1 rounded-full bg-[var(--color-primary-default)] px-1.5 py-0.5 text-xs text-[var(--color-primary-foreground)]">
-        {badge}
-      </span>
+      <NotificationBadge count={badge} size="md" className="ms-1" />
     )}
   </TabsPrimitive.Trigger>
 ));

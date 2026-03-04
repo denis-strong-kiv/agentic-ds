@@ -16,13 +16,6 @@ const meta: Meta<typeof Input> = {
 export default meta;
 type Story = StoryObj<typeof Input>;
 
-export const Default: Story = {};
-export const WithValue: Story = { args: { defaultValue: 'john@example.com' } };
-export const WithError: Story = {
-  args: { id: 'email', placeholder: 'Email', error: 'Invalid email address' },
-};
-export const Disabled: Story = { args: { disabled: true, value: 'Disabled value' } };
-
 export const WithLabel: Story = {
   render: () => (
     <div style={{ maxWidth: 320 }}>

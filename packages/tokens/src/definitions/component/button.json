@@ -1,75 +1,57 @@
 {
   "$schema": "component-tokens",
-  "$description": "Button component tokens. All values reference semantic tokens — no hard-coded colors.",
+  "$description": "Button component tokens — base default state only. Hover/active are derived in CSS via OKLCH relative color syntax (no separate tokens needed). Inverted variants use oklch(100% 0 0) for white.",
   "button": {
     "primary": {
-      "background": {
-        "default":  { "value": "{color.primary.default}",  "type": "color" },
-        "hover":    { "value": "{color.primary.hover}",    "type": "color" },
-        "active":   { "value": "{color.primary.active}",   "type": "color" },
-        "disabled": { "value": "{color.foreground.subtle}", "type": "color" },
-        "focus":    { "value": "{color.primary.default}",  "type": "color" }
-      },
-      "foreground": {
-        "default":  { "value": "{color.primary.foreground}", "type": "color" },
-        "disabled": { "value": "{color.foreground.muted}",   "type": "color" }
-      },
-      "border": {
-        "default":  { "value": "transparent",               "type": "color" },
-        "focus":    { "value": "{color.primary.active}",    "type": "color" }
-      },
-      "shadow": {
-        "focus": { "value": "0 0 0 3px {color.primary.default}", "type": "boxShadow" }
-      }
+      "background": { "value": "{color.primary.default}",   "type": "color" },
+      "foreground": { "value": "{color.primary.foreground}", "type": "color" },
+      "border":     { "value": "transparent",               "type": "color" }
     },
     "secondary": {
-      "background": {
-        "default":  { "value": "{color.surface.card}",       "type": "color" },
-        "hover":    { "value": "{color.background.subtle}",  "type": "color" },
-        "active":   { "value": "{color.border.default}",     "type": "color" },
-        "disabled": { "value": "{color.background.subtle}",  "type": "color" },
-        "focus":    { "value": "{color.surface.card}",       "type": "color" }
-      },
-      "foreground": {
-        "default":  { "value": "{color.foreground.default}", "type": "color" },
-        "disabled": { "value": "{color.foreground.muted}",   "type": "color" }
-      },
-      "border": {
-        "default":  { "value": "{color.border.default}",     "type": "color" },
-        "focus":    { "value": "{color.primary.default}",    "type": "color" }
-      }
+      "background": { "value": "transparent",               "type": "color" },
+      "foreground": { "value": "{color.foreground.default}", "type": "color" },
+      "border":     { "value": "{color.border.default}",    "type": "color" }
+    },
+    "tertiary": {
+      "$description": "Figma 'Tertiary' — ghost style with neutral foreground label.",
+      "background": { "value": "transparent",               "type": "color" },
+      "foreground": { "value": "{color.foreground.default}", "type": "color" },
+      "border":     { "value": "transparent",               "type": "color" }
+    },
+    "neutral": {
+      "$description": "Figma 'Default' — dark filled button using foreground/background inversion.",
+      "background": { "value": "{color.foreground.default}", "type": "color" },
+      "foreground": { "value": "{color.background.default}", "type": "color" },
+      "border":     { "value": "transparent",               "type": "color" }
+    },
+    "inverted-primary": {
+      "$description": "For dark surfaces. White fill; hover/active use oklch(100% 0 0 / alpha).",
+      "background": { "value": "oklch(100% 0 0)",           "type": "color" },
+      "foreground": { "value": "{color.foreground.default}", "type": "color" },
+      "border":     { "value": "transparent",               "type": "color" }
+    },
+    "inverted-secondary": {
+      "$description": "For dark surfaces. White outline; hover/active fill use oklch(100% 0 0 / alpha).",
+      "background": { "value": "transparent",               "type": "color" },
+      "foreground": { "value": "oklch(100% 0 0)",           "type": "color" },
+      "border":     { "value": "oklch(100% 0 0)",           "type": "color" }
+    },
+    "inverted-tertiary": {
+      "$description": "For dark surfaces. White label only; hover/active fill use oklch(100% 0 0 / alpha).",
+      "background": { "value": "transparent",               "type": "color" },
+      "foreground": { "value": "oklch(100% 0 0)",           "type": "color" },
+      "border":     { "value": "transparent",               "type": "color" }
     },
     "ghost": {
-      "background": {
-        "default":  { "value": "transparent",               "type": "color" },
-        "hover":    { "value": "{color.background.subtle}", "type": "color" },
-        "active":   { "value": "{color.border.muted}",      "type": "color" },
-        "disabled": { "value": "transparent",               "type": "color" },
-        "focus":    { "value": "transparent",               "type": "color" }
-      },
-      "foreground": {
-        "default":  { "value": "{color.foreground.default}", "type": "color" },
-        "disabled": { "value": "{color.foreground.muted}",   "type": "color" }
-      },
-      "border": {
-        "default": { "value": "transparent", "type": "color" },
-        "focus":   { "value": "{color.primary.default}", "type": "color" }
-      }
+      "$description": "Kept for backward compatibility — transparent bg, foreground-colored label.",
+      "background": { "value": "transparent",               "type": "color" },
+      "foreground": { "value": "{color.foreground.default}", "type": "color" },
+      "border":     { "value": "transparent",               "type": "color" }
     },
     "destructive": {
-      "background": {
-        "default":  { "value": "{color.error.default}", "type": "color" },
-        "hover":    { "value": "{color.error.default}", "type": "color" },
-        "active":   { "value": "{color.error.default}", "type": "color" },
-        "disabled": { "value": "{color.foreground.subtle}", "type": "color" }
-      },
-      "foreground": {
-        "default":  { "value": "{color.error.foreground}", "type": "color" },
-        "disabled": { "value": "{color.foreground.muted}", "type": "color" }
-      },
-      "border": {
-        "default": { "value": "transparent", "type": "color" }
-      }
+      "background": { "value": "{color.error.default}",     "type": "color" },
+      "foreground": { "value": "{color.error.foreground}",  "type": "color" },
+      "border":     { "value": "transparent",               "type": "color" }
     },
     "radius": { "value": "{shape.button}", "type": "borderRadius" }
   }

@@ -8,10 +8,15 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'ghost', 'destructive', 'link'],
+      options: [
+        'primary', 'secondary', 'tertiary', 'neutral',
+        'inverted-primary', 'inverted-secondary', 'inverted-tertiary',
+        'outline', 'ghost', 'destructive', 'link',
+      ],
     },
-    size: { control: 'select', options: ['sm', 'md', 'lg', 'icon'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg', 'xl', 'icon'] },
     disabled: { control: 'boolean' },
+    isLoading: { control: 'boolean' },
     children: { control: 'text' },
   },
   args: { children: 'Button', onClick: () => {} },
@@ -19,22 +24,19 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-export const Primary: Story = { args: { variant: 'primary' } };
-export const Secondary: Story = { args: { variant: 'secondary' } };
-export const Outline: Story = { args: { variant: 'outline' } };
-export const Ghost: Story = { args: { variant: 'ghost' } };
-export const Destructive: Story = { args: { variant: 'destructive' } };
-export const Link: Story = { args: { variant: 'link' } };
-export const Small: Story = { args: { variant: 'primary', size: 'sm' } };
-export const Large: Story = { args: { variant: 'primary', size: 'lg' } };
-export const Disabled: Story = { args: { variant: 'primary', disabled: true } };
-
 export const AllVariants: Story = {
   render: () => (
-    <div className="flex flex-wrap gap-3">
-      {(['primary', 'secondary', 'outline', 'ghost', 'destructive', 'link'] as const).map(v => (
-        <Button key={v} variant={v}>{v}</Button>
-      ))}
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-center gap-3">
+        {(['primary', 'secondary', 'tertiary', 'neutral', 'outline', 'ghost', 'destructive', 'link'] as const).map(v => (
+          <Button key={v} variant={v}>{v}</Button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-3 bg-[var(--color-foreground-default)] p-4 rounded-lg">
+        {(['inverted-primary', 'inverted-secondary', 'inverted-tertiary'] as const).map(v => (
+          <Button key={v} variant={v}>{v}</Button>
+        ))}
+      </div>
     </div>
   ),
 };
@@ -42,9 +44,26 @@ export const AllVariants: Story = {
 export const AllSizes: Story = {
   render: () => (
     <div className="flex items-center flex-wrap gap-3">
-      {(['sm', 'md', 'lg'] as const).map(s => (
+      {(['sm', 'md', 'lg', 'xl'] as const).map(s => (
         <Button key={s} size={s}>Size {s}</Button>
       ))}
+    </div>
+  ),
+};
+
+export const AllDisabled: Story = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-center gap-3">
+        {(['primary', 'secondary', 'tertiary', 'neutral', 'destructive'] as const).map(v => (
+          <Button key={v} variant={v} disabled>{v}</Button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-3 bg-[var(--color-foreground-default)] p-4 rounded-lg">
+        {(['inverted-primary', 'inverted-secondary', 'inverted-tertiary'] as const).map(v => (
+          <Button key={v} variant={v} disabled>{v}</Button>
+        ))}
+      </div>
     </div>
   ),
 };

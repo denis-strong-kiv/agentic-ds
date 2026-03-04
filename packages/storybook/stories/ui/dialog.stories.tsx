@@ -41,11 +41,6 @@ function DialogDemo({ size }: { size?: 'sm' | 'md' | 'lg' | 'xl' | 'full' }) {
   );
 }
 
-export const Default: Story = { render: () => <DialogDemo /> };
-export const Small: Story = { render: () => <DialogDemo size="sm" /> };
-export const Large: Story = { render: () => <DialogDemo size="lg" /> };
-export const ExtraLarge: Story = { render: () => <DialogDemo size="xl" /> };
-
 export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>

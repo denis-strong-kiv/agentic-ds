@@ -15,7 +15,13 @@
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.2.14",
+    "@storybook/addon-docs": "^10.2.14",
+    "@storybook/addon-themes": "^10.2.14",
     "@storybook/addon-vitest": "^10.2.14",
+    "@storybook/react": "^10.2.14",
+    "@storybook/react-vite": "^10.2.14",
+    "@tailwindcss/vite": "^4.2.1",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
     "eslint": "^9.18.0",
@@ -23,6 +29,7 @@
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "prettier": "^3.4.2",
+    "storybook": "^10.2.14",
     "turbo": "^2.3.3",
     "typescript": "^5.7.3"
   },
