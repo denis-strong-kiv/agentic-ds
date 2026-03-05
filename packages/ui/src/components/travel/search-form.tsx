@@ -7,6 +7,7 @@ import {
   Users,
   BedDouble,
   Search,
+  Plane,
   Plus,
   Minus,
   type LucideIcon,
@@ -16,12 +17,28 @@ import { Icon } from '../ui/icon.js';
 import { Calendar } from '../ui/calendar.js';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover.js';
 import { Button } from '../ui/button.js';
+import { DestinationItemContent } from './destination-item-content.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type SearchTab = 'flights' | 'hotels';
 export type TripType = 'round-trip' | 'one-way' | 'multi-city';
 export type CabinClass = 'economy' | 'premium-economy' | 'business' | 'first';
+export type DestinationItemType =
+  | 'continent'
+  | 'country'
+  | 'region'
+  | 'area'
+  | 'city'
+  | 'airport'
+  | 'neighborhood'
+  | 'landmark'
+  | 'hotel';
+
+export interface GeographicBreadcrumb {
+  type: Exclude<DestinationItemType, 'continent'>;
+  label: string;
+}
 
 const CABIN_LABELS: Record<CabinClass, string> = {
   'economy': 'Economy',
@@ -31,12 +48,23 @@ const CABIN_LABELS: Record<CabinClass, string> = {
 };
 
 export interface DestinationOption {
+  id?: string;
   iata?: string;
   city?: string;
   code?: string;
   label?: string;
   name?: string;
+  shortName?: string;
   country?: string;
+  distance?: string;
+  thumbnailUrl?: string;
+  itemType?: DestinationItemType;
+  geographicBreadcrumbs?: GeographicBreadcrumb[];
+}
+
+export interface RecentSearchItem {
+  route: string;
+  dates?: string;
 }
 
 // Backward-compat alias
@@ -87,6 +115,7 @@ export interface TravelSearchFormProps {
   defaultTab?: SearchTab;
   destinationOptions?: DestinationOption[];
   airportOptions?: DestinationOption[];
+  recentSearches?: RecentSearchItem[];
   onSearch?: (payload: TravelSearchPayload) => void;
   className?: string;
 }
@@ -275,7 +304,34 @@ function Counter({
 // ─── DestinationPicker ────────────────────────────────────────────────────────
 
 function getDestinationName(option: DestinationOption): string {
-  return option.city ?? option.label ?? option.name ?? '';
+  return option.shortName ?? option.city ?? option.label ?? option.name ?? '';
+}
+
+function getDestinationOptionTitle(option: DestinationOption): string {
+  return option.label ?? option.name ?? option.shortName ?? option.city ?? '';
+}
+
+function getDestinationTypeLabel(option: DestinationOption): string | null {
+  if (!option.itemType) return null;
+  return option.itemType.charAt(0).toUpperCase() + option.itemType.slice(1);
+}
+
+function formatGeographicBreadcrumbs(option: DestinationOption): string {
+  if (option.itemType === 'country') return '';
+  const crumbs = option.geographicBreadcrumbs?.map(crumb => crumb.label).filter(Boolean) ?? [];
+  if (crumbs.length === 0) return '';
+  return crumbs.slice(0, 2).join(', ');
+}
+
+function getDestinationOptionSubtitle(option: DestinationOption): string {
+  const breadcrumbText = formatGeographicBreadcrumbs(option);
+  if (breadcrumbText) return breadcrumbText;
+
+  const title = getDestinationOptionTitle(option);
+  if (title && option.city && title.toLowerCase() !== option.city.toLowerCase()) {
+    return [option.city, option.country].filter(Boolean).join(', ');
+  }
+  return option.country ?? '';
 }
 
 function getDestinationCode(option: DestinationOption): string {
@@ -293,6 +349,7 @@ function DestinationPicker({
   icon,
   className,
   buttonClassName,
+  recentSearches = [],
 }: {
   id: string;
   value: DestinationOption | null;
@@ -304,6 +361,7 @@ function DestinationPicker({
   icon?: LucideIcon;
   className?: string;
   buttonClassName?: string;
+  recentSearches?: RecentSearchItem[];
 }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
@@ -322,14 +380,23 @@ function DestinationPicker({
     const matched = normalizedQuery.length >= 1
       ? pool.filter(option => {
           const name = getDestinationName(option).toLowerCase();
+          const title = getDestinationOptionTitle(option).toLowerCase();
+          const shortName = (option.shortName ?? '').toLowerCase();
           const code = getDestinationCode(option).toLowerCase();
-          return name.includes(normalizedQuery) || code.includes(normalizedQuery);
+          const country = (option.country ?? '').toLowerCase();
+          const breadcrumbs = (option.geographicBreadcrumbs ?? []).map(crumb => crumb.label.toLowerCase());
+          return name.includes(normalizedQuery)
+            || title.includes(normalizedQuery)
+            || shortName.includes(normalizedQuery)
+            || code.includes(normalizedQuery)
+            || country.includes(normalizedQuery)
+            || breadcrumbs.some(label => label.includes(normalizedQuery));
         })
       : pool;
 
     const sorted = [...matched].sort((left, right) => {
-      const leftName = getDestinationName(left).toLowerCase();
-      const rightName = getDestinationName(right).toLowerCase();
+      const leftName = getDestinationOptionTitle(left).toLowerCase();
+      const rightName = getDestinationOptionTitle(right).toLowerCase();
       const leftCode = getDestinationCode(left).toLowerCase();
       const rightCode = getDestinationCode(right).toLowerCase();
 
@@ -357,6 +424,26 @@ function DestinationPicker({
     if (!open || activeIndex < 0) return;
     optionRefs.current[activeIndex]?.scrollIntoView({ block: 'nearest' });
   }, [activeIndex, open]);
+
+  const featuredCity = React.useMemo(() => {
+    if (value?.city) return value.city;
+    const firstWithCity = filtered.find(item => Boolean(item.city));
+    return firstWithCity?.city ?? null;
+  }, [filtered, value?.city]);
+
+  const featuredCountry = React.useMemo(() => {
+    if (value?.country) return value.country;
+    const firstInCity = filtered.find(item => item.city === featuredCity && Boolean(item.country));
+    return firstInCity?.country ?? null;
+  }, [featuredCity, filtered, value?.country]);
+
+  const cityAirports = React.useMemo(() => {
+    const airportPool = filtered.filter(item => item.itemType === 'airport' || Boolean(getDestinationCode(item)));
+    const scoped = airportPool.length > 0 ? airportPool : filtered;
+    if (!featuredCity) return scoped.slice(0, 3);
+    const inCity = scoped.filter(item => item.city === featuredCity);
+    return (inCity.length ? inCity : scoped).slice(0, 3);
+  }, [featuredCity, filtered]);
 
   function select(opt: DestinationOption) {
     onChange(opt);
@@ -425,67 +512,140 @@ function DestinationPicker({
           onMouseDown={e => e.preventDefault()}
         >
           <div className="border-b border-[var(--color-border-default)] p-2">
-            <input
-              ref={inputRef}
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="Search destinations or cities…"
-              aria-label={`Search ${pickerType === 'origin' ? 'origins' : 'destinations'}`}
-              role="combobox"
-              aria-expanded={open}
-              aria-controls={listId}
-              aria-activedescendant={open && activeIndex >= 0 ? `${listId}-opt-${activeIndex}` : undefined}
-              onKeyDown={e => {
-                if (!filtered.length) return;
+            <div className="flex items-center gap-2">
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Search destinations or cities…"
+                aria-label={`Search ${pickerType === 'origin' ? 'origins' : 'destinations'}`}
+                role="combobox"
+                aria-expanded={open}
+                aria-controls={listId}
+                aria-activedescendant={open && activeIndex >= 0 ? `${listId}-opt-${activeIndex}` : undefined}
+                onKeyDown={e => {
+                  if (!filtered.length) return;
 
-                if (e.key === 'ArrowDown') {
-                  e.preventDefault();
-                  setActiveIndex(prev => (prev + 1) % filtered.length);
-                  return;
-                }
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setActiveIndex(prev => (prev + 1) % filtered.length);
+                    return;
+                  }
 
-                if (e.key === 'ArrowUp') {
-                  e.preventDefault();
-                  setActiveIndex(prev => (prev <= 0 ? filtered.length - 1 : prev - 1));
-                  return;
-                }
+                  if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setActiveIndex(prev => (prev <= 0 ? filtered.length - 1 : prev - 1));
+                    return;
+                  }
 
-                if (e.key === 'Home') {
-                  e.preventDefault();
-                  setActiveIndex(0);
-                  return;
-                }
+                  if (e.key === 'Home') {
+                    e.preventDefault();
+                    setActiveIndex(0);
+                    return;
+                  }
 
-                if (e.key === 'End') {
-                  e.preventDefault();
-                  setActiveIndex(filtered.length - 1);
-                  return;
-                }
+                  if (e.key === 'End') {
+                    e.preventDefault();
+                    setActiveIndex(filtered.length - 1);
+                    return;
+                  }
 
-                if (e.key === 'Enter' && activeIndex >= 0) {
-                  e.preventDefault();
-                  select(filtered[activeIndex] as DestinationOption);
-                  return;
-                }
+                  if (e.key === 'Enter' && activeIndex >= 0) {
+                    e.preventDefault();
+                    select(filtered[activeIndex] as DestinationOption);
+                    return;
+                  }
 
-                if (e.key === 'Escape') {
-                  e.preventDefault();
-                  setOpen(false);
-                  setLockActive(null);
-                }
-              }}
-              onBlur={() => setOpen(false)}
-              onBlurCapture={e => {
-                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
-                  setLockActive(null);
-                }
-              }}
-              className={cn(
-                'w-full rounded-md bg-transparent px-2 py-1.5 text-sm outline-none',
-                'text-[var(--color-foreground-default)] placeholder:text-[var(--color-foreground-subtle)]',
-              )}
-            />
+                  if (e.key === 'Escape') {
+                    e.preventDefault();
+                    setOpen(false);
+                    setLockActive(null);
+                  }
+                }}
+                onBlur={() => setOpen(false)}
+                onBlurCapture={e => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+                    setLockActive(null);
+                  }
+                }}
+                className={cn(
+                  'w-full rounded-md bg-transparent px-2 py-1.5 text-sm outline-none',
+                  'text-[var(--color-foreground-default)] placeholder:text-[var(--color-foreground-subtle)]',
+                )}
+              />
+              <button
+                type="button"
+                aria-label="Add destination"
+                className={cn(
+                  'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
+                  'bg-[var(--color-background-subtle)] text-[var(--color-foreground-muted)]',
+                )}
+              >
+                <Icon icon={Plus} size="sm" aria-hidden />
+              </button>
+            </div>
           </div>
+
+          {!normalizedQuery && pickerType !== 'hotel' && featuredCity && (
+            <div className="border-b border-[var(--color-border-default)] px-4 py-4">
+              <div className="flex items-center gap-3">
+                <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[var(--color-background-subtle)]">
+                  {value?.thumbnailUrl ? (
+                    <img src={value.thumbnailUrl} alt={featuredCity} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-[var(--color-foreground-muted)]">
+                      {featuredCity.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-2xl font-semibold text-[var(--color-foreground-default)]">{featuredCity}</p>
+                  <p className="truncate text-sm text-[var(--color-foreground-muted)]">
+                    {[featuredCity, featuredCountry].filter(Boolean).join(', ')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!normalizedQuery && pickerType !== 'hotel' && cityAirports.length > 0 && (
+            <div className="border-b border-[var(--color-border-default)] px-2 py-2">
+              <p className="px-2 pb-1 text-xs font-semibold text-[var(--color-foreground-muted)]">Popular destination</p>
+              {cityAirports.map((opt, index) => (
+                <button
+                  key={`airport-row-${getDestinationCode(opt)}-${index}`}
+                  type="button"
+                  onMouseDown={() => select(opt)}
+                  className={cn(
+                    'flex w-full items-center gap-3 rounded-lg px-2 py-2 text-start',
+                    'hover:bg-[var(--color-background-subtle)]',
+                  )}
+                >
+                  <DestinationItemContent
+                    leading={(
+                      <span
+                        className={cn(
+                          'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl',
+                          'bg-[var(--color-background-subtle)] text-[var(--color-foreground-muted)]',
+                        )}
+                      >
+                        <Icon icon={Plane} size="md" aria-hidden />
+                      </span>
+                    )}
+                    title={getDestinationOptionTitle(opt)}
+                    trailing={getDestinationCode(opt) ? (
+                      <span className="shrink-0 text-sm font-semibold uppercase text-[var(--color-foreground-subtle)]">
+                        {getDestinationCode(opt)}
+                      </span>
+                    ) : undefined}
+                    subtitle={opt.distance ?? getDestinationOptionSubtitle(opt)}
+                    titleClassName="text-base font-semibold"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+
           <ul id={listId} role="listbox" className="max-h-56 overflow-y-auto py-1">
             {filtered.length === 0 ? (
               <li className="px-3 py-2 text-sm text-[var(--color-foreground-muted)]">No destinations found.</li>
@@ -508,21 +668,48 @@ function DestinationPicker({
                     value && getDestinationCode(value) === getDestinationCode(opt) && 'text-[var(--color-primary-default)]',
                   )}
                 >
-                  {getDestinationCode(opt) && (
-                    <span className="w-9 shrink-0 text-xs font-medium uppercase text-[var(--color-foreground-subtle)]">
-                      {getDestinationCode(opt)}
-                    </span>
-                  )}
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-[var(--color-foreground-default)]">{getDestinationName(opt)}</p>
-                    {opt.country && (
-                      <p className="truncate text-xs text-[var(--color-foreground-muted)]">{opt.country}</p>
-                    )}
-                  </div>
+                  <DestinationItemContent
+                    leading={getDestinationCode(opt) ? (
+                      <span className="w-9 shrink-0 text-xs font-medium uppercase text-[var(--color-foreground-subtle)]">
+                        {getDestinationCode(opt)}
+                      </span>
+                    ) : undefined}
+                    title={getDestinationOptionTitle(opt)}
+                    subtitle={
+                      (opt.country || opt.city || opt.geographicBreadcrumbs?.length)
+                        ? getDestinationOptionSubtitle(opt)
+                        : undefined
+                    }
+                    meta={getDestinationTypeLabel(opt) ?? undefined}
+                  />
                 </li>
               ))
             )}
           </ul>
+
+          {!normalizedQuery && recentSearches.length > 0 && (
+            <div className="border-t border-[var(--color-border-default)] px-3 py-3">
+              <p className="mb-2 text-sm font-semibold text-[var(--color-foreground-default)]">Recent search</p>
+              <div className="space-y-1">
+                {recentSearches.slice(0, 3).map(item => (
+                  <button
+                    key={`${item.route}-${item.dates ?? ''}`}
+                    type="button"
+                    className={cn(
+                      'flex w-full items-start gap-2 rounded-md px-2 py-2 text-start',
+                      'hover:bg-[var(--color-background-subtle)]',
+                    )}
+                  >
+                    <DestinationItemContent
+                      leading={<Icon icon={Plane} size="sm" className="mt-1 shrink-0 text-[var(--color-foreground-muted)]" aria-hidden />}
+                      title={item.route}
+                      subtitle={item.dates}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </SearchField>
@@ -823,6 +1010,7 @@ export function TravelSearchForm({
   defaultTab = 'flights',
   destinationOptions,
   airportOptions = [],
+  recentSearches = [],
   onSearch,
   className,
 }: TravelSearchFormProps) {
@@ -970,6 +1158,7 @@ export function TravelSearchForm({
                 pickerType="origin"
                 placeholder="From"
                 options={resolvedDestinationOptions}
+                recentSearches={recentSearches}
               />
               <FieldSeparator left="origin" right="destination" />
               <DestinationPicker
@@ -981,6 +1170,7 @@ export function TravelSearchForm({
                 options={resolvedDestinationOptions}
                 excludeCode={getDestinationCode(origin ?? {}) || undefined}
                 buttonClassName="ps-7"
+                recentSearches={recentSearches}
               />
               {/* Swap button — centered on the separator */}
               <button
@@ -1076,6 +1266,7 @@ export function TravelSearchForm({
                       pickerType="origin"
                       placeholder="From"
                       options={resolvedDestinationOptions}
+                      recentSearches={recentSearches}
                     />
                     <FieldSeparator left={`mc-origin-${i}`} right={`mc-dest-${i}`} />
                     <DestinationPicker
@@ -1086,6 +1277,7 @@ export function TravelSearchForm({
                       placeholder="To"
                       options={resolvedDestinationOptions}
                       excludeCode={getDestinationCode(leg.origin ?? {}) || undefined}
+                      recentSearches={recentSearches}
                     />
                   </div>
                   <FieldSeparator left={`mc-dest-${i}`} right={`mc-date-${i}`} />
@@ -1143,6 +1335,7 @@ export function TravelSearchForm({
               icon={Search}
               className="flex-[2_0_0]"
               buttonClassName="ps-4"
+              recentSearches={recentSearches}
             />
             <FieldSeparator left="hotel-dest" right="checkin" />
             <DateField id="checkin" value={checkIn} onChange={setCheckIn} placeholder="Check-in" />

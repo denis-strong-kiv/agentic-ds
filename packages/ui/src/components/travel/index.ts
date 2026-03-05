@@ -8,6 +8,7 @@ export * from './activity-card';
 export * from './booking-confirmation';
 export * from './booking-stepper';
 export * from './car-card';
+export * from './destination-item-content';
 export * from './filter-panel';
 export * from './flight-card';
 export * from './hotel-card';
