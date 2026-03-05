@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 import {
-  Plane,
-  Building2,
   ArrowLeftRight,
   CalendarDays,
   Users,
@@ -103,10 +101,10 @@ function FieldSeparator({ left, right }: { left: string; right: string }) {
   const { active } = React.useContext(ActiveFieldCtx);
   const hidden = active === left || active === right;
   return (
-    <div className="flex shrink-0 items-center self-stretch py-2" aria-hidden="true">
+    <div className="flex shrink-0 items-center self-stretch py-3" aria-hidden="true">
       <div
         className={cn(
-          'h-8 w-px shrink-0 bg-[var(--color-border-default)]',
+          'h-full w-px shrink-0 bg-[var(--color-border-default)]',
           'transition-opacity duration-[var(--duration-fast,100ms)]',
           hidden && 'opacity-0',
         )}
@@ -142,11 +140,54 @@ function SearchField({
 // ─── Shared field button styles ───────────────────────────────────────────────
 
 const fieldBtn = cn(
-  'flex min-w-0 flex-1 items-center gap-2 rounded-full px-3 py-4 text-start',
+  'flex h-16 min-w-0 flex-1 items-center gap-2 rounded-full px-5 text-start',
   'transition-colors duration-[var(--duration-fast,100ms)]',
   'hover:bg-[var(--color-background-subtle)]',
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-primary-default)]',
 );
+
+const pillShell = cn(
+  'flex h-16 items-center rounded-full',
+  'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
+);
+
+const tabBtn = (active: boolean) => cn(
+  'border-b-2 px-10 py-3 text-[34px] font-medium',
+  'transition-colors duration-[var(--duration-fast,100ms)]',
+  active
+    ? 'border-[var(--color-foreground-default)] text-[var(--color-foreground-default)]'
+    : 'border-transparent text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
+);
+
+const tripTypeLabel = (active: boolean) => cn(
+  'flex cursor-pointer items-center gap-2.5 rounded-full py-1',
+  'text-[15px] font-medium transition-colors duration-[var(--duration-fast,100ms)]',
+  active
+    ? 'text-[var(--color-foreground-default)]'
+    : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
+);
+
+const tripTypeIndicator = (active: boolean) => cn(
+  'flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2',
+  'transition-colors duration-[var(--duration-fast,100ms)]',
+  active
+    ? 'border-[var(--color-primary-default)]'
+    : 'border-[var(--color-border-default)]',
+);
+
+function SearchActionButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button
+      variant="primary"
+      size="xl"
+      onClick={onClick}
+      className="rounded-full"
+    >
+      <Icon icon={Search} size="sm" aria-hidden />
+      Search
+    </Button>
+  );
+}
 
 // ─── Counter ──────────────────────────────────────────────────────────────────
 
@@ -575,7 +616,7 @@ function HotelDestinationField({
       onMouseEnter={() => setActive(id)}
       onMouseLeave={() => setActive(null)}
     >
-      <div className="flex min-w-0 flex-1 items-center rounded-full px-4 transition-colors hover:bg-[var(--color-background-subtle)]">
+      <div className="flex h-16 min-w-0 flex-1 items-center rounded-full px-4 transition-colors hover:bg-[var(--color-background-subtle)]">
         <input
           type="text"
           value={value}
@@ -585,7 +626,7 @@ function HotelDestinationField({
           onFocus={() => setActive(id)}
           onBlur={() => setActive(null)}
           className={cn(
-            'min-w-0 flex-1 bg-transparent py-4 text-sm font-medium outline-none',
+            'h-full min-w-0 flex-1 bg-transparent text-sm font-medium outline-none',
             'text-[var(--color-foreground-default)] placeholder:text-[var(--color-foreground-subtle)]',
           )}
         />
@@ -606,26 +647,10 @@ function SearchPill({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn(
-      'flex items-center rounded-full',
-      'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
-    )}>
+    <div className={pillShell}>
       <div className="flex min-w-0 flex-1 items-stretch">{children}</div>
-      <div className="shrink-0 p-2">
-        <button
-          type="button"
-          onClick={onSearch}
-          className={cn(
-            'flex h-12 items-center gap-2 rounded-full px-5',
-            'bg-[var(--color-primary-default)] text-[var(--color-primary-foreground)]',
-            'text-sm font-semibold',
-            'transition-opacity hover:opacity-90',
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-primary-default)]',
-          )}
-        >
-          <Icon icon={Search} size="sm" aria-hidden />
-          Search
-        </button>
+      <div className="shrink-0 p-1">
+        <SearchActionButton onClick={onSearch} />
       </div>
     </div>
   );
@@ -633,9 +658,9 @@ function SearchPill({
 
 // ─── TravelSearchForm ─────────────────────────────────────────────────────────
 
-const TABS: { id: SearchTab; label: string; icon: LucideIcon }[] = [
-  { id: 'flights', label: 'Flights', icon: Plane },
-  { id: 'hotels', label: 'Hotels', icon: Building2 },
+const TABS: { id: SearchTab; label: string }[] = [
+  { id: 'flights', label: 'Flights' },
+  { id: 'hotels', label: 'Hotels' },
 ];
 
 const TRIP_TYPES: { id: TripType; label: string }[] = [
@@ -707,10 +732,10 @@ export function TravelSearchForm({
 
   return (
     <ActiveFieldCtx.Provider value={{ active: activeField, setActive: setActiveField }}>
-      <div className={cn('flex flex-col gap-2', className)}>
+      <div className={cn('flex flex-col gap-3', className)}>
 
-        {/* ── Tab bar ─────────────────────────────────────────────────────── */}
-        <div className="flex gap-1" role="tablist" aria-label="Travel type">
+        {/* ── Top nav tabs ─────────────────────────────────────────────────── */}
+        <div className="flex justify-center border-b border-[var(--color-border-default)]" role="tablist" aria-label="Travel type">
           {TABS.map(tab => (
             <button
               key={tab.id}
@@ -718,15 +743,8 @@ export function TravelSearchForm({
               role="tab"
               aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                'flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium',
-                'transition-colors duration-[var(--duration-fast,100ms)]',
-                activeTab === tab.id
-                  ? 'bg-[var(--color-surface-card)] text-[var(--color-foreground-default)] shadow-sm'
-                  : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
-              )}
+              className={tabBtn(activeTab === tab.id)}
             >
-              <Icon icon={tab.icon} size="sm" aria-hidden />
               {tab.label}
             </button>
           ))}
@@ -740,31 +758,19 @@ export function TravelSearchForm({
           )}
         >
           <div className="overflow-hidden">
-            <div className="flex gap-1 pb-2 ps-1" role="radiogroup" aria-label="Trip type">
+            <div className="flex items-center gap-7 pb-2 ps-1" role="radiogroup" aria-label="Trip type">
               {TRIP_TYPES.map(type => (
                 <label
                   key={type.id}
-                  className={cn(
-                    'flex cursor-pointer items-center gap-2 rounded-full px-3 py-1',
-                    'text-[13px] font-medium transition-colors duration-[var(--duration-fast,100ms)]',
-                    tripType === type.id
-                      ? 'text-[var(--color-foreground-default)]'
-                      : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
-                  )}
+                  className={tripTypeLabel(tripType === type.id)}
                 >
                   {/* Custom radio indicator */}
                   <span
-                    className={cn(
-                      'flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2',
-                      'transition-colors duration-[var(--duration-fast,100ms)]',
-                      tripType === type.id
-                        ? 'border-[var(--color-primary-default)]'
-                        : 'border-[var(--color-border-default)]',
-                    )}
+                    className={tripTypeIndicator(tripType === type.id)}
                     aria-hidden="true"
                   >
                     {tripType === type.id && (
-                      <span className="h-2 w-2 rounded-full bg-[var(--color-primary-default)]" />
+                      <span className="h-3 w-3 rounded-full bg-[var(--color-primary-default)]" />
                     )}
                   </span>
                   <input
@@ -786,7 +792,13 @@ export function TravelSearchForm({
         {activeTab === 'flights' && tripType !== 'multi-city' && (
           <SearchPill onSearch={handleSearch}>
             {/* Origin + Destination — takes most space */}
-            <div className="relative flex flex-[3_0_0] min-w-0 items-stretch">
+            <div
+              className={cn(
+                'relative flex min-w-0 items-stretch',
+                'transition-all duration-[var(--duration-normal,200ms)] ease-out motion-safe:transition-all',
+                tripType === 'round-trip' ? 'flex-[3_0_0]' : 'flex-[4_0_0]',
+              )}
+            >
               <AirportField
                 id="origin"
                 value={origin}
@@ -827,15 +839,22 @@ export function TravelSearchForm({
               value={departureDate}
               onChange={setDepartureDate}
               placeholder="Depart"
+              className={cn(
+                'transition-all duration-[var(--duration-normal,200ms)] ease-out motion-safe:transition-all',
+                tripType === 'round-trip' ? 'flex-[1_0_0]' : 'flex-[2_0_0]',
+              )}
             />
 
-            {/* Return date — same flex weight as departure, collapses for one-way */}
+            {/* Return date — collapses for one-way, allowing smooth width redistribution */}
             <div
               className={cn(
-                'flex-[1_0_0] flex overflow-hidden items-stretch',
+                'flex overflow-hidden items-stretch',
                 'transition-all duration-[var(--duration-normal,200ms)] ease-out motion-safe:transition-all',
-                tripType === 'round-trip' ? 'max-w-[500px] opacity-100' : 'max-w-0 opacity-0',
+                tripType === 'round-trip'
+                  ? 'max-w-[500px] flex-[1_0_0] opacity-100'
+                  : 'max-w-0 flex-[0_0_0] pointer-events-none opacity-0',
               )}
+              aria-hidden={tripType !== 'round-trip'}
             >
               <FieldSeparator left="departure" right="return" />
               <DateField
@@ -853,7 +872,12 @@ export function TravelSearchForm({
             />
 
             {/* Passengers + cabin class */}
-            <PassengerField id="passengers" value={passengers} onChange={setPassengers} />
+            <PassengerField
+              id="passengers"
+              value={passengers}
+              onChange={setPassengers}
+              className="w-[220px] min-w-[220px] shrink-0 flex-none"
+            />
           </SearchPill>
         )}
 
@@ -918,25 +942,10 @@ export function TravelSearchForm({
                 </button>
               )}
               <div className="ms-auto flex items-center gap-2">
-                <div className={cn(
-                  'flex rounded-full',
-                  'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
-                )}>
+                <div className={pillShell}>
                   <PassengerField id="mc-passengers" value={passengers} onChange={setPassengers} />
                 </div>
-                <button
-                  type="button"
-                  onClick={handleSearch}
-                  className={cn(
-                    'flex h-12 items-center gap-2 rounded-full px-5',
-                    'bg-[var(--color-primary-default)] text-[var(--color-primary-foreground)]',
-                    'text-sm font-semibold transition-opacity hover:opacity-90',
-                    'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-primary-default)]',
-                  )}
-                >
-                  <Icon icon={Search} size="sm" aria-hidden />
-                  Search
-                </button>
+                <SearchActionButton onClick={handleSearch} />
               </div>
             </div>
           </div>

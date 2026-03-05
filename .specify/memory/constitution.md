@@ -1,50 +1,47 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Agentic-DS Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Token-First Styling
+All visual styling MUST come from design tokens and theme primitives.
+- Use `var(--color-*)`, `var(--shape-*)`, `var(--duration-*)`, and existing Tailwind token mappings.
+- Hard-coded hex/rgb/hsl colors are forbidden in component code.
+- New visual decisions must be added to tokens first, then consumed by components.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. No Inline Styles by Default
+Component styles MUST be expressed through class utilities and shared style constants.
+- Avoid `style={{ ... }}` in production components.
+- Allowed exception: runtime-computed values that cannot be represented via tokens/utilities.
+- If exception is used, document why in PR notes and keep it minimal.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Reusable UI Primitives Over One-Off Markup
+Prefer existing UI-kit primitives and shared class constants over repeated ad-hoc class strings.
+- Build from `packages/ui/src/components/ui/*` primitives.
+- Extract repeated patterns into local constants/utilities before duplicating.
+- Public APIs should stay stable unless a breaking change is explicitly approved.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Accessibility and RTL Are Non-Negotiable
+Every shipped UI change must preserve accessibility and internationalization constraints.
+- Keyboard access, semantic roles, and visible focus states are required.
+- Respect reduced motion and existing ARIA patterns.
+- Use logical properties/utilities for directionality and RTL safety.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Test and Verify Before Merge
+Behavioral changes must be covered and validated.
+- Update/add tests for changed behavior and labels.
+- Run relevant package tests before merge.
+- Avoid unrelated refactors in the same changeset.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Implementation Guardrails
+- Keep components focused and minimal: no speculative features.
+- Prefer composition over deeply nested conditional styling.
+- Keep Storybook examples aligned with production component behavior.
+- Maintain strict TypeScript and existing linting conventions.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This constitution supersedes local stylistic preferences for UI implementation.
+- Any deviation requires explicit approval and rationale.
+- Reviews must verify token usage, no-inline-style compliance, and accessibility.
+- Amendments must include migration guidance when rules change.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-03-05 | **Last Amended**: 2026-03-05
