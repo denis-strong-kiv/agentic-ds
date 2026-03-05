@@ -1,4 +1,4 @@
-// ─── Combined i18n + Brand Resolution Middleware ─────────────────────────────
+// ─── Combined i18n + Brand Resolution Proxy ────────────────────────────────
 // 1. next-intl handles locale detection and URL-prefix routing (/ar/...)
 // 2. Brand resolution extracts brand key from subdomain/path/header and
 //    injects x-brand / x-color-mode headers for SSR consumption.
@@ -57,9 +57,9 @@ function extractColorMode(request: NextRequest): 'light' | 'dark' {
   return 'light';
 }
 
-// ─── Combined middleware ──────────────────────────────────────────────────────
+// ─── Combined proxy ───────────────────────────────────────────────────────────
 
-export function middleware(request: NextRequest): NextResponse {
+export function proxy(request: NextRequest): NextResponse {
   // Run next-intl locale routing first
   const intlResponse = intlMiddleware(request) as NextResponse;
 
