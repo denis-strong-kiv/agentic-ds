@@ -87,15 +87,14 @@ async function healthR2(env: Env): Promise<Response> {
 // ─── 2. DB test endpoint ──────────────────────────────────────────────────────
 
 async function dbTest(env: Env): Promise<Response> {
-  await env.DB.prepare(
-    "CREATE TABLE IF NOT EXISTS items (id TEXT PRIMARY KEY, name TEXT NOT NULL, data TEXT, created_at TEXT NOT NULL)"
-  ).run();
+  await ensureItemsTable(env);
   return json({ status: "ok", message: "items table ready" });
 }
 
 // ─── 3. Basic CRUD ────────────────────────────────────────────────────────────
 
 async function listItems(env: Env): Promise<Response> {
+  await ensureItemsTable(env);
   const { results } = await env.DB.prepare(
     "SELECT * FROM items ORDER BY created_at DESC"
   ).all();
@@ -103,6 +102,7 @@ async function listItems(env: Env): Promise<Response> {
 }
 
 async function createItem(request: Request, env: Env): Promise<Response> {
+  await ensureItemsTable(env);
   const body = await request.json<{ name: string; data?: string }>();
   if (!body.name || typeof body.name !== "string") return json({ error: "name is required" }, 400);
   if (body.name.length > 255) return json({ error: "name must be 255 characters or fewer" }, 422);
@@ -122,6 +122,7 @@ async function createItem(request: Request, env: Env): Promise<Response> {
 }
 
 async function getItem(id: string, env: Env): Promise<Response> {
+  await ensureItemsTable(env);
   const item = await env.DB.prepare("SELECT * FROM items WHERE id = ?")
     .bind(id)
     .first();
@@ -134,6 +135,7 @@ async function updateItem(
   request: Request,
   env: Env
 ): Promise<Response> {
+  await ensureItemsTable(env);
   const body = await request.json<{ name?: string; data?: string }>();
   const item = await env.DB.prepare("SELECT * FROM items WHERE id = ?")
     .bind(id)
@@ -155,6 +157,7 @@ async function updateItem(
 }
 
 async function deleteItem(id: string, env: Env): Promise<Response> {
+  await ensureItemsTable(env);
   const { meta } = await env.DB.prepare("DELETE FROM items WHERE id = ?")
     .bind(id)
     .run();
@@ -166,6 +169,7 @@ async function deleteItem(id: string, env: Env): Promise<Response> {
 // ─── 4. KV caching layer ─────────────────────────────────────────────────────
 
 async function listItemsCached(env: Env): Promise<Response> {
+  await ensureItemsTable(env);
   const cached = await env.KV.get("items:list");
   if (cached) {
     return new Response(cached, {
@@ -182,6 +186,12 @@ async function listItemsCached(env: Env): Promise<Response> {
   return new Response(body, {
     headers: { "Content-Type": "application/json", "X-Cache": "MISS" },
   });
+}
+
+async function ensureItemsTable(env: Env): Promise<void> {
+  await env.DB.prepare(
+    "CREATE TABLE IF NOT EXISTS items (id TEXT PRIMARY KEY, name TEXT NOT NULL, data TEXT, created_at TEXT NOT NULL)"
+  ).run();
 }
 
 // ─── 5. R2 upload/download ────────────────────────────────────────────────────
