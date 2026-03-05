@@ -142,7 +142,6 @@ describe('TravelSearchForm', () => {
   // ── Hotels occupancy ─────────────────────────────────────────────────────
 
   it('shows occupancy field on hotels tab', async () => {
-    const user = userEvent.setup();
     render(<TravelSearchForm defaultTab="hotels" />);
     expect(screen.getByRole('button', { name: /2 Guests, 1 Room/i })).toBeInTheDocument();
   });
