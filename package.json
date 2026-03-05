@@ -11,7 +11,8 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "FORCE_COLOR=1 turbo test --ui=stream",
-    "storybook": "turbo storybook",
+    "storybook": "npm run -w @travel/storybook storybook",
+    "storybook:build": "npm run -w @travel/storybook storybook:build",
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {
