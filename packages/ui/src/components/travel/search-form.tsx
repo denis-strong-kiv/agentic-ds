@@ -30,11 +30,17 @@ const CABIN_LABELS: Record<CabinClass, string> = {
   'first': 'First',
 };
 
-export interface AirportOption {
-  iata: string;
-  city: string;
+export interface DestinationOption {
+  iata?: string;
+  city?: string;
+  code?: string;
+  label?: string;
+  name?: string;
   country?: string;
 }
+
+// Backward-compat alias
+export type AirportOption = DestinationOption;
 
 export interface PassengerConfig {
   adults: number;
@@ -50,8 +56,8 @@ export interface OccupancyConfig {
 }
 
 export interface FlightLeg {
-  origin: AirportOption | null;
-  destination: AirportOption | null;
+  origin: DestinationOption | null;
+  destination: DestinationOption | null;
   departureDate: Date | null;
 }
 
@@ -79,7 +85,8 @@ export type SearchVertical = SearchTab;
 
 export interface TravelSearchFormProps {
   defaultTab?: SearchTab;
-  airportOptions?: AirportOption[];
+  destinationOptions?: DestinationOption[];
+  airportOptions?: DestinationOption[];
   onSearch?: (payload: TravelSearchPayload) => void;
   className?: string;
 }
@@ -265,23 +272,35 @@ function Counter({
   );
 }
 
-// ─── AirportField ─────────────────────────────────────────────────────────────
+// ─── DestinationPicker ────────────────────────────────────────────────────────
 
-function AirportField({
+function getDestinationName(option: DestinationOption): string {
+  return option.city ?? option.label ?? option.name ?? '';
+}
+
+function getDestinationCode(option: DestinationOption): string {
+  return option.iata ?? option.code ?? '';
+}
+
+function DestinationPicker({
   id,
   value,
   onChange,
   placeholder,
   options,
+  pickerType = 'destination',
+  excludeCode,
   icon,
   className,
   buttonClassName,
 }: {
   id: string;
-  value: AirportOption | null;
-  onChange: (v: AirportOption | null) => void;
+  value: DestinationOption | null;
+  onChange: (v: DestinationOption | null) => void;
   placeholder: string;
-  options: AirportOption[];
+  options: DestinationOption[];
+  pickerType?: 'origin' | 'destination' | 'hotel';
+  excludeCode?: string;
   icon?: LucideIcon;
   className?: string;
   buttonClassName?: string;
@@ -294,19 +313,52 @@ function AirportField({
   const listId = React.useId();
   const { setLockActive } = React.useContext(ActiveFieldCtx);
 
-  const filtered = query.length >= 1
-    ? options.filter(o =>
-        o.city.toLowerCase().includes(query.toLowerCase()) ||
-        o.iata.toLowerCase().includes(query.toLowerCase()),
-      )
-    : options.slice(0, 8);
+  const normalizedQuery = query.trim().toLowerCase();
+  const filtered = React.useMemo(() => {
+    const pool = excludeCode
+      ? options.filter(option => getDestinationCode(option) !== excludeCode)
+      : options;
+
+    const matched = normalizedQuery.length >= 1
+      ? pool.filter(option => {
+          const name = getDestinationName(option).toLowerCase();
+          const code = getDestinationCode(option).toLowerCase();
+          return name.includes(normalizedQuery) || code.includes(normalizedQuery);
+        })
+      : pool;
+
+    const sorted = [...matched].sort((left, right) => {
+      const leftName = getDestinationName(left).toLowerCase();
+      const rightName = getDestinationName(right).toLowerCase();
+      const leftCode = getDestinationCode(left).toLowerCase();
+      const rightCode = getDestinationCode(right).toLowerCase();
+
+      if (normalizedQuery.length >= 1) {
+        const leftNameStarts = leftName.startsWith(normalizedQuery);
+        const rightNameStarts = rightName.startsWith(normalizedQuery);
+        if (leftNameStarts !== rightNameStarts) return leftNameStarts ? -1 : 1;
+
+        const leftCodeStarts = leftCode.startsWith(normalizedQuery);
+        const rightCodeStarts = rightCode.startsWith(normalizedQuery);
+        if (leftCodeStarts !== rightCodeStarts) return leftCodeStarts ? -1 : 1;
+      }
+
+      if (pickerType === 'origin') {
+        return leftCode.localeCompare(rightCode) || leftName.localeCompare(rightName);
+      }
+
+      return leftName.localeCompare(rightName) || leftCode.localeCompare(rightCode);
+    });
+
+    return sorted.slice(0, 8);
+  }, [excludeCode, normalizedQuery, options, pickerType]);
 
   React.useEffect(() => {
     if (!open || activeIndex < 0) return;
     optionRefs.current[activeIndex]?.scrollIntoView({ block: 'nearest' });
   }, [activeIndex, open]);
 
-  function select(opt: AirportOption) {
+  function select(opt: DestinationOption) {
     onChange(opt);
     setOpen(false);
     setQuery('');
@@ -326,7 +378,9 @@ function AirportField({
     <SearchField id={id} className={cn('flex-1 min-w-0', open && 'z-20', className)}>
       <button
         type="button"
-        aria-label={value ? `${value.city} ${value.iata} — change ${placeholder}` : placeholder}
+        aria-label={value
+          ? `${getDestinationName(value)}${getDestinationCode(value) ? ` ${getDestinationCode(value)}` : ''} — change ${placeholder}`
+          : placeholder}
         onClick={handleOpen}
         onKeyDown={e => {
           if (e.key === 'Escape' && open) {
@@ -349,11 +403,11 @@ function AirportField({
               value ? 'text-[var(--color-foreground-default)]' : 'text-[var(--color-foreground-subtle)]',
             )}
           >
-            {value ? value.city : placeholder}
+            {value ? getDestinationName(value) : placeholder}
           </span>
-          {value && (
+          {value && getDestinationCode(value) && (
             <span className="shrink-0 text-xs font-medium uppercase text-[var(--color-foreground-subtle)]">
-              {value.iata}
+              {getDestinationCode(value)}
             </span>
           )}
         </div>
@@ -375,8 +429,8 @@ function AirportField({
               ref={inputRef}
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Search airports or cities…"
-              aria-label="Search airports"
+              placeholder="Search destinations or cities…"
+              aria-label={`Search ${pickerType === 'origin' ? 'origins' : 'destinations'}`}
               role="combobox"
               aria-expanded={open}
               aria-controls={listId}
@@ -410,7 +464,7 @@ function AirportField({
 
                 if (e.key === 'Enter' && activeIndex >= 0) {
                   e.preventDefault();
-                  select(filtered[activeIndex] as AirportOption);
+                  select(filtered[activeIndex] as DestinationOption);
                   return;
                 }
 
@@ -434,29 +488,33 @@ function AirportField({
           </div>
           <ul id={listId} role="listbox" className="max-h-56 overflow-y-auto py-1">
             {filtered.length === 0 ? (
-              <li className="px-3 py-2 text-sm text-[var(--color-foreground-muted)]">No airports found.</li>
+              <li className="px-3 py-2 text-sm text-[var(--color-foreground-muted)]">No destinations found.</li>
             ) : (
               filtered.map((opt, index) => (
                 <li
-                  key={opt.iata}
+                  key={`${getDestinationCode(opt)}-${getDestinationName(opt)}-${index}`}
                   id={`${listId}-opt-${index}`}
                   ref={el => { optionRefs.current[index] = el; }}
                   role="option"
-                  aria-selected={value?.iata === opt.iata || activeIndex === index}
+                  aria-selected={
+                    (value && getDestinationCode(value) === getDestinationCode(opt)) || activeIndex === index
+                  }
                   onMouseEnter={() => setActiveIndex(index)}
                   onMouseDown={() => select(opt)}
                   className={cn(
                     'flex cursor-pointer items-center gap-3 px-3 py-2',
                     'hover:bg-[var(--color-background-subtle)]',
                     activeIndex === index && 'bg-[var(--color-background-subtle)]',
-                    value?.iata === opt.iata && 'text-[var(--color-primary-default)]',
+                    value && getDestinationCode(value) === getDestinationCode(opt) && 'text-[var(--color-primary-default)]',
                   )}
                 >
-                  <span className="w-9 shrink-0 text-xs font-medium uppercase text-[var(--color-foreground-subtle)]">
-                    {opt.iata}
-                  </span>
+                  {getDestinationCode(opt) && (
+                    <span className="w-9 shrink-0 text-xs font-medium uppercase text-[var(--color-foreground-subtle)]">
+                      {getDestinationCode(opt)}
+                    </span>
+                  )}
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-[var(--color-foreground-default)]">{opt.city}</p>
+                    <p className="truncate text-sm font-medium text-[var(--color-foreground-default)]">{getDestinationName(opt)}</p>
                     {opt.country && (
                       <p className="truncate text-xs text-[var(--color-foreground-muted)]">{opt.country}</p>
                     )}
@@ -725,33 +783,6 @@ function OccupancyField({
   );
 }
 
-// ─── HotelDestinationField ────────────────────────────────────────────────────
-
-function HotelDestinationField({
-  id,
-  value,
-  onChange,
-  options,
-}: {
-  id: string;
-  value: AirportOption | null;
-  onChange: (v: AirportOption | null) => void;
-  options: AirportOption[];
-}) {
-  return (
-    <AirportField
-      id={id}
-      value={value}
-      onChange={onChange}
-      placeholder="Where to?"
-      options={options}
-      icon={Search}
-      className="flex-[2_0_0]"
-      buttonClassName="ps-4"
-    />
-  );
-}
-
 // ─── SearchPill ───────────────────────────────────────────────────────────────
 // Single outer pill wrapping all fields. Fields inside use rounded-full for
 // hover/focus background only — no individual borders.
@@ -790,6 +821,7 @@ const DEFAULT_LEG: FlightLeg = { origin: null, destination: null, departureDate:
 
 export function TravelSearchForm({
   defaultTab = 'flights',
+  destinationOptions,
   airportOptions = [],
   onSearch,
   className,
@@ -798,8 +830,8 @@ export function TravelSearchForm({
   const [tripType, setTripType] = React.useState<TripType>('round-trip');
 
   // Flights state
-  const [origin, setOrigin] = React.useState<AirportOption | null>(null);
-  const [destination, setDestination] = React.useState<AirportOption | null>(null);
+  const [origin, setOrigin] = React.useState<DestinationOption | null>(null);
+  const [destination, setDestination] = React.useState<DestinationOption | null>(null);
   const [departureDate, setDepartureDate] = React.useState<Date | null>(null);
   const [returnDate, setReturnDate] = React.useState<Date | null>(null);
   const [passengers, setPassengers] = React.useState<PassengerConfig>(DEFAULT_PASSENGERS);
@@ -807,10 +839,15 @@ export function TravelSearchForm({
   const [swapRotationDeg, setSwapRotationDeg] = React.useState(0);
 
   // Hotels state
-  const [hotelDest, setHotelDest] = React.useState<AirportOption | null>(null);
+  const [hotelDest, setHotelDest] = React.useState<DestinationOption | null>(null);
   const [checkIn, setCheckIn] = React.useState<Date | null>(null);
   const [checkOut, setCheckOut] = React.useState<Date | null>(null);
   const [occupancy, setOccupancy] = React.useState<OccupancyConfig>(DEFAULT_OCCUPANCY);
+
+  const resolvedDestinationOptions = React.useMemo(
+    () => destinationOptions ?? airportOptions,
+    [destinationOptions, airportOptions],
+  );
 
   // Separator context
   const [hoverActiveField, setHoverActiveField] = React.useState<string | null>(null);
@@ -837,7 +874,9 @@ export function TravelSearchForm({
     } else {
       onSearch?.({
         tab: 'hotels',
-        destination: hotelDest ? `${hotelDest.city} (${hotelDest.iata})` : '',
+        destination: hotelDest
+          ? `${getDestinationName(hotelDest)}${getDestinationCode(hotelDest) ? ` (${getDestinationCode(hotelDest)})` : ''}`
+          : '',
         checkIn,
         checkOut,
         occupancy,
@@ -924,20 +963,23 @@ export function TravelSearchForm({
                 tripType === 'round-trip' ? 'flex-[3_0_0]' : 'flex-[4_0_0]',
               )}
             >
-              <AirportField
+              <DestinationPicker
                 id="origin"
                 value={origin}
                 onChange={setOrigin}
+                pickerType="origin"
                 placeholder="From"
-                options={airportOptions}
+                options={resolvedDestinationOptions}
               />
               <FieldSeparator left="origin" right="destination" />
-              <AirportField
+              <DestinationPicker
                 id="destination"
                 value={destination}
                 onChange={setDestination}
+                pickerType="destination"
                 placeholder="Where to?"
-                options={airportOptions}
+                options={resolvedDestinationOptions}
+                excludeCode={getDestinationCode(origin ?? {}) || undefined}
                 buttonClassName="ps-7"
               />
               {/* Swap button — centered on the separator */}
@@ -1027,20 +1069,23 @@ export function TravelSearchForm({
                 <div className="flex min-w-0 flex-1 items-stretch">
                   {/* O+D group — takes most space */}
                   <div className="relative flex flex-[3_0_0] min-w-0 items-stretch">
-                    <AirportField
+                    <DestinationPicker
                       id={`mc-origin-${i}`}
                       value={leg.origin}
                       onChange={v => updateLeg(i, { origin: v })}
+                      pickerType="origin"
                       placeholder="From"
-                      options={airportOptions}
+                      options={resolvedDestinationOptions}
                     />
                     <FieldSeparator left={`mc-origin-${i}`} right={`mc-dest-${i}`} />
-                    <AirportField
+                    <DestinationPicker
                       id={`mc-dest-${i}`}
                       value={leg.destination}
                       onChange={v => updateLeg(i, { destination: v })}
+                      pickerType="destination"
                       placeholder="To"
-                      options={airportOptions}
+                      options={resolvedDestinationOptions}
+                      excludeCode={getDestinationCode(leg.origin ?? {}) || undefined}
                     />
                   </div>
                   <FieldSeparator left={`mc-dest-${i}`} right={`mc-date-${i}`} />
@@ -1088,7 +1133,17 @@ export function TravelSearchForm({
         {/* ── Hotels form ──────────────────────────────────────────────────── */}
         {activeTab === 'hotels' && (
           <SearchPill onSearch={handleSearch}>
-            <HotelDestinationField id="hotel-dest" value={hotelDest} onChange={setHotelDest} options={airportOptions} />
+            <DestinationPicker
+              id="hotel-dest"
+              value={hotelDest}
+              onChange={setHotelDest}
+              pickerType="hotel"
+              placeholder="Where to?"
+              options={resolvedDestinationOptions}
+              icon={Search}
+              className="flex-[2_0_0]"
+              buttonClassName="ps-4"
+            />
             <FieldSeparator left="hotel-dest" right="checkin" />
             <DateField id="checkin" value={checkIn} onChange={setCheckIn} placeholder="Check-in" />
             <FieldSeparator left="checkin" right="checkout" />

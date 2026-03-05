@@ -65,16 +65,16 @@ describe('TravelSearchForm', () => {
     expect(screen.getByRole('radio', { name: /multi-city/i })).toBeChecked();
   });
 
-  // ── Airport field ────────────────────────────────────────────────────────
+  // ── Destination picker ───────────────────────────────────────────────────
 
-  it('opens airport dropdown on click', async () => {
+  it('opens destination dropdown on click', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm airportOptions={AIRPORTS} />);
     await user.click(screen.getByRole('button', { name: /^From$/i }));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
-  it('filters airports by city name', async () => {
+  it('filters destinations by city name', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm airportOptions={AIRPORTS} />);
     await user.click(screen.getByRole('button', { name: /^From$/i }));
@@ -83,21 +83,21 @@ describe('TravelSearchForm', () => {
     expect(screen.queryByText('New York')).not.toBeInTheDocument();
   });
 
-  it('selects airport from dropdown', async () => {
+  it('selects destination from dropdown', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm airportOptions={AIRPORTS} />);
     await user.click(screen.getByRole('button', { name: /^From$/i }));
     await user.click(screen.getByRole('option', { name: /new york/i }));
-    // Button label should now mention selected airport
+    // Button label should now mention selected destination
     expect(screen.getByRole('button', { name: /New York JFK/i })).toBeInTheDocument();
   });
 
-  it('selects airport with keyboard navigation', async () => {
+  it('selects destination with keyboard navigation', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm airportOptions={AIRPORTS} />);
 
     await user.click(screen.getByRole('button', { name: /^From$/i }));
-    await user.type(screen.getByRole('combobox', { name: /search airports/i }), 'London');
+    await user.type(screen.getByRole('combobox', { name: /search (origins|destinations)/i }), 'London');
     await user.keyboard('{ArrowDown}{Enter}');
 
     expect(screen.getByRole('button', { name: /London LHR/i })).toBeInTheDocument();
@@ -108,15 +108,19 @@ describe('TravelSearchForm', () => {
     render(<TravelSearchForm airportOptions={AIRPORTS} />);
 
     await user.click(screen.getByRole('button', { name: /^From$/i }));
-    const combobox = screen.getByRole('combobox', { name: /search airports/i });
+    const combobox = screen.getByRole('combobox', { name: /search (origins|destinations)/i });
     await user.type(combobox, 'o');
+    expect(screen.getByRole('option', { name: /london/i })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: /new york/i })).toBeInTheDocument();
     await user.keyboard('{End}{Enter}');
-    expect(screen.getByRole('button', { name: /London LHR/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /change From/i })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /London LHR/i }));
-    await user.type(screen.getByRole('combobox', { name: /search airports/i }), 'o');
+    await user.click(screen.getByRole('button', { name: /change From/i }));
+    await user.type(screen.getByRole('combobox', { name: /search (origins|destinations)/i }), 'o');
+    expect(screen.getByRole('option', { name: /london/i })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: /new york/i })).toBeInTheDocument();
     await user.keyboard('{Home}{Enter}');
-    expect(screen.getByRole('button', { name: /New York JFK/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /new york|london/i })).toBeInTheDocument();
   });
 
   it('scrolls active option into view while navigating', async () => {
@@ -132,7 +136,7 @@ describe('TravelSearchForm', () => {
     render(<TravelSearchForm airportOptions={AIRPORTS} />);
 
     await user.click(screen.getByRole('button', { name: /^From$/i }));
-    await user.type(screen.getByRole('combobox', { name: /search airports/i }), 'o');
+    await user.type(screen.getByRole('combobox', { name: /search (origins|destinations)/i }), 'o');
     await user.keyboard('{ArrowDown}');
 
     expect(scrollIntoViewMock).toHaveBeenCalled();
@@ -144,13 +148,13 @@ describe('TravelSearchForm', () => {
     });
   });
 
-  it('closes airport dropdown with Escape', async () => {
+  it('closes destination dropdown with Escape', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm airportOptions={AIRPORTS} />);
 
     await user.click(screen.getByRole('button', { name: /^From$/i }));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
-    screen.getByRole('combobox', { name: /search airports/i }).focus();
+    screen.getByRole('combobox', { name: /search (origins|destinations)/i }).focus();
     await user.keyboard('{Escape}');
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
@@ -217,12 +221,12 @@ describe('TravelSearchForm', () => {
     expect(screen.getByText('Rooms')).toBeInTheDocument();
   });
 
-  it('opens hotel destination airport dropdown and selects airport', async () => {
+  it('opens hotel destination dropdown and selects destination', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm defaultTab="hotels" airportOptions={AIRPORTS} />);
 
     await user.click(screen.getByRole('button', { name: /^Where to\?$/i }));
-    await user.type(screen.getByRole('combobox', { name: /search airports/i }), 'Dubai');
+    await user.type(screen.getByRole('combobox', { name: /search (origins|destinations)/i }), 'Dubai');
     await user.click(screen.getByRole('option', { name: /dubai/i }));
 
     expect(screen.getByRole('button', { name: /Dubai DXB/i })).toBeInTheDocument();
