@@ -3,6 +3,7 @@ node_modules/
 dist/
 .next/
 .turbo/
+.tmp/
 storybook-static/
 coverage/
 
@@ -20,6 +21,7 @@ pnpm-debug.log*
 # OS/editor noise
 .DS_Store
 .vscode/
+.claude/settings.local.json
 
 # Generated token artifacts
 packages/tokens/dist/
