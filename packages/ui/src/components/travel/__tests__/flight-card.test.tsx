@@ -22,6 +22,11 @@ const PROPS: FlightCardProps = {
 };
 
 describe('FlightCard', () => {
+  it('applies semantic root class', () => {
+    const { container } = render(<FlightCard {...PROPS} />);
+    expect(container.firstElementChild).toHaveClass('travel-flight-card');
+  });
+
   it('renders airline name', () => {
     render(<FlightCard {...PROPS} />);
     expect(screen.getByText('American Airlines')).toBeInTheDocument();

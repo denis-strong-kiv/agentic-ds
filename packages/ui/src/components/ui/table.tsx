@@ -3,10 +3,10 @@ import { cn } from '../../utils/cn.js';
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <div className="relative w-full overflow-auto">
+    <div className="ui-table-container">
       <table
         ref={ref}
-        className={cn('w-full caption-bottom text-sm', className)}
+        className={cn('ui-table', className)}
         {...props}
       />
     </div>
@@ -16,14 +16,14 @@ Table.displayName = 'Table';
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
+    <thead ref={ref} className={cn('ui-table-header', className)} {...props} />
   ),
 );
 TableHeader.displayName = 'TableHeader';
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props} />
+    <tbody ref={ref} className={cn('ui-table-body', className)} {...props} />
   ),
 );
 TableBody.displayName = 'TableBody';
@@ -33,9 +33,7 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribut
     <tfoot
       ref={ref}
       className={cn(
-        'border-t border-[var(--color-border-default)]',
-        'bg-[var(--color-background-subtle)] font-medium',
-        '[&>tr]:last:border-b-0',
+        'ui-table-footer',
         className,
       )}
       {...props}
@@ -54,10 +52,8 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
     <tr
       ref={ref}
       className={cn(
-        'border-b border-[var(--color-border-muted)] transition-colors',
-        'hover:bg-[var(--color-background-subtle)]',
-        'data-[state=selected]:bg-[var(--color-background-subtle)]',
-        selected && 'bg-[var(--color-background-subtle)]',
+        'ui-table-row',
+        selected && 'ui-table-row--selected',
         className,
       )}
       aria-selected={selected}
@@ -80,19 +76,18 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     <th
       ref={ref}
       className={cn(
-        'h-10 px-4 text-start align-middle font-medium text-[var(--color-foreground-muted)]',
-        '[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
-        sortable && 'cursor-pointer select-none hover:text-[var(--color-foreground-default)]',
+        'ui-table-head',
+        sortable && 'ui-table-head--sortable',
         className,
       )}
       onClick={sortable ? onSort : undefined}
       aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : undefined}
       {...props}
     >
-      <span className="flex items-center gap-2">
+      <span className="ui-table-head-content">
         {children}
         {sortable && (
-          <span className="ms-1">
+          <span className="ui-table-head-sort-indicator">
             {sortDirection === 'asc' ? '↑' : sortDirection === 'desc' ? '↓' : '↕'}
           </span>
         )}
@@ -107,8 +102,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
     <td
       ref={ref}
       className={cn(
-        'p-4 align-middle text-[var(--color-foreground-default)]',
-        '[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+        'ui-table-cell',
         className,
       )}
       {...props}
@@ -121,7 +115,7 @@ const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <caption
       ref={ref}
-      className={cn('mt-4 text-sm text-[var(--color-foreground-muted)]', className)}
+      className={cn('ui-table-caption', className)}
       {...props}
     />
   ),

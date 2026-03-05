@@ -1,0 +1,22 @@
+@layer components {
+  .ui-alert-dialog-overlay { position: fixed; inset: 0; z-index: 50; background: var(--color-surface-overlay); }
+  .ui-alert-dialog-overlay[data-state='open'] { animation: fade-in var(--duration-normal) ease-out; }
+  .ui-alert-dialog-overlay[data-state='closed'] { animation: fade-out var(--duration-normal) ease-out; }
+  .ui-alert-dialog-content {
+    position: fixed; left: 50%; top: 50%; z-index: 50;
+    width: 100%; max-width: 32rem; transform: translate(-50%, -50%);
+    display: grid; gap: 1rem; padding: 1.5rem;
+    border: 1px solid var(--color-border-default); border-radius: var(--shape-preset-dialog);
+    background: var(--color-surface-popover); box-shadow: var(--shadow-lg);
+  }
+  .ui-alert-dialog-header { display: flex; flex-direction: column; gap: 0.5rem; text-align: center; }
+  .ui-alert-dialog-footer { display: flex; flex-direction: column-reverse; }
+  @media (min-width: 640px) {
+    .ui-alert-dialog-header { text-align: left; }
+    .ui-alert-dialog-footer { flex-direction: row; justify-content: flex-end; gap: 0.5rem; }
+    .ui-alert-dialog-cancel { margin-top: 0; }
+  }
+  .ui-alert-dialog-cancel { margin-top: 0.5rem; }
+  .ui-alert-dialog-title { font-size: 1.125rem; font-weight: 600; color: var(--color-foreground-default); }
+  .ui-alert-dialog-description { font-size: 0.875rem; color: var(--color-foreground-muted); }
+}

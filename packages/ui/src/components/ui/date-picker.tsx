@@ -36,17 +36,17 @@ export function DatePicker({
       <PopoverTrigger asChild>
         <Button
           variant="secondary"
-          className={cn('w-full justify-start text-start font-normal', !value && 'text-[var(--color-foreground-subtle)]', className)}
+          className={cn('ui-date-picker-trigger', !value && 'ui-date-picker-trigger--placeholder', className)}
           aria-haspopup="dialog"
         >
-          <svg className="me-2 h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg className="ui-date-picker-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="4" width="18" height="18" rx="2" />
             <path d="M16 2v4M8 2v4M3 10h18" />
           </svg>
           {formatted}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="ui-date-picker-popover" align="start">
         <Calendar
           mode="single"
           {...(value !== undefined ? { selected: value } : {})}
@@ -100,18 +100,18 @@ export function DateRangePicker({
       <PopoverTrigger asChild>
         <Button
           variant="secondary"
-          className={cn('w-full justify-start text-left font-normal gap-2', className)}
+          className={cn('ui-date-range-picker-trigger', className)}
         >
-          <span className={cn(!value?.from && 'text-[var(--color-foreground-subtle)]')}>
+          <span className={cn('ui-date-range-picker-value', !value?.from && 'ui-date-range-picker-value--placeholder')}>
             {value?.from ? value.from.toLocaleDateString() : placeholder.from}
           </span>
-          <span className="text-[var(--color-foreground-muted)]">→</span>
-          <span className={cn(!value?.to && 'text-[var(--color-foreground-subtle)]')}>
+          <span className="ui-date-range-picker-separator">→</span>
+          <span className={cn('ui-date-range-picker-value', !value?.to && 'ui-date-range-picker-value--placeholder')}>
             {value?.to ? value.to.toLocaleDateString() : placeholder.to}
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="ui-date-picker-popover" align="start">
         <Calendar
           mode="range"
           {...(value !== undefined ? { selected: value } : {})}
@@ -119,7 +119,7 @@ export function DateRangePicker({
           {...(minDate !== undefined ? { minDate } : {})}
           {...(maxDate !== undefined ? { maxDate } : {})}
         />
-        <div className="px-3 pb-3 text-xs text-[var(--color-foreground-muted)]">
+        <div className="ui-date-range-picker-stage">
           {stage === 'from' ? 'Select departure date' : 'Select return date'}
         </div>
       </PopoverContent>

@@ -27,6 +27,11 @@ const INSURANCE_OPTIONS = [
 ];
 
 describe('CarCard', () => {
+  it('applies semantic root class', () => {
+    const { container } = render(<CarCard {...PROPS} />);
+    expect(container.firstElementChild).toHaveClass('travel-car-card');
+  });
+
   it('renders car name', () => {
     render(<CarCard {...PROPS} />);
     expect(screen.getByText('Toyota Corolla')).toBeInTheDocument();

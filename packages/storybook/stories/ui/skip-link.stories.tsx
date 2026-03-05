@@ -12,14 +12,14 @@ type Story = StoryObj<typeof SkipLink>;
 export const Default: Story = {
   name: 'Default (visually hidden until focused)',
   render: () => (
-    <div className="relative">
+    <div className="sb-relative">
       <SkipLink href="#main-content" />
-      <p className="text-sm text-[var(--color-foreground-muted)] p-4 border border-dashed border-[var(--color-border-default)] rounded">
+      <p className="sb-skip-note">
         Tab into this preview to reveal the skip link. It is visually hidden (sr-only) until
         it receives keyboard focus, then appears fixed in the top-left corner.
       </p>
-      <main id="main-content" tabIndex={-1} className="mt-4 p-4 rounded bg-[var(--color-background-subtle)]">
-        <p className="text-sm text-[var(--color-foreground-default)]">Main content area</p>
+      <main id="main-content" tabIndex={-1} className="sb-skip-main">
+        <p className="sb-text-sm-default">Main content area</p>
       </main>
     </div>
   ),
@@ -28,7 +28,7 @@ export const Default: Story = {
 export const FocusVisible: Story = {
   name: 'Focus-visible state',
   render: () => (
-    <div className="relative min-h-24">
+    <div className="sb-skip-focus-wrap">
       {/* Force focus state via inline override to show what it looks like when focused */}
       <a
         href="#main"
@@ -42,7 +42,7 @@ export const FocusVisible: Story = {
       >
         Skip to main content
       </a>
-      <p className="text-sm text-[var(--color-foreground-muted)] mt-16 p-4">
+      <p className="sb-skip-focus-note">
         This shows the skip link in its focused/visible state.
       </p>
     </div>
@@ -54,7 +54,7 @@ export const CustomTarget: Story = {
   render: () => (
     <div>
       <SkipLink href="#search-results">Skip to search results</SkipLink>
-      <p className="text-sm text-[var(--color-foreground-muted)] p-4">
+      <p className="sb-text-sm-muted sb-p-md">
         Tab here to activate the custom skip link targeting #search-results.
       </p>
     </div>

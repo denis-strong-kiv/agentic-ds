@@ -12,7 +12,7 @@ type Story = StoryObj<typeof Accordion>;
 export const FAQ: Story = {
   name: 'FAQ (single)',
   render: () => (
-    <Accordion type="single" collapsible className="w-full max-w-lg">
+    <Accordion type="single" collapsible className="sb-accordion-wrap">
       <AccordionItem value="baggage">
         <AccordionTrigger>What is the baggage allowance?</AccordionTrigger>
         <AccordionContent>
@@ -41,7 +41,7 @@ export const FAQ: Story = {
 export const MultiExpand: Story = {
   name: 'Multiple open',
   render: () => (
-    <Accordion type="multiple" defaultValue={['seat', 'meal']} className="w-full max-w-lg">
+    <Accordion type="multiple" defaultValue={['seat', 'meal']} className="sb-accordion-wrap">
       <AccordionItem value="seat">
         <AccordionTrigger>Seat selection</AccordionTrigger>
         <AccordionContent>
@@ -70,7 +70,7 @@ export const MultiExpand: Story = {
 export const DisabledItem: Story = {
   name: 'With disabled item',
   render: () => (
-    <Accordion type="single" collapsible className="w-full max-w-lg">
+    <Accordion type="single" collapsible className="sb-accordion-wrap">
       <AccordionItem value="active">
         <AccordionTrigger>Flight status</AccordionTrigger>
         <AccordionContent>

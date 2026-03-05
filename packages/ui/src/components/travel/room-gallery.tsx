@@ -37,16 +37,16 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
 
   return (
     <>
-      <div className="relative">
+      <div className="travel-room-gallery-main">
         <AspectRatio ratio={16 / 9}>
           {images.length > 0 ? (
             <img
               src={images[current]}
               alt={`${alt} (${current + 1})`}
-              className="h-full w-full object-cover rounded-[var(--shape-preset-card)]"
+              className="travel-room-gallery-image"
             />
           ) : (
-            <div className="h-full w-full bg-[var(--color-background-subtle)] rounded-[var(--shape-preset-card)] flex items-center justify-center text-[var(--color-foreground-subtle)]">
+            <div className="travel-room-gallery-empty">
               No image
             </div>
           )}
@@ -55,9 +55,9 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
             type="button"
             onClick={() => setFullscreen(true)}
             aria-label="View fullscreen"
-            className="absolute bottom-2 right-2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+            className="travel-room-gallery-fullscreen-btn"
           >
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="travel-room-gallery-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
             </svg>
           </button>
@@ -69,13 +69,13 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
             <button
               type="button"
               onClick={() => setCurrent(i => (i - 1 + images.length) % images.length)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+              className="travel-room-gallery-nav travel-room-gallery-nav--prev"
               aria-label="Previous image"
             >‹</button>
             <button
               type="button"
               onClick={() => setCurrent(i => (i + 1) % images.length)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+              className="travel-room-gallery-nav travel-room-gallery-nav--next"
               aria-label="Next image"
             >›</button>
           </>
@@ -84,7 +84,7 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
 
       {/* Thumbnail strip */}
       {images.length > 1 && (
-        <div className="flex gap-1.5 mt-1.5 overflow-x-auto pb-1">
+        <div className="travel-room-gallery-thumbs">
           {images.map((src, i) => (
             <button
               key={i}
@@ -93,13 +93,13 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
               aria-label={`Go to image ${i + 1}`}
               aria-pressed={i === current}
               className={cn(
-                'flex-shrink-0 h-12 w-16 rounded overflow-hidden border-2 transition-colors',
+                'travel-room-gallery-thumb-btn',
                 i === current
-                  ? 'border-[var(--color-primary-default)]'
-                  : 'border-transparent hover:border-[var(--color-border-default)]',
+                  ? 'travel-room-gallery-thumb-btn--active'
+                  : 'travel-room-gallery-thumb-btn--inactive',
               )}
             >
-              <img src={src} alt="" className="h-full w-full object-cover" aria-hidden />
+              <img src={src} alt="" className="travel-room-gallery-thumb-image" aria-hidden />
             </button>
           ))}
         </div>
@@ -107,16 +107,16 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
 
       {/* Fullscreen dialog */}
       <Dialog open={fullscreen} onOpenChange={setFullscreen}>
-        <DialogContent size="full" className="p-0">
-          <DialogHeader className="absolute top-4 left-4 z-10">
-            <DialogTitle className="text-white">{alt}</DialogTitle>
+        <DialogContent size="full" className="travel-room-gallery-dialog">
+          <DialogHeader className="travel-room-gallery-dialog-header">
+            <DialogTitle className="travel-room-gallery-dialog-title">{alt}</DialogTitle>
           </DialogHeader>
-          <div className="relative h-full bg-black flex items-center justify-center">
+          <div className="travel-room-gallery-dialog-body">
             {images.length > 0 && (
               <img
                 src={images[current]}
                 alt={`${alt} (${current + 1})`}
-                className="max-h-full max-w-full object-contain"
+                className="travel-room-gallery-dialog-image"
               />
             )}
             {images.length > 1 && (
@@ -124,13 +124,13 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
                 <button
                   type="button"
                   onClick={() => setCurrent(i => (i - 1 + images.length) % images.length)}
-                  className="absolute left-4 h-12 w-12 rounded-full bg-black/50 text-white flex items-center justify-center text-2xl hover:bg-black/70"
+                  className="travel-room-gallery-dialog-nav travel-room-gallery-dialog-nav--prev"
                   aria-label="Previous image"
                 >‹</button>
                 <button
                   type="button"
                   onClick={() => setCurrent(i => (i + 1) % images.length)}
-                  className="absolute right-4 h-12 w-12 rounded-full bg-black/50 text-white flex items-center justify-center text-2xl hover:bg-black/70"
+                  className="travel-room-gallery-dialog-nav travel-room-gallery-dialog-nav--next"
                   aria-label="Next image"
                 >›</button>
               </>
@@ -156,48 +156,48 @@ function RoomTypeCard({
   return (
     <div
       className={cn(
-        'rounded-[var(--shape-preset-card)] border-2 transition-colors p-4',
+        'travel-room-card',
         isSelected
-          ? 'border-[var(--color-primary-default)] bg-[var(--color-primary-default)]/5'
-          : 'border-[var(--color-border-default)] bg-[var(--color-surface-card)] hover:border-[var(--color-primary-default)]/50',
+          ? 'travel-room-card--selected'
+          : 'travel-room-card--idle',
       )}
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
+      <div className="travel-room-card-header">
         <div>
-          <h4 className="font-medium text-[var(--color-foreground-default)]">{room.name}</h4>
+          <h4 className="travel-room-card-title">{room.name}</h4>
           {room.size && (
-            <p className="text-xs text-[var(--color-foreground-muted)]">{room.size}</p>
+            <p className="travel-room-card-size">{room.size}</p>
           )}
         </div>
-        <div className="text-right">
-          <p className="text-lg font-bold text-[var(--color-foreground-default)]">{room.pricePerNight}</p>
-          <p className="text-xs text-[var(--color-foreground-muted)]">{room.currency ?? 'USD'}/night</p>
+        <div className="travel-room-card-price-wrap">
+          <p className="travel-room-card-price">{room.pricePerNight}</p>
+          <p className="travel-room-card-price-meta">{room.currency ?? 'USD'}/night</p>
         </div>
       </div>
 
-      <p className="text-sm text-[var(--color-foreground-muted)] mb-2">{room.bedConfiguration}</p>
+      <p className="travel-room-card-bed">{room.bedConfiguration}</p>
 
       {room.isLastFew && room.availability <= 3 && (
-        <Badge variant="destructive" className="mb-2 text-xs">
+        <Badge variant="destructive" className="travel-room-card-alert-badge">
           Only {room.availability} room{room.availability > 1 ? 's' : ''} left at this price!
         </Badge>
       )}
 
-      <div className="flex flex-wrap gap-1 mb-3">
+      <div className="travel-room-card-amenities">
         {room.amenities.slice(0, 4).map(a => (
-          <span key={a} className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-background-subtle)] text-[var(--color-foreground-muted)]">
+          <span key={a} className="travel-room-card-amenity-pill">
             {a}
           </span>
         ))}
         {room.amenities.length > 4 && (
-          <span className="text-xs text-[var(--color-foreground-subtle)]">+{room.amenities.length - 4}</span>
+          <span className="travel-room-card-amenity-more">+{room.amenities.length - 4}</span>
         )}
       </div>
 
       <Button
         variant={isSelected ? 'primary' : 'outline'}
         size="sm"
-        className="w-full"
+        className="travel-room-card-select-btn"
         onClick={onSelect}
         aria-pressed={isSelected}
       >
@@ -223,22 +223,22 @@ export function RoomGallery({
   }
 
   return (
-    <div className={cn('grid grid-cols-1 lg:grid-cols-3 gap-6', className)}>
+    <div className={cn('travel-room-gallery-layout', className)}>
       {/* Gallery area */}
-      <div className="lg:col-span-2">
+      <div className="travel-room-gallery-column">
         {selectedRoom && (
           <>
             <ImageGallery images={selectedRoom.images} alt={selectedRoom.name} />
             {selectedRoom.description && (
-              <p className="mt-3 text-sm text-[var(--color-foreground-muted)]">{selectedRoom.description}</p>
+              <p className="travel-room-gallery-description">{selectedRoom.description}</p>
             )}
           </>
         )}
       </div>
 
       {/* Room selector */}
-      <div className="flex flex-col gap-3">
-        <h3 className="text-sm font-semibold text-[var(--color-foreground-default)]">
+      <div className="travel-room-selector-column">
+        <h3 className="travel-room-selector-title">
           {rooms.length} Room Type{rooms.length !== 1 ? 's' : ''} Available
         </h3>
         {rooms.map(room => (

@@ -15,19 +15,19 @@ describe('Skeleton', () => {
 
   it('renders with pulse animation by default', () => {
     render(<Skeleton data-testid="skeleton" />);
-    expect(screen.getByTestId('skeleton').className).toContain('skeleton-pulse');
+    expect(screen.getByTestId('skeleton').className).toContain('ui-skeleton--pulse');
   });
 
   it('renders with shimmer animation', () => {
     render(<Skeleton animation="shimmer" data-testid="skeleton" />);
-    expect(screen.getByTestId('skeleton').className).toContain('overflow-hidden');
+    expect(screen.getByTestId('skeleton').className).toContain('ui-skeleton--shimmer');
   });
 
   it('renders with no animation when animation="none"', () => {
     render(<Skeleton animation="none" data-testid="skeleton" />);
     const el = screen.getByTestId('skeleton');
-    expect(el.className).not.toContain('skeleton-pulse');
-    expect(el.className).not.toContain('overflow-hidden');
+    expect(el.className).toContain('ui-skeleton--none');
+    expect(el.className).not.toContain('ui-skeleton--pulse');
   });
 
   it('accepts className for sizing', () => {

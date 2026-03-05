@@ -1,0 +1,23 @@
+@layer components {
+  .ui-notification-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-notification-badge--brand { background: var(--color-primary-default); color: var(--color-primary-foreground); }
+  .ui-notification-badge--accent { background: var(--color-accent-default); color: var(--color-accent-foreground); }
+  .ui-notification-badge--success { background: var(--color-success-default); color: var(--color-success-foreground); }
+  .ui-notification-badge--warning { background: var(--color-warning-default); color: var(--color-warning-foreground); }
+  .ui-notification-badge--danger { background: var(--color-error-default); color: var(--color-error-foreground); }
+  .ui-notification-badge--neutral { background: var(--color-foreground-default); color: var(--color-background-default); }
+  .ui-notification-badge--inverted { background: oklch(100% 0 0); color: var(--color-foreground-default); }
+
+  .ui-notification-badge--lg { height: 1.25rem; min-width: 1.25rem; padding-inline: 0.25rem; font-size: 11px; }
+  .ui-notification-badge--md { height: 1rem; min-width: 1rem; padding-inline: 0.25rem; font-size: 10px; }
+}

@@ -21,8 +21,8 @@ export const PriceRange: Story = {
     formatValue: (v: number) => `$${v}`,
   },
   render: (args) => (
-    <div className="w-72">
-      <p className="text-sm font-medium text-[var(--color-foreground-default)] mb-4">
+    <div className="sb-slider-wrap">
+      <p className="sb-title-sm sb-mb-md">
         Price per night
       </p>
       <Slider {...args} />
@@ -41,8 +41,8 @@ export const BudgetFilter: Story = {
     formatValue: (v: number) => `$${v}`,
   },
   render: (args) => (
-    <div className="w-72">
-      <p className="text-sm font-medium text-[var(--color-foreground-default)] mb-4">
+    <div className="sb-slider-wrap">
+      <p className="sb-title-sm sb-mb-md">
         Max total budget
       </p>
       <Slider {...args} aria-label="Max total budget" />
@@ -61,8 +61,8 @@ export const DurationFilter: Story = {
     formatValue: (v: number) => `${v}h`,
   },
   render: (args) => (
-    <div className="w-72">
-      <p className="text-sm font-medium text-[var(--color-foreground-default)] mb-4">
+    <div className="sb-slider-wrap">
+      <p className="sb-title-sm sb-mb-md">
         Max flight duration
       </p>
       <Slider {...args} />
@@ -78,7 +78,7 @@ export const Disabled: Story = {
     formatValue: (v: number) => `${v}%`,
   },
   render: (args) => (
-    <div className="w-72">
+    <div className="sb-slider-wrap">
       <Slider {...args} aria-label="Disabled slider" />
     </div>
   ),

@@ -1,0 +1,29 @@
+@layer components {
+  .travel-price-breakdown { border: 1px solid var(--color-border-default); border-radius: var(--shape-preset-card); background: var(--color-surface-card); overflow: hidden; }
+  .travel-price-breakdown--sticky { position: sticky; top: 1rem; }
+  .travel-price-breakdown-header { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border-muted); background: var(--color-background-subtle); }
+  .travel-price-breakdown-title { font-size: 0.875rem; font-weight: 600; color: var(--color-foreground-default); }
+  .travel-price-breakdown-body { padding: 1rem; }
+  .travel-price-breakdown-accordion-item { border-bottom: 0; }
+  .travel-price-breakdown-accordion-trigger { padding-block: 0.5rem; font-size: 0.875rem; color: var(--color-foreground-muted); }
+  .travel-price-breakdown-accordion-trigger--primary { color: var(--color-foreground-default); }
+  .travel-price-breakdown-accordion-content { padding-bottom: 0.5rem; display: grid; gap: 0.375rem; }
+  .travel-price-breakdown-section { padding-block: 0.5rem; display: grid; gap: 0.5rem; }
+  .travel-price-breakdown-row { display: flex; justify-content: space-between; font-size: 0.875rem; }
+  .travel-price-breakdown-row--compact { padding-block: 0.25rem; }
+  .travel-price-breakdown-row-label { color: var(--color-foreground-muted); }
+  .travel-price-breakdown-row-label--subtle { color: var(--color-foreground-subtle); }
+  .travel-price-breakdown-row-description { font-size: 0.75rem; color: var(--color-foreground-subtle); }
+  .travel-price-breakdown-row-amount { color: var(--color-foreground-default); }
+  .travel-price-breakdown-row-amount--strong { font-weight: 500; }
+  .travel-price-breakdown-row-amount--muted { color: var(--color-foreground-muted); }
+  .travel-price-breakdown-discount { color: var(--color-success-default); }
+  .travel-price-breakdown-discount--strong { font-weight: 500; }
+  .travel-price-breakdown-promo { display: inline-flex; align-items: center; gap: 0.375rem; color: var(--color-success-default); }
+  .travel-price-breakdown-promo-badge { font-size: 0.75rem; }
+  .travel-price-breakdown-separator { margin-block: 0.75rem; }
+  .travel-price-breakdown-total { display: flex; align-items: flex-end; justify-content: space-between; }
+  .travel-price-breakdown-total-label { font-size: 1rem; font-weight: 700; color: var(--color-foreground-default); }
+  .travel-price-breakdown-total-meta { font-size: 0.75rem; color: var(--color-foreground-muted); }
+  .travel-price-breakdown-total-amount { font-size: 1.5rem; font-weight: 700; color: var(--color-foreground-default); }
+}

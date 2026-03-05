@@ -1,0 +1,33 @@
+@layer components {
+  .travel-flight-card { border: 1px solid var(--color-border-default); border-radius: var(--shape-preset-card); background: var(--color-surface-card); overflow: hidden; }
+  .travel-flight-card-layout { padding: 1rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+  @media (min-width: 640px) { .travel-flight-card-layout { flex-direction: row; align-items: center; } }
+  .travel-flight-card-airline { width: 8rem; flex-shrink: 0; display: flex; align-items: center; gap: 0.5rem; }
+  .travel-flight-card-airline-logo { height: 2rem; width: 2rem; object-fit: contain; }
+  .travel-flight-card-airline-fallback { height: 2rem; width: 2rem; display: flex; align-items: center; justify-content: center; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 700; color: var(--color-foreground-muted); background: var(--color-background-subtle); }
+  .travel-flight-card-airline-name { font-size: 0.75rem; font-weight: 500; color: var(--color-foreground-default); }
+  .travel-flight-card-flight-number, .travel-flight-card-code, .travel-flight-card-duration, .travel-flight-card-stop-label, .travel-flight-card-price-meta { font-size: 0.75rem; color: var(--color-foreground-muted); }
+  .travel-flight-card-times { flex: 1; display: flex; align-items: center; gap: 0.75rem; }
+  .travel-flight-card-time-point { text-align: center; }
+  .travel-flight-card-time { font-size: 1.125rem; font-weight: 700; color: var(--color-foreground-default); }
+  .travel-flight-card-middle { min-width: 80px; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+  .travel-flight-card-stops { width: 100%; max-width: 120px; display: flex; align-items: center; gap: 0.125rem; }
+  .travel-flight-card-stop-dot { height: 0.5rem; width: 0.5rem; border-radius: 9999px; flex-shrink: 0; }
+  .travel-flight-card-stop-dot--edge { background: var(--color-primary-default); }
+  .travel-flight-card-stop-dot--mid { background: var(--color-border-default); box-shadow: inset 0 0 0 1px var(--color-primary-default); }
+  .travel-flight-card-stop-line { height: 1px; flex: 1; background: var(--color-border-default); }
+  .travel-flight-card-price-col { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+  @media (min-width: 640px) { .travel-flight-card-price-col { margin-inline-start: 1rem; } }
+  .travel-flight-card-price-wrap { text-align: end; }
+  .travel-flight-card-badges { margin-bottom: 0.25rem; }
+  .travel-flight-card-price { font-size: 1.5rem; font-weight: 700; color: var(--color-foreground-default); }
+  .travel-flight-card-fare-class { margin-top: 0.25rem; font-size: 0.75rem; }
+  .travel-flight-card-breakdown-wrap { border-top: 1px solid var(--color-border-muted); }
+  .travel-flight-card-breakdown-item { border-bottom: 0; }
+  .travel-flight-card-breakdown-trigger { padding-inline: 1rem; font-size: 0.875rem; color: var(--color-primary-default); }
+  .travel-flight-card-breakdown-content { padding-inline: 1rem; padding-bottom: 1rem; display: grid; gap: 0.5rem; }
+  .travel-flight-card-breakdown-row { display: flex; justify-content: space-between; font-size: 0.875rem; }
+  .travel-flight-card-breakdown-row--total { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--color-border-muted); font-weight: 600; }
+  .travel-flight-card-breakdown-label { color: var(--color-foreground-muted); }
+  .travel-flight-card-breakdown-amount { color: var(--color-foreground-default); }
+}

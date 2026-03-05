@@ -1,0 +1,9 @@
+@layer components {
+  .ui-scroll-area { position: relative; overflow: hidden; }
+  .ui-scroll-area-viewport { height: 100%; width: 100%; border-radius: inherit; }
+  .ui-scroll-area-scrollbar { display: flex; touch-action: none; user-select: none; transition: color var(--duration-normal); }
+  .ui-scroll-area-scrollbar--vertical { height: 100%; width: 0.625rem; border-inline-start: 1px solid transparent; padding: 1px; }
+  .ui-scroll-area-scrollbar--horizontal { height: 0.625rem; flex-direction: column; border-top: 1px solid transparent; padding: 1px; }
+  .ui-scroll-area-thumb { position: relative; flex: 1; border-radius: 9999px; background: var(--color-border-default); }
+  .ui-scroll-area-thumb:hover { background: var(--color-foreground-subtle); }
+}

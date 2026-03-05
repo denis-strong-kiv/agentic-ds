@@ -40,7 +40,7 @@ describe('Textarea', () => {
 
     it('adds resize-none class when autoResize is true', () => {
       render(<Textarea autoResize />);
-      expect(screen.getByRole('textbox').className).toContain('resize-none');
+      expect(screen.getByRole('textbox').className).toContain('ui-textarea--auto-resize');
     });
   });
 

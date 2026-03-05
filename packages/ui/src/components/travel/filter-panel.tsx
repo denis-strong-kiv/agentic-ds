@@ -94,25 +94,24 @@ export function FilterPanel({
   return (
     <aside
       className={cn(
-        'w-full rounded-[var(--shape-preset-card)] border border-[var(--color-border-default)]',
-        'bg-[var(--color-surface-card)] p-4',
+        'travel-filter-panel',
         className,
       )}
       aria-label="Search filters"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-[var(--color-foreground-default)]">
+      <div className="travel-filter-panel-header">
+        <h2 className="travel-filter-panel-title">
           Filters
           {activeCount > 0 && (
-            <Badge className="ml-2" variant="default">{activeCount}</Badge>
+            <Badge className="travel-filter-panel-active-count" variant="default">{activeCount}</Badge>
           )}
         </h2>
         {activeCount > 0 && (
           <button
             type="button"
             onClick={onClearAll}
-            className="text-sm text-[var(--color-primary-default)] hover:underline"
+            className="travel-filter-panel-clear"
           >
             Clear all
           </button>
@@ -125,7 +124,7 @@ export function FilterPanel({
         <AccordionItem value="price">
           <AccordionTrigger>Price Range</AccordionTrigger>
           <AccordionContent>
-            <div className="pt-2 pb-4">
+            <div className="travel-filter-panel-section-body">
               <Slider
                 min={0}
                 max={maxPrice}
@@ -135,7 +134,7 @@ export function FilterPanel({
                 showValue
                 formatValue={v => `$${v}`}
               />
-              <div className="flex justify-between mt-2 text-xs text-[var(--color-foreground-muted)]">
+              <div className="travel-filter-panel-range-labels">
                 <span>$0</span>
                 <span>${maxPrice}+</span>
               </div>
@@ -148,13 +147,13 @@ export function FilterPanel({
           <AccordionItem value="stops">
             <AccordionTrigger>Stops</AccordionTrigger>
             <AccordionContent>
-              <div className="flex flex-col gap-2 pt-1">
+              <div className="travel-filter-panel-check-list">
                 {([
                   { value: 'nonstop', label: 'Non-stop' },
                   { value: '1-stop', label: '1 Stop' },
                   { value: '2-plus', label: '2+ Stops' },
                 ] as { value: FilterState['stops'][number]; label: string }[]).map(opt => (
-                  <div key={opt.value} className="flex items-center gap-2">
+                  <div key={opt.value} className="travel-filter-panel-check-item">
                     <Checkbox
                       id={`stop-${opt.value}`}
                       checked={filters.stops.includes(opt.value)}
@@ -162,7 +161,7 @@ export function FilterPanel({
                         onChange({ ...filters, stops: toggleItem(filters.stops, opt.value) })
                       }
                     />
-                    <Label htmlFor={`stop-${opt.value}`} className="text-sm font-normal cursor-pointer">
+                    <Label htmlFor={`stop-${opt.value}`} className="travel-filter-panel-check-label">
                       {opt.label}
                     </Label>
                   </div>
@@ -177,9 +176,9 @@ export function FilterPanel({
           <AccordionItem value="providers">
             <AccordionTrigger>{mode === 'flights' ? 'Airlines' : 'Providers'}</AccordionTrigger>
             <AccordionContent>
-              <div className="flex flex-col gap-2 pt-1 max-h-48 overflow-y-auto">
+              <div className="travel-filter-panel-check-list travel-filter-panel-check-list--scrollable">
                 {providerOptions.map(opt => (
-                  <div key={opt.value} className="flex items-center gap-2">
+                  <div key={opt.value} className="travel-filter-panel-check-item">
                     <Checkbox
                       id={`provider-${opt.value}`}
                       checked={filters.airlines.includes(opt.value)}
@@ -187,9 +186,9 @@ export function FilterPanel({
                         onChange({ ...filters, airlines: toggleItem(filters.airlines, opt.value) })
                       }
                     />
-                    <Label htmlFor={`provider-${opt.value}`} className="text-sm font-normal cursor-pointer flex items-center gap-2">
+                    <Label htmlFor={`provider-${opt.value}`} className="travel-filter-panel-check-label travel-filter-panel-check-label--with-logo">
                       {opt.logoUrl && (
-                        <img src={opt.logoUrl} alt="" className="h-4 w-auto object-contain" aria-hidden />
+                        <img src={opt.logoUrl} alt="" className="travel-filter-panel-provider-logo" aria-hidden />
                       )}
                       {opt.label}
                     </Label>
@@ -205,7 +204,7 @@ export function FilterPanel({
           <AccordionItem value="times">
             <AccordionTrigger>Departure Time</AccordionTrigger>
             <AccordionContent>
-              <div className="pt-2 pb-4">
+              <div className="travel-filter-panel-section-body">
                 <Slider
                   min={0}
                   max={24}
@@ -225,7 +224,7 @@ export function FilterPanel({
           <AccordionItem value="arrival-times">
             <AccordionTrigger>Arrival Time</AccordionTrigger>
             <AccordionContent>
-              <div className="pt-2 pb-4">
+              <div className="travel-filter-panel-section-body">
                 <Slider
                   min={0}
                   max={24}
@@ -245,7 +244,7 @@ export function FilterPanel({
           <AccordionItem value="stars">
             <AccordionTrigger>Star Rating</AccordionTrigger>
             <AccordionContent>
-              <div className="flex gap-2 flex-wrap pt-1">
+              <div className="travel-filter-panel-stars-wrap">
                 {[1, 2, 3, 4, 5].map(stars => (
                   <button
                     key={stars}
@@ -256,10 +255,10 @@ export function FilterPanel({
                     aria-pressed={filters.starRatings.includes(stars)}
                     aria-label={`${stars} star${stars !== 1 ? 's' : ''}`}
                     className={cn(
-                      'px-3 py-1 rounded-full text-sm border transition-colors',
+                      'travel-filter-panel-star-btn',
                       filters.starRatings.includes(stars)
-                        ? 'bg-[var(--color-primary-default)] text-[var(--color-primary-foreground)] border-transparent'
-                        : 'border-[var(--color-border-default)] text-[var(--color-foreground-default)]',
+                        ? 'travel-filter-panel-star-btn--active'
+                        : 'travel-filter-panel-star-btn--inactive',
                     )}
                   >
                     {'★'.repeat(stars)}
@@ -275,9 +274,9 @@ export function FilterPanel({
           <AccordionItem value="amenities">
             <AccordionTrigger>Amenities</AccordionTrigger>
             <AccordionContent>
-              <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="travel-filter-panel-amenities-grid">
                 {amenityOptions.map(opt => (
-                  <div key={opt.value} className="flex items-center gap-2">
+                  <div key={opt.value} className="travel-filter-panel-check-item">
                     <Checkbox
                       id={`amenity-${opt.value}`}
                       checked={filters.amenities.includes(opt.value)}
@@ -285,7 +284,7 @@ export function FilterPanel({
                         onChange({ ...filters, amenities: toggleItem(filters.amenities, opt.value) })
                       }
                     />
-                    <Label htmlFor={`amenity-${opt.value}`} className="text-sm font-normal cursor-pointer">
+                    <Label htmlFor={`amenity-${opt.value}`} className="travel-filter-panel-check-label">
                       {opt.label}
                     </Label>
                   </div>
@@ -297,8 +296,8 @@ export function FilterPanel({
       </Accordion>
 
       {/* Apply button (mobile) */}
-      <div className="mt-4 md:hidden">
-        <Button className="w-full">Apply Filters</Button>
+      <div className="travel-filter-panel-mobile-actions">
+        <Button className="travel-filter-panel-apply-btn">Apply Filters</Button>
       </div>
     </aside>
   );

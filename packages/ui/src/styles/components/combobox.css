@@ -1,0 +1,73 @@
+@layer components {
+  .ui-combobox-root { position: relative; }
+
+  .ui-combobox-shell {
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+    border-radius: var(--shape-preset-input);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface-card);
+    transition: box-shadow var(--duration-normal), border-color var(--duration-normal);
+  }
+
+  .ui-combobox-shell:focus-within { border-color: var(--color-primary-default); box-shadow: 0 0 0 2px var(--color-primary-default); }
+  .ui-combobox-shell--disabled { opacity: 0.5; }
+
+  .ui-combobox-input {
+    height: 100%;
+    flex: 1 1 0%;
+    border: none;
+    background: transparent;
+    padding-inline: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-foreground-default);
+    outline: none;
+  }
+
+  .ui-combobox-input::placeholder { color: var(--color-foreground-subtle); }
+  .ui-combobox-input--disabled { cursor: not-allowed; }
+
+  .ui-combobox-toggle {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding-inline: 0.5rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .ui-combobox-toggle-icon { transition: transform 150ms; }
+  .ui-combobox-toggle-icon--open { transform: rotate(180deg); }
+
+  .ui-combobox-listbox {
+    position: absolute;
+    z-index: 50;
+    margin-top: 0.25rem;
+    max-height: 15rem;
+    width: 100%;
+    overflow: auto;
+    border-radius: var(--shape-preset-card);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface-popover);
+    box-shadow: var(--shadow-md);
+    padding-block: 0.25rem;
+  }
+
+  .ui-combobox-empty { padding: 0.5rem 0.75rem; font-size: 0.875rem; color: var(--color-foreground-muted); }
+
+  .ui-combobox-option {
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-foreground-default);
+  }
+
+  .ui-combobox-option--active { background: var(--color-background-subtle); }
+  .ui-combobox-option--selected { font-weight: 500; }
+  .ui-combobox-option--disabled { cursor: not-allowed; opacity: 0.4; }
+  .ui-combobox-check { flex-shrink: 0; color: var(--color-primary-default); }
+}

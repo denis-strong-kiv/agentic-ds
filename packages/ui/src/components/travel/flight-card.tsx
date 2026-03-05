@@ -44,19 +44,19 @@ export interface FlightCardProps {
 function StopsLine({ stops }: { stops: number }) {
   const dots = stops + 2; // origin + stops + destination
   return (
-    <div className="flex items-center gap-0.5 w-full max-w-[120px]" aria-hidden>
+    <div className="travel-flight-card-stops" aria-hidden>
       {Array.from({ length: dots }).map((_, i) => (
         <React.Fragment key={i}>
           <div
             className={cn(
-              'h-2 w-2 rounded-full flex-shrink-0',
+              'travel-flight-card-stop-dot',
               i === 0 || i === dots - 1
-                ? 'bg-[var(--color-primary-default)]'
-                : 'bg-[var(--color-border-default)] ring-1 ring-[var(--color-primary-default)]',
+                ? 'travel-flight-card-stop-dot--edge'
+                : 'travel-flight-card-stop-dot--mid',
             )}
           />
           {i < dots - 1 && (
-            <div className="h-px flex-1 bg-[var(--color-border-default)]" />
+            <div className="travel-flight-card-stop-line" />
           )}
         </React.Fragment>
       ))}
@@ -80,62 +80,61 @@ export function FlightCard({
   return (
     <div
       className={cn(
-        'rounded-[var(--shape-preset-card)] border border-[var(--color-border-default)]',
-        'bg-[var(--color-surface-card)] overflow-hidden',
+        'travel-flight-card',
         className,
       )}
     >
       {/* Main card row */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
+      <div className="travel-flight-card-layout">
         {/* Airline */}
-        <div className="flex items-center gap-2 w-32 flex-shrink-0">
+        <div className="travel-flight-card-airline">
           {segment.airlineLogo ? (
-            <img src={segment.airlineLogo} alt={segment.airline} className="h-8 w-8 object-contain" />
+            <img src={segment.airlineLogo} alt={segment.airline} className="travel-flight-card-airline-logo" />
           ) : (
-            <div className="h-8 w-8 rounded flex items-center justify-center bg-[var(--color-background-subtle)] text-xs font-bold text-[var(--color-foreground-muted)]">
+            <div className="travel-flight-card-airline-fallback">
               {segment.airline.slice(0, 2).toUpperCase()}
             </div>
           )}
           <div>
-            <p className="text-xs font-medium text-[var(--color-foreground-default)] truncate">{segment.airline}</p>
-            <p className="text-xs text-[var(--color-foreground-muted)]">{segment.flightNumber}</p>
+            <p className="travel-flight-card-airline-name">{segment.airline}</p>
+            <p className="travel-flight-card-flight-number">{segment.flightNumber}</p>
           </div>
         </div>
 
         {/* Times */}
-        <div className="flex items-center gap-3 flex-1">
-          <div className="text-center">
-            <p className="text-lg font-bold text-[var(--color-foreground-default)]">{segment.departureTime}</p>
-            <p className="text-xs text-[var(--color-foreground-muted)]">{segment.origin}</p>
+        <div className="travel-flight-card-times">
+          <div className="travel-flight-card-time-point">
+            <p className="travel-flight-card-time">{segment.departureTime}</p>
+            <p className="travel-flight-card-code">{segment.origin}</p>
           </div>
 
-          <div className="flex flex-col items-center gap-1 flex-1 min-w-[80px]">
-            <p className="text-xs text-[var(--color-foreground-muted)]">{segment.duration}</p>
+          <div className="travel-flight-card-middle">
+            <p className="travel-flight-card-duration">{segment.duration}</p>
             <StopsLine stops={segment.stops} />
-            <p className="text-xs text-[var(--color-foreground-muted)]">
+            <p className="travel-flight-card-stop-label">
               {segment.stops === 0 ? 'Non-stop' : `${segment.stops} stop${segment.stops > 1 ? 's' : ''}`}
             </p>
           </div>
 
-          <div className="text-center">
-            <p className="text-lg font-bold text-[var(--color-foreground-default)]">{segment.arrivalTime}</p>
-            <p className="text-xs text-[var(--color-foreground-muted)]">{segment.destination}</p>
+          <div className="travel-flight-card-time-point">
+            <p className="travel-flight-card-time">{segment.arrivalTime}</p>
+            <p className="travel-flight-card-code">{segment.destination}</p>
           </div>
         </div>
 
         {/* Price + CTA */}
-        <div className="flex flex-col items-end gap-2 sm:ml-4">
-          <div className="text-right">
+        <div className="travel-flight-card-price-col">
+          <div className="travel-flight-card-price-wrap">
             {(isBestValue || isCheapest) && (
-              <div className="mb-1">
+              <div className="travel-flight-card-badges">
                 {isBestValue && <Badge variant="deal">Best Value</Badge>}
                 {isCheapest && !isBestValue && <Badge variant="popular">Cheapest</Badge>}
               </div>
             )}
-            <p className="text-2xl font-bold text-[var(--color-foreground-default)]">{price}</p>
-            <p className="text-xs text-[var(--color-foreground-muted)]">{currency} per person</p>
+            <p className="travel-flight-card-price">{price}</p>
+            <p className="travel-flight-card-price-meta">{currency} per person</p>
             {fareClass && (
-              <Badge variant="outline" className="mt-1 text-xs">{fareClass}</Badge>
+              <Badge variant="outline" className="travel-flight-card-fare-class">{fareClass}</Badge>
             )}
           </div>
           <Button onClick={onSelect} size="sm">Select</Button>
@@ -144,24 +143,24 @@ export function FlightCard({
 
       {/* Fare breakdown accordion */}
       {fareBreakdown.length > 0 && (
-        <div className="border-t border-[var(--color-border-muted)]">
+        <div className="travel-flight-card-breakdown-wrap">
           <Accordion type="single" collapsible>
-            <AccordionItem value="breakdown" className="border-none">
-              <AccordionTrigger className="px-4 text-sm text-[var(--color-primary-default)]">
+            <AccordionItem value="breakdown" className="travel-flight-card-breakdown-item">
+              <AccordionTrigger className="travel-flight-card-breakdown-trigger">
                 Fare breakdown
               </AccordionTrigger>
               <AccordionContent>
-                <div className="px-4 pb-4 space-y-2">
+                <div className="travel-flight-card-breakdown-content">
                   {fareBreakdown.map((item, i) => (
                     <div
                       key={i}
                       className={cn(
-                        'flex justify-between text-sm',
-                        item.type === 'total' && 'font-semibold border-t border-[var(--color-border-muted)] pt-2 mt-2',
+                        'travel-flight-card-breakdown-row',
+                        item.type === 'total' && 'travel-flight-card-breakdown-row--total',
                       )}
                     >
-                      <span className="text-[var(--color-foreground-muted)]">{item.label}</span>
-                      <span className="text-[var(--color-foreground-default)]">{item.amount}</span>
+                      <span className="travel-flight-card-breakdown-label">{item.label}</span>
+                      <span className="travel-flight-card-breakdown-amount">{item.amount}</span>
                     </div>
                   ))}
                 </div>

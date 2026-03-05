@@ -10,99 +10,94 @@ describe('Button', () => {
       render(<Button>Click me</Button>);
       const btn = screen.getByRole('button', { name: 'Click me' });
       expect(btn).toBeInTheDocument();
-      expect(btn.className).toContain('bg-[var(--color-primary-default)]');
+      expect(btn.className).toContain('ui-button--primary');
     });
 
     it('renders secondary variant', () => {
       render(<Button variant="secondary">Secondary</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('bg-transparent');
-      expect(btn.className).toContain('border-[var(--color-border-default)]');
+      expect(btn.className).toContain('ui-button--secondary');
     });
 
     it('renders tertiary variant', () => {
       render(<Button variant="tertiary">Tertiary</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('text-[var(--color-foreground-default)]');
-      expect(btn.className).toContain('bg-transparent');
+      expect(btn.className).toContain('ui-button--tertiary');
     });
 
     it('renders neutral variant', () => {
       render(<Button variant="neutral">Neutral</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('bg-[var(--color-foreground-default)]');
-      expect(btn.className).toContain('text-[var(--color-background-default)]');
+      expect(btn.className).toContain('ui-button--neutral');
     });
 
     it('renders inverted-primary variant', () => {
       render(<Button variant="inverted-primary">Inverted Primary</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('bg-[oklch(100%_0_0)]');
+      expect(btn.className).toContain('ui-button--inverted-primary');
     });
 
     it('renders inverted-secondary variant', () => {
       render(<Button variant="inverted-secondary">Inverted Secondary</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('text-[oklch(100%_0_0)]');
-      expect(btn.className).toContain('border-[oklch(100%_0_0)]');
+      expect(btn.className).toContain('ui-button--inverted-secondary');
     });
 
     it('renders inverted-tertiary variant', () => {
       render(<Button variant="inverted-tertiary">Inverted Tertiary</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('text-[oklch(100%_0_0)]');
-      expect(btn.className).toContain('bg-transparent');
+      expect(btn.className).toContain('ui-button--inverted-tertiary');
     });
 
     it('renders outline variant', () => {
       render(<Button variant="outline">Outline</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('border-[var(--color-primary-default)]');
+      expect(btn.className).toContain('ui-button--outline');
     });
 
     it('renders ghost variant', () => {
       render(<Button variant="ghost">Ghost</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('hover:bg-[var(--color-background-subtle)]');
+      expect(btn.className).toContain('ui-button--ghost');
     });
 
     it('renders destructive variant', () => {
       render(<Button variant="destructive">Delete</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('bg-[var(--color-error-default)]');
+      expect(btn.className).toContain('ui-button--destructive');
     });
 
     it('renders link variant', () => {
       render(<Button variant="link">Link</Button>);
       const btn = screen.getByRole('button');
-      expect(btn.className).toContain('text-[var(--color-primary-default)]');
+      expect(btn.className).toContain('ui-button--link');
     });
   });
 
   describe('sizes', () => {
     it('renders sm size', () => {
       render(<Button size="sm">Small</Button>);
-      expect(screen.getByRole('button').className).toContain('h-8');
+      expect(screen.getByRole('button').className).toContain('ui-button--sm');
     });
 
     it('renders md size by default', () => {
       render(<Button>Medium</Button>);
-      expect(screen.getByRole('button').className).toContain('h-10');
+      expect(screen.getByRole('button').className).toContain('ui-button--md');
     });
 
     it('renders lg size', () => {
       render(<Button size="lg">Large</Button>);
-      expect(screen.getByRole('button').className).toContain('h-12');
+      expect(screen.getByRole('button').className).toContain('ui-button--lg');
     });
 
     it('renders xl size', () => {
       render(<Button size="xl">X-Large</Button>);
-      expect(screen.getByRole('button').className).toContain('h-14');
+      expect(screen.getByRole('button').className).toContain('ui-button--xl');
     });
 
     it('renders icon size', () => {
       render(<Button size="icon" aria-label="icon">X</Button>);
-      expect(screen.getByRole('button').className).toContain('h-10 w-10');
+      expect(screen.getByRole('button').className).toContain('ui-button--icon');
     });
   });
 

@@ -15,6 +15,12 @@ function makeFilters(overrides: Partial<FilterState> = {}): FilterState {
 }
 
 describe('FilterPanel', () => {
+  it('applies semantic root class', () => {
+    const onChange = vi.fn();
+    render(<FilterPanel filters={makeFilters()} onChange={onChange} />);
+    expect(screen.getByLabelText('Search filters')).toHaveClass('travel-filter-panel');
+  });
+
   it('renders Filters heading', () => {
     const onChange = vi.fn();
     render(<FilterPanel filters={makeFilters()} onChange={onChange} />);

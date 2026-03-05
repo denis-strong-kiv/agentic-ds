@@ -18,25 +18,14 @@ const Switch = React.forwardRef<
   const control = (
     <SwitchPrimitive.Root
       className={cn(
-        'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full',
-        'border-2 border-transparent',
-        'transition-colors duration-[var(--duration-normal)]',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-default)]',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        'bg-[var(--color-border-default)]',
-        'data-[state=checked]:bg-[var(--color-primary-default)]',
+        'ui-switch',
         className,
       )}
       {...props}
       ref={ref}
     >
       <SwitchPrimitive.Thumb
-        className={cn(
-          'pointer-events-none block h-5 w-5 rounded-full',
-          'bg-white shadow-lg ring-0',
-          'transition-transform duration-[var(--duration-normal)]',
-          'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0',
-        )}
+        className={cn('ui-switch-thumb')}
       />
     </SwitchPrimitive.Root>
   );
@@ -44,13 +33,13 @@ const Switch = React.forwardRef<
   if (!label) return control;
 
   return (
-    <label className={cn('flex items-center gap-3 cursor-pointer', props.disabled && 'cursor-not-allowed')}>
+    <label className={cn('ui-switch-label-wrap', props.disabled && 'ui-switch-label-wrap--disabled')}>
       {labelPosition === 'left' && (
-        <span className="text-sm font-medium text-[var(--color-foreground-default)]">{label}</span>
+        <span className="ui-switch-label">{label}</span>
       )}
       {control}
       {labelPosition === 'right' && (
-        <span className="text-sm font-medium text-[var(--color-foreground-default)]">{label}</span>
+        <span className="ui-switch-label">{label}</span>
       )}
     </label>
   );

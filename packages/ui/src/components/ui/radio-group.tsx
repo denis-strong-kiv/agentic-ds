@@ -11,7 +11,7 @@ const RadioGroup = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => (
   <RadioGroupPrimitive.Root
-    className={cn('flex flex-col gap-2', className)}
+    className={cn('ui-radio-group', className)}
     {...props}
     ref={ref}
   />
@@ -25,17 +25,12 @@ const RadioGroupItem = React.forwardRef<
   <RadioGroupPrimitive.Item
     ref={ref}
     className={cn(
-      'aspect-square h-4 w-4 rounded-full',
-      'border border-[var(--color-border-default)]',
-      'text-[var(--color-primary-default)]',
-      'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-default)]',
-      'disabled:cursor-not-allowed disabled:opacity-50',
-      'data-[state=checked]:border-[var(--color-primary-default)]',
+      'ui-radio-group-item',
       className,
     )}
     {...props}
   >
-    <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
+    <RadioGroupPrimitive.Indicator className="ui-radio-group-indicator">
       <Icon icon={Circle} size="xs" fill="currentColor" />
     </RadioGroupPrimitive.Indicator>
   </RadioGroupPrimitive.Item>

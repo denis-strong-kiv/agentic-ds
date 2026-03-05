@@ -27,37 +27,30 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     );
 
     return (
-      <div className="flex flex-col gap-1.5">
+      <div className="ui-textarea-group">
         <textarea
           ref={ref}
           id={id}
           maxLength={maxLength}
           onChange={handleChange}
           className={cn(
-            'flex min-h-[80px] w-full rounded-[var(--shape-preset-input)]',
-            'border border-[var(--color-border-default)]',
-            'bg-[var(--color-surface-card)] text-[var(--color-foreground-default)]',
-            'px-3 py-2 text-sm',
-            'placeholder:text-[var(--color-foreground-subtle)]',
-            'transition-colors duration-[var(--duration-normal)]',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-default)]',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            error && 'border-[var(--color-error-default)] focus-visible:ring-[var(--color-error-default)]',
-            autoResize && 'resize-none overflow-hidden',
+            'ui-textarea',
+            error && 'ui-textarea--error',
+            autoResize && 'ui-textarea--auto-resize',
             className,
           )}
           aria-describedby={errorId}
           aria-invalid={!!error}
           {...props}
         />
-        <div className="flex justify-between">
+        <div className="ui-textarea-footer">
           {error && (
-            <p id={errorId} className="text-sm text-[var(--color-error-default)]" role="alert">
+            <p id={errorId} className="ui-textarea-error-text" role="alert">
               {error}
             </p>
           )}
           {showCount && maxLength && (
-            <p className="text-xs text-[var(--color-foreground-muted)] ml-auto">
+            <p className="ui-textarea-count">
               {count}/{maxLength}
             </p>
           )}

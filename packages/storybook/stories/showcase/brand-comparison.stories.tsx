@@ -22,7 +22,7 @@ function BrandFrame({ brandId, mode = 'light', children }: {
     if (!el) { el = document.createElement('style'); el.id = styleId; document.head.appendChild(el); }
     el.textContent = `[data-brand-frame="${brandId}-${mode}"] { ${Object.entries(tokens).map(([k,v]) => `${k}:${v}`).join(';')} }`;
     return () => { el?.remove(); };
-  }, [brandId, mode]);
+  }, [brandId, mode, styleId, tokens]);
 
   return (
     <div

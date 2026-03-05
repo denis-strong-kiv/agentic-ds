@@ -106,14 +106,14 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       render(<DialogFixture size="sm" />);
       await user.click(screen.getByRole('button', { name: 'Open Dialog' }));
-      expect(screen.getByRole('dialog').className).toContain('max-w-sm');
+      expect(screen.getByRole('dialog').className).toContain('ui-dialog-content--sm');
     });
 
     it('renders lg size', async () => {
       const user = userEvent.setup();
       render(<DialogFixture size="lg" />);
       await user.click(screen.getByRole('button', { name: 'Open Dialog' }));
-      expect(screen.getByRole('dialog').className).toContain('max-w-2xl');
+      expect(screen.getByRole('dialog').className).toContain('ui-dialog-content--lg');
     });
   });
 });

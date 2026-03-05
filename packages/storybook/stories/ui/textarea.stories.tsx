@@ -64,7 +64,7 @@ export const Disabled: Story = {
 export const FullForm: Story = {
   name: 'In a form context',
   render: () => (
-    <div className="max-w-sm flex flex-col gap-1.5">
+    <div className="sb-stack-sm sb-max-sm">
       <Label htmlFor="msg" required helperText="Up to 280 characters">
         Message to airline
       </Label>

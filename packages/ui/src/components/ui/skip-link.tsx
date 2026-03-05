@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '../../utils/cn.js';
+import { cn } from '../../utils/cn';
 
 export interface SkipLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   /** The id of the main content area to skip to (without the `#`). */

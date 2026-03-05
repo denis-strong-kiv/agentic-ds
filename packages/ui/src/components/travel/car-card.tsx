@@ -65,68 +65,67 @@ export function CarCard({
   return (
     <div
       className={cn(
-        'rounded-[var(--shape-preset-card)] border border-[var(--color-border-default)]',
-        'bg-[var(--color-surface-card)] overflow-hidden',
+        'travel-car-card',
         className,
       )}
     >
-      <div className="flex flex-col sm:flex-row">
+      <div className="travel-car-card-layout">
         {/* Vehicle image */}
-        <div className="sm:w-48 flex-shrink-0 bg-[var(--color-background-subtle)] flex items-center justify-center p-4">
+        <div className="travel-car-card-media">
           {imageUrl ? (
-            <img src={imageUrl} alt={name} className="h-28 w-full object-contain" />
+            <img src={imageUrl} alt={name} className="travel-car-card-image" />
           ) : (
-            <div className="h-28 w-full flex items-center justify-center text-[var(--color-foreground-subtle)]">
-              <svg className="h-16 w-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <div className="travel-car-card-image-fallback">
+              <svg className="travel-car-card-image-fallback-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v9a2 2 0 0 1-2 2h-2" />
                 <circle cx="7" cy="17" r="2" />
                 <circle cx="17" cy="17" r="2" />
               </svg>
             </div>
           )}
-          <div className="mt-2 text-center">
+          <div className="travel-car-card-category-wrap">
             <Badge variant="secondary">{category}</Badge>
           </div>
         </div>
 
         {/* Car details */}
-        <div className="flex-1 p-4">
-          <div className="flex items-start justify-between gap-2">
+        <div className="travel-car-card-content">
+          <div className="travel-car-card-header">
             <div>
-              <h3 className="font-semibold text-[var(--color-foreground-default)]">{name}</h3>
-              <p className="text-xs text-[var(--color-foreground-muted)] mt-0.5">or similar</p>
+              <h3 className="travel-car-card-title">{name}</h3>
+              <p className="travel-car-card-subtitle">or similar</p>
             </div>
             {/* Provider */}
-            <div className="flex items-center gap-1.5 text-xs text-[var(--color-foreground-muted)]">
-              {providerLogo && <img src={providerLogo} alt={providerName} className="h-5 w-auto object-contain" />}
+            <div className="travel-car-card-provider">
+              {providerLogo && <img src={providerLogo} alt={providerName} className="travel-car-card-provider-logo" />}
               {!providerLogo && <span>{providerName}</span>}
             </div>
           </div>
 
           {/* Specs row */}
-          <div className="flex flex-wrap gap-3 mt-3" aria-label="Vehicle specifications">
-            <span className="text-xs text-[var(--color-foreground-muted)] flex items-center gap-1">
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <div className="travel-car-card-specs" aria-label="Vehicle specifications">
+            <span className="travel-car-card-spec travel-car-card-spec--with-icon">
+              <svg className="travel-car-card-spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
               </svg>
               {specs.seats} seats
             </span>
-            <span className="text-xs text-[var(--color-foreground-muted)] flex items-center gap-1">
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <span className="travel-car-card-spec travel-car-card-spec--with-icon">
+              <svg className="travel-car-card-spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="3" y="3" width="18" height="18" rx="2" />
               </svg>
               {specs.doors} doors
             </span>
-            <span className="text-xs text-[var(--color-foreground-muted)]">{specs.transmission}</span>
-            {specs.hasAC && <span className="text-xs text-[var(--color-foreground-muted)]">A/C</span>}
-            <span className="text-xs text-[var(--color-foreground-muted)]">
+            <span className="travel-car-card-spec">{specs.transmission}</span>
+            {specs.hasAC && <span className="travel-car-card-spec">A/C</span>}
+            <span className="travel-car-card-spec">
               {specs.luggageCapacity} bag{specs.luggageCapacity !== 1 ? 's' : ''}
             </span>
           </div>
 
           {/* Location */}
-          <div className="mt-2 text-xs text-[var(--color-foreground-muted)]">
+          <div className="travel-car-card-location">
             <p>Pick-up: {pickupLocation}</p>
             {dropoffLocation && dropoffLocation !== pickupLocation && (
               <p>Drop-off: {dropoffLocation}</p>
@@ -135,10 +134,10 @@ export function CarCard({
 
           {/* Insurance options */}
           {insuranceOptions.length > 0 && (
-            <div className="mt-3 space-y-2">
-              <p className="text-xs font-medium text-[var(--color-foreground-default)]">Insurance options</p>
+            <div className="travel-car-card-insurance">
+              <p className="travel-car-card-insurance-title">Insurance options</p>
               {insuranceOptions.map(option => (
-                <div key={option.id} className="flex items-center justify-between">
+                <div key={option.id} className="travel-car-card-insurance-option">
                   <Switch
                     label={`${option.label} (+${option.pricePerDay}/day)`}
                     checked={selectedInsurance === option.id}
@@ -152,12 +151,12 @@ export function CarCard({
           )}
 
           {/* Price + CTA */}
-          <div className="flex items-end justify-between mt-4">
+          <div className="travel-car-card-footer">
             <div>
-              <p className="text-2xl font-bold text-[var(--color-foreground-default)]">{pricePerDay}</p>
-              <p className="text-xs text-[var(--color-foreground-muted)]">{currency} per day</p>
+              <p className="travel-car-card-price">{pricePerDay}</p>
+              <p className="travel-car-card-price-meta">{currency} per day</p>
               {totalPrice && (
-                <p className="text-xs text-[var(--color-foreground-muted)]">{totalPrice} total</p>
+                <p className="travel-car-card-price-meta">{totalPrice} total</p>
               )}
             </div>
             <Button onClick={() => onSelect?.(selectedInsurance)}>Select Car</Button>

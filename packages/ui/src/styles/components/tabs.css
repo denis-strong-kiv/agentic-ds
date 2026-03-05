@@ -1,0 +1,41 @@
+@layer components {
+  .ui-tabs-list {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    background: var(--color-background-subtle);
+    padding: 0.25rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .ui-tabs-list--horizontal { flex-direction: row; height: 2.5rem; }
+  .ui-tabs-list--vertical { flex-direction: column; height: auto; width: auto; }
+
+  .ui-tabs-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border-radius: 0.125rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all var(--duration-normal);
+  }
+
+  .ui-tabs-trigger:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-primary-default); }
+  .ui-tabs-trigger:disabled { pointer-events: none; opacity: 0.5; }
+  .ui-tabs-trigger[data-state='active'] {
+    background: var(--color-surface-card);
+    color: var(--color-foreground-default);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .ui-tabs-trigger-icon { flex-shrink: 0; }
+  .ui-tabs-trigger-badge { margin-inline-start: 0.25rem; }
+
+  .ui-tabs-content { margin-top: 0.5rem; }
+  .ui-tabs-content:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-primary-default); }
+}

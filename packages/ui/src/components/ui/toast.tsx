@@ -16,8 +16,7 @@ const ToastViewport = React.forwardRef<
   <ToastPrimitive.Viewport
     ref={ref}
     className={cn(
-      'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4',
-      'sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]',
+      'ui-toast-viewport',
       className,
     )}
     {...props}
@@ -27,23 +26,15 @@ ToastViewport.displayName = ToastPrimitive.Viewport.displayName;
 
 const toastVariants = cva(
   [
-    'group pointer-events-auto relative flex w-full items-center justify-between gap-2',
-    'overflow-hidden rounded-[var(--shape-preset-card)] border p-4 shadow-[var(--shadow-lg)]',
-    'transition-all',
-    'data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)]',
-    'data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none',
-    'data-[state=open]:animate-in data-[state=closed]:animate-out',
-    'data-[swipe=end]:animate-out data-[state=closed]:fade-out-80',
-    'data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full',
-    'data-[state=open]:sm:slide-in-from-bottom-full',
+    'ui-toast',
   ],
   {
     variants: {
       variant: {
-        default: 'border-[var(--color-border-default)] bg-[var(--color-surface-popover)] text-[var(--color-foreground-default)]',
-        success: 'border-[var(--color-success-default)] bg-[var(--color-success-subtle)] text-[var(--color-foreground-default)]',
-        error: 'border-[var(--color-error-default)] bg-[var(--color-error-subtle)] text-[var(--color-foreground-default)]',
-        warning: 'border-[var(--color-warning-default)] bg-[var(--color-warning-subtle)] text-[var(--color-foreground-default)]',
+        default: 'ui-toast--default',
+        success: 'ui-toast--success',
+        error: 'ui-toast--error',
+        warning: 'ui-toast--warning',
       },
     },
     defaultVariants: { variant: 'default' },
@@ -65,11 +56,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitive.Action
     ref={ref}
     className={cn(
-      'inline-flex h-8 shrink-0 items-center justify-center rounded-md border px-3',
-      'text-sm font-medium transition-colors',
-      'border-[var(--color-border-default)] hover:bg-[var(--color-background-subtle)]',
-      'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-default)]',
-      'disabled:pointer-events-none disabled:opacity-50',
+      'ui-toast-action',
       className,
     )}
     {...props}
@@ -85,10 +72,7 @@ const ToastClose = React.forwardRef<
     ref={ref}
     aria-label="Dismiss"
     className={cn(
-      'absolute right-2 top-2 rounded-md p-1 opacity-0 transition-opacity',
-      'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
-      'focus:opacity-100 focus:outline-none focus:ring-2',
-      'group-hover:opacity-100',
+      'ui-toast-close',
       className,
     )}
     toast-close=""
@@ -105,7 +89,7 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Title
     ref={ref}
-    className={cn('text-sm font-semibold', className)}
+    className={cn('ui-toast-title', className)}
     {...props}
   />
 ));
@@ -117,7 +101,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitive.Description
     ref={ref}
-    className={cn('text-sm opacity-90', className)}
+    className={cn('ui-toast-description', className)}
     {...props}
   />
 ));

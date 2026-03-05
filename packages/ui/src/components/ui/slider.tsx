@@ -18,11 +18,11 @@ const Slider = React.forwardRef<
   const values = props.value ?? props.defaultValue ?? [0];
 
   return (
-    <div className="relative">
+    <div className="ui-slider-container">
       {showValue && (
-        <div className="flex justify-between mb-1">
+        <div className="ui-slider-values">
           {values.map((v, i) => (
-            <span key={i} className="text-xs text-[var(--color-foreground-muted)]">
+            <span key={i} className="ui-slider-value-label">
               {formatValue(v)}
             </span>
           ))}
@@ -32,19 +32,18 @@ const Slider = React.forwardRef<
         ref={ref}
         aria-label={ariaLabel}
         className={cn(
-          'relative flex w-full touch-none select-none items-center',
+          'ui-slider-root',
           className,
         )}
         {...props}
       >
         <SliderPrimitive.Track
           className={cn(
-            'relative h-1.5 w-full grow overflow-hidden rounded-full',
-            'bg-[var(--color-border-default)]',
+            'ui-slider-track',
           )}
         >
           <SliderPrimitive.Range
-            className="absolute h-full bg-[var(--color-primary-default)]"
+            className="ui-slider-range"
           />
         </SliderPrimitive.Track>
         {values.map((_, i) => (
@@ -52,12 +51,7 @@ const Slider = React.forwardRef<
             key={i}
             aria-label={values.length > 1 ? (i === 0 ? 'Minimum' : 'Maximum') : ariaLabel}
             className={cn(
-              'block h-4 w-4 rounded-full',
-              'border border-[var(--color-primary-default)] bg-white',
-              'shadow transition-transform',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-default)]',
-              'disabled:pointer-events-none disabled:opacity-50',
-              'hover:scale-110',
+              'ui-slider-thumb',
             )}
           />
         ))}

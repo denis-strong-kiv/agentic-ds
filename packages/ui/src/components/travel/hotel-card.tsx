@@ -30,13 +30,13 @@ export interface HotelCardProps {
 
 function StarRating({ rating }: { rating: number }) {
   return (
-    <div className="flex gap-0.5" role="img" aria-label={`${rating} star hotel`}>
+    <div className="travel-hotel-stars" role="img" aria-label={`${rating} star hotel`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <span
           key={i}
           className={cn(
-            'text-xs',
-            i < rating ? 'text-[var(--color-warning-default)]' : 'text-[var(--color-border-default)]',
+            'travel-hotel-star',
+            i < rating ? 'travel-hotel-star--active' : 'travel-hotel-star--inactive',
           )}
           aria-hidden
         >
@@ -55,8 +55,8 @@ function ImageCarousel({ images, alt }: { images: string[]; alt: string }) {
   if (images.length === 0) {
     return (
       <AspectRatio ratio={4 / 3}>
-        <div className="h-full w-full bg-[var(--color-background-subtle)] flex items-center justify-center">
-          <svg className="h-12 w-12 text-[var(--color-foreground-subtle)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <div className="travel-hotel-image-placeholder">
+          <svg className="travel-hotel-image-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <path d="M3 9h18M9 21V9" />
           </svg>
@@ -67,18 +67,18 @@ function ImageCarousel({ images, alt }: { images: string[]; alt: string }) {
 
   return (
     <AspectRatio ratio={4 / 3}>
-      <div className="relative h-full w-full overflow-hidden rounded-t-[var(--shape-preset-card)]">
+      <div className="travel-hotel-image-shell">
         <img
           src={images[current]}
           alt={`${alt} (${current + 1} of ${images.length})`}
-          className="h-full w-full object-cover"
+          className="travel-hotel-image"
         />
         {images.length > 1 && (
           <>
             <button
               type="button"
               onClick={() => setCurrent(i => (i - 1 + images.length) % images.length)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+              className="travel-hotel-image-nav travel-hotel-image-nav--prev"
               aria-label="Previous image"
             >
               ‹
@@ -86,12 +86,12 @@ function ImageCarousel({ images, alt }: { images: string[]; alt: string }) {
             <button
               type="button"
               onClick={() => setCurrent(i => (i + 1) % images.length)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+              className="travel-hotel-image-nav travel-hotel-image-nav--next"
               aria-label="Next image"
             >
               ›
             </button>
-            <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
+            <div className="travel-hotel-image-dots">
               {images.map((_, i) => (
                 <button
                   key={i}
@@ -99,8 +99,8 @@ function ImageCarousel({ images, alt }: { images: string[]; alt: string }) {
                   onClick={() => setCurrent(i)}
                   aria-label={`Go to image ${i + 1}`}
                   className={cn(
-                    'h-1.5 rounded-full transition-all',
-                    i === current ? 'w-4 bg-white' : 'w-1.5 bg-white/60',
+                    'travel-hotel-image-dot',
+                    i === current ? 'travel-hotel-image-dot--active' : 'travel-hotel-image-dot--inactive',
                   )}
                 />
               ))}
@@ -142,13 +142,12 @@ export function HotelCard({
   return (
     <div
       className={cn(
-        'rounded-[var(--shape-preset-card)] border border-[var(--color-border-default)]',
-        'bg-[var(--color-surface-card)] overflow-hidden',
+        'travel-hotel-card',
         className,
       )}
     >
       {/* Image carousel */}
-      <div className="relative">
+      <div className="travel-hotel-image-wrap">
         <ImageCarousel images={images} alt={name} />
         {/* Favorite toggle */}
         <button
@@ -156,10 +155,13 @@ export function HotelCard({
           onClick={onFavoriteToggle}
           aria-label={isFavorite ? 'Remove from wishlist' : 'Add to wishlist'}
           aria-pressed={isFavorite}
-          className="absolute top-2 right-2 h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow hover:bg-white transition-colors"
+          className="travel-hotel-favorite-btn"
         >
           <svg
-            className={cn('h-4 w-4', isFavorite ? 'fill-[var(--color-error-default)] text-[var(--color-error-default)]' : 'text-[var(--color-foreground-muted)]')}
+            className={cn(
+              'travel-hotel-favorite-icon',
+              isFavorite ? 'travel-hotel-favorite-icon--active' : 'travel-hotel-favorite-icon--inactive',
+            )}
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth="2"
@@ -171,11 +173,11 @@ export function HotelCard({
       </div>
 
       {/* Hotel info */}
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="font-semibold text-[var(--color-foreground-default)] line-clamp-1">{name}</h3>
+      <div className="travel-hotel-content">
+        <div className="travel-hotel-header-row">
+          <h3 className="travel-hotel-name">{name}</h3>
           {reviewScore !== undefined && (
-            <Badge variant={reviewVariant(reviewScore)} className="flex-shrink-0">
+            <Badge variant={reviewVariant(reviewScore)} className="travel-hotel-review-badge">
               {reviewScore.toFixed(1)}
             </Badge>
           )}
@@ -183,41 +185,41 @@ export function HotelCard({
 
         <StarRating rating={starRating} />
 
-        <p className="text-xs text-[var(--color-foreground-muted)] mt-1">
+        <p className="travel-hotel-location">
           {location}
           {distanceToCenter && ` · ${distanceToCenter} from center`}
         </p>
 
         {reviewCount !== undefined && (
-          <p className="text-xs text-[var(--color-foreground-muted)]">
+          <p className="travel-hotel-review-count">
             {reviewCount.toLocaleString()} reviews
           </p>
         )}
 
         {/* Amenity icons */}
         {amenities.length > 0 && (
-          <div className="flex gap-2 mt-2 flex-wrap" aria-label="Amenities">
+          <div className="travel-hotel-amenities" aria-label="Amenities">
             {amenities.slice(0, 5).map(amenity => (
               <span
                 key={amenity}
-                className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-background-subtle)] text-[var(--color-foreground-muted)]"
+                className="travel-hotel-amenity-pill"
               >
                 {amenity}
               </span>
             ))}
             {amenities.length > 5 && (
-              <span className="text-xs text-[var(--color-foreground-muted)]">+{amenities.length - 5} more</span>
+              <span className="travel-hotel-amenity-more">+{amenities.length - 5} more</span>
             )}
           </div>
         )}
 
         {/* Price + CTA */}
-        <div className="flex items-end justify-between mt-4">
+        <div className="travel-hotel-footer-row">
           <div>
-            <p className="text-2xl font-bold text-[var(--color-foreground-default)]">{pricePerNight}</p>
-            <p className="text-xs text-[var(--color-foreground-muted)]">{currency} per night</p>
+            <p className="travel-hotel-price">{pricePerNight}</p>
+            <p className="travel-hotel-price-currency">{currency} per night</p>
             {totalPrice && (
-              <p className="text-xs text-[var(--color-foreground-muted)]">{totalPrice} total</p>
+              <p className="travel-hotel-price-total">{totalPrice} total</p>
             )}
           </div>
           <Button onClick={onViewDeal}>View Deal</Button>

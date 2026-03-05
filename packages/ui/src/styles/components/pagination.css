@@ -1,0 +1,8 @@
+@layer components {
+  .ui-pagination { margin-inline: auto; display: flex; width: 100%; justify-content: center; }
+  .ui-pagination-content { display: flex; flex-direction: row; align-items: center; gap: 0.25rem; }
+  .ui-pagination-link { gap: 0.25rem; }
+  .ui-pagination-link--previous { padding-inline-start: 0.625rem; }
+  .ui-pagination-link--next { padding-inline-end: 0.625rem; }
+  .ui-pagination-ellipsis { display: flex; height: 2.25rem; width: 2.25rem; align-items: center; justify-content: center; color: var(--color-foreground-muted); }
+}

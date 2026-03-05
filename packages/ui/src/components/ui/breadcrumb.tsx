@@ -13,7 +13,7 @@ const BreadcrumbList = React.forwardRef<HTMLOListElement, React.ComponentPropsWi
   ({ className, ...props }, ref) => (
     <ol
       ref={ref}
-      className={cn('flex flex-wrap items-center gap-1.5 break-words text-sm text-[var(--color-foreground-muted)] sm:gap-2.5', className)}
+        className={cn('ui-breadcrumb-list', className)}
       {...props}
     />
   ),
@@ -22,7 +22,7 @@ BreadcrumbList.displayName = 'BreadcrumbList';
 
 const BreadcrumbItem = React.forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<'li'>>(
   ({ className, ...props }, ref) => (
-    <li ref={ref} className={cn('inline-flex items-center gap-1.5', className)} {...props} />
+    <li ref={ref} className={cn('ui-breadcrumb-item', className)} {...props} />
   ),
 );
 BreadcrumbItem.displayName = 'BreadcrumbItem';
@@ -33,7 +33,7 @@ const BreadcrumbLink = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <a
     ref={ref}
-    className={cn('transition-colors hover:text-[var(--color-foreground-default)]', className)}
+    className={cn('ui-breadcrumb-link', className)}
     {...props}
   />
 ));
@@ -46,7 +46,7 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWit
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn('font-normal text-[var(--color-foreground-default)]', className)}
+      className={cn('ui-breadcrumb-page', className)}
       {...props}
     />
   ),
@@ -71,11 +71,11 @@ const BreadcrumbEllipsis = ({ className, ...props }: React.ComponentProps<'span'
   <span
     role="presentation"
     aria-hidden="true"
-    className={cn('flex h-9 w-9 items-center justify-center', className)}
+    className={cn('ui-breadcrumb-ellipsis', className)}
     {...props}
   >
     <Icon icon={MoreHorizontal} size="sm" />
-    <span className="sr-only">More</span>
+    <span className="ui-breadcrumb-sr-only">More</span>
   </span>
 );
 BreadcrumbEllipsis.displayName = 'BreadcrumbEllipsis';

@@ -90,43 +90,43 @@ export function Calendar({
   ];
 
   return (
-    <div className={cn('p-3 select-none', className)}>
+    <div className={cn('ui-calendar', className)}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="ui-calendar-header">
         <button
           onClick={prevMonth}
-          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-7 w-7')}
+          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'ui-calendar-nav-button')}
           aria-label="Previous month"
         >
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg className="ui-calendar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <span className="text-sm font-medium text-[var(--color-foreground-default)]">
+        <span className="ui-calendar-title">
           {MONTHS[viewMonth]} {viewYear}
         </span>
         <button
           onClick={nextMonth}
-          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-7 w-7')}
+          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'ui-calendar-nav-button')}
           aria-label="Next month"
         >
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg className="ui-calendar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M9 18l6-6-6-6" />
           </svg>
         </button>
       </div>
 
       {/* Day names */}
-      <div className="grid grid-cols-7 mb-1">
+      <div className="ui-calendar-day-names">
         {DAYS.map(day => (
-          <div key={day} className="text-center text-xs text-[var(--color-foreground-muted)] py-1">
+          <div key={day} className="ui-calendar-day-name">
             {day}
           </div>
         ))}
       </div>
 
       {/* Date grid */}
-      <div className="grid grid-cols-7 gap-y-1">
+      <div className="ui-calendar-grid">
         {cells.map((date, idx) => {
           if (!date) return <div key={`empty-${idx}`} />;
           const disabled = isDisabled(date);
@@ -141,22 +141,22 @@ export function Calendar({
               onClick={() => !disabled && onSelect?.(date)}
               disabled={disabled}
               aria-label={`${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}${price ? `, ${price}` : ''}`}
+              data-today={isToday && !selected_ ? 'true' : undefined}
+              data-selected={selected_ ? 'true' : undefined}
+              data-in-range={inRange ? 'true' : undefined}
               className={cn(
-                'relative flex flex-col items-center justify-center h-9 w-full rounded-md',
-                'text-xs text-[var(--color-foreground-default)]',
-                'transition-colors',
-                isToday && !selected_ && 'border border-[var(--color-primary-default)]',
-                selected_ && 'bg-[var(--color-primary-default)] text-[var(--color-primary-foreground)]',
-                inRange && 'bg-[var(--color-background-subtle)]',
-                !disabled && !selected_ && 'hover:bg-[var(--color-background-subtle)] cursor-pointer',
-                disabled && 'opacity-30 cursor-not-allowed',
+                'ui-calendar-day',
+                selected_ && 'ui-calendar-day--selected',
+                inRange && 'ui-calendar-day--in-range',
+                !disabled && !selected_ && 'ui-calendar-day--interactive',
+                disabled && 'ui-calendar-day--disabled',
               )}
             >
               <span>{date.getDate()}</span>
               {price && (
                 <span className={cn(
-                  'text-[9px] leading-none',
-                  selected_ ? 'text-[var(--color-primary-foreground)]' : 'text-[var(--color-success-default)]',
+                  'ui-calendar-day-price',
+                  selected_ ? 'ui-calendar-day-price--selected' : 'ui-calendar-day-price--default',
                 )}>
                   {price}
                 </span>

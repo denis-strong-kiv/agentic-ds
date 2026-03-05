@@ -24,6 +24,11 @@ const PASSENGER_BREAKDOWN: PassengerBreakdown[] = [
 ];
 
 describe('PriceBreakdown', () => {
+  it('applies semantic root class', () => {
+    const { container } = render(<PriceBreakdown lineItems={[]} totalAmount="$349" />);
+    expect(container.firstElementChild).toHaveClass('travel-price-breakdown');
+  });
+
   it('renders Price Summary heading', () => {
     render(<PriceBreakdown lineItems={[]} totalAmount="$349" />);
     expect(screen.getByText('Price Summary')).toBeInTheDocument();
@@ -127,7 +132,7 @@ describe('PriceBreakdown', () => {
     const { container } = render(
       <PriceBreakdown lineItems={[]} totalAmount="$349" sticky />,
     );
-    expect(container.firstChild).toHaveClass('md:sticky');
+    expect(container.firstChild).toHaveClass('travel-price-breakdown--sticky');
   });
 
   it('does not apply sticky class by default', () => {

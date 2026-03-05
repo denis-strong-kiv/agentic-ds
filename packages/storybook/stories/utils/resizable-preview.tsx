@@ -18,6 +18,11 @@ export function ResizablePreview({
   const startX = useRef(0);
   const startW = useRef(0);
 
+  function adjustWidth(delta: number) {
+    const current = ref.current?.offsetWidth ?? width ?? 800;
+    setWidth(Math.max(320, current + delta));
+  }
+
   function onMouseDown(e: React.MouseEvent) {
     e.preventDefault();
     dragging.current = true;
@@ -52,9 +57,21 @@ export function ResizablePreview({
       {children}
 
       {/* Drag handle */}
-      <div
+      <button
+        type="button"
         onMouseDown={onMouseDown}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            adjustWidth(-16);
+          }
+          if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            adjustWidth(16);
+          }
+        }}
         title="Drag to resize"
+        aria-label="Resize preview width"
         style={{
           position: 'absolute',
           right: 0,
@@ -66,10 +83,13 @@ export function ResizablePreview({
           alignItems: 'center',
           justifyContent: 'center',
           userSelect: 'none',
+          border: 0,
+          background: 'transparent',
+          padding: 0,
         }}
       >
         <div style={{ width: 3, height: 32, borderRadius: 2, background: 'rgba(0,0,0,0.18)' }} />
-      </div>
+      </button>
 
       {/* Width badge shown while dragging */}
       {width != null && (

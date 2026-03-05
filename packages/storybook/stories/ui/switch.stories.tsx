@@ -31,7 +31,7 @@ export const WithLabelLeft: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
+    <div className="sb-stack-md">
       <Switch label="Disabled off" disabled />
       <Switch label="Disabled on" disabled defaultChecked />
     </div>
@@ -41,8 +41,8 @@ export const Disabled: Story = {
 export const NotificationSettings: Story = {
   name: 'Notification preferences',
   render: () => (
-    <div className="flex flex-col gap-4 max-w-xs">
-      <p className="text-sm font-semibold text-[var(--color-foreground-default)]">
+    <div className="sb-stack-md sb-max-xs">
+      <p className="sb-title-sm">
         Notifications
       </p>
       {[
@@ -52,8 +52,8 @@ export const NotificationSettings: Story = {
         { label: 'Promotional offers', defaultChecked: false },
         { label: 'Newsletter', defaultChecked: false },
       ].map(({ label, defaultChecked }) => (
-        <div key={label} className="flex items-center justify-between">
-          <span className="text-sm text-[var(--color-foreground-default)]">{label}</span>
+        <div key={label} className="sb-row-between">
+          <span className="sb-text-sm-default">{label}</span>
           <Switch defaultChecked={defaultChecked} aria-label={label} />
         </div>
       ))}

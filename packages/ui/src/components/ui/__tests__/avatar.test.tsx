@@ -41,7 +41,7 @@ describe('Avatar', () => {
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
     );
-    expect(screen.getByTestId('avatar').className).toContain('rounded-full');
+    expect(screen.getByTestId('avatar').className).toContain('ui-avatar');
   });
 
   it('forwards ref to Avatar root', () => {

@@ -12,22 +12,22 @@ describe('Alert', () => {
 
   it('renders info variant by default', () => {
     render(<Alert data-testid="alert">Info message</Alert>);
-    expect(screen.getByTestId('alert').className).toContain('border-[var(--color-info-default)]');
+    expect(screen.getByTestId('alert').className).toContain('ui-alert--info');
   });
 
   it('renders success variant', () => {
     render(<Alert variant="success" data-testid="alert">Success</Alert>);
-    expect(screen.getByTestId('alert').className).toContain('border-[var(--color-success-default)]');
+    expect(screen.getByTestId('alert').className).toContain('ui-alert--success');
   });
 
   it('renders warning variant', () => {
     render(<Alert variant="warning" data-testid="alert">Warning</Alert>);
-    expect(screen.getByTestId('alert').className).toContain('border-[var(--color-warning-default)]');
+    expect(screen.getByTestId('alert').className).toContain('ui-alert--warning');
   });
 
   it('renders error variant', () => {
     render(<Alert variant="error" data-testid="alert">Error</Alert>);
-    expect(screen.getByTestId('alert').className).toContain('border-[var(--color-error-default)]');
+    expect(screen.getByTestId('alert').className).toContain('ui-alert--error');
   });
 
   it('renders children content', () => {

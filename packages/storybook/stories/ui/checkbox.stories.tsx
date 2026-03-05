@@ -25,7 +25,7 @@ export const Indeterminate: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <div className="flex gap-4">
+    <div className="sb-row-md">
       <Checkbox disabled aria-label="Disabled unchecked" />
       <Checkbox disabled defaultChecked aria-label="Disabled checked" />
       <Checkbox disabled checked="indeterminate" aria-label="Disabled indeterminate" />
@@ -36,8 +36,8 @@ export const Disabled: Story = {
 export const AmenitiesFilter: Story = {
   name: 'Amenities filter group',
   render: () => (
-    <fieldset className="flex flex-col gap-3 border-0 p-0">
-      <legend className="text-sm font-semibold text-[var(--color-foreground-default)] mb-1">
+    <fieldset className="sb-fieldset-stack">
+      <legend className="sb-legend-title">
         Hotel amenities
       </legend>
       {[
@@ -48,9 +48,9 @@ export const AmenitiesFilter: Story = {
         { id: 'parking', label: 'Free parking' },
         { id: 'restaurant', label: 'On-site restaurant' },
       ].map(({ id, label, defaultChecked }) => (
-        <div key={id} className="flex items-center gap-2">
+        <div key={id} className="sb-row-sm">
           <Checkbox id={id} defaultChecked={defaultChecked} />
-          <Label htmlFor={id} className="cursor-pointer">{label}</Label>
+          <Label htmlFor={id} className="sb-cursor-pointer">{label}</Label>
         </div>
       ))}
     </fieldset>
@@ -60,13 +60,13 @@ export const AmenitiesFilter: Story = {
 export const SelectAll: Story = {
   name: 'Select-all with indeterminate',
   render: () => (
-    <div className="flex flex-col gap-2 max-w-xs">
-      <div className="flex items-center gap-2 pb-2 border-b border-[var(--color-border-default)]">
+    <div className="sb-stack-sm sb-max-xs">
+      <div className="sb-row-sm sb-divider-bottom">
         <Checkbox id="select-all" checked="indeterminate" />
         <Label htmlFor="select-all">Select all passengers</Label>
       </div>
       {['Emma Wilson', 'James Davis', 'Sophie Allen'].map((name, i) => (
-        <div key={i} className="flex items-center gap-2 ps-4">
+        <div key={i} className="sb-row-sm sb-indent-sm">
           <Checkbox id={`p-${i}`} defaultChecked={i === 0} />
           <Label htmlFor={`p-${i}`}>{name}</Label>
         </div>

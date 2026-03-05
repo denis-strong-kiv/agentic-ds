@@ -23,19 +23,19 @@ type Story = StoryObj<typeof NotificationBadge>;
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center gap-3">
+    <div className="sb-stack-lg">
+      <div className="sb-row-wrap-sm">
         {(['brand', 'accent', 'success', 'warning', 'danger', 'neutral'] as const).map((v) => (
-          <div key={v} className="flex flex-col items-center gap-1">
+          <div key={v} className="sb-stack-center-xs">
             <NotificationBadge variant={v} count={1} />
-            <span className="text-xs text-[var(--color-foreground-muted)]">{v}</span>
+            <span className="sb-caption-muted">{v}</span>
           </div>
         ))}
       </div>
-      <div className="flex flex-wrap items-center gap-3 bg-[var(--color-foreground-default)] p-4 rounded-lg">
-        <div className="flex flex-col items-center gap-1">
+      <div className="sb-row-wrap-sm sb-inverse-panel">
+        <div className="sb-stack-center-xs">
           <NotificationBadge variant="inverted" count={1} />
-          <span className="text-xs text-[oklch(100%_0_0)]">inverted</span>
+          <span className="sb-caption-inverse">inverted</span>
         </div>
       </div>
     </div>
@@ -46,11 +46,11 @@ export const AllVariants: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div className="flex items-end gap-4">
+    <div className="sb-row-end-md">
       {(['lg', 'md'] as const).map((s) => (
-        <div key={s} className="flex flex-col items-center gap-1">
+        <div key={s} className="sb-stack-center-xs">
           <NotificationBadge size={s} count={5} />
-          <span className="text-xs text-[var(--color-foreground-muted)]">{s}</span>
+          <span className="sb-caption-muted">{s}</span>
         </div>
       ))}
     </div>
@@ -61,11 +61,11 @@ export const AllSizes: Story = {
 
 export const CountOverflow: Story = {
   render: () => (
-    <div className="flex items-center gap-3">
+    <div className="sb-row-sm">
       {[1, 9, 10, 42, 99, 100, 999].map((n) => (
-        <div key={n} className="flex flex-col items-center gap-1">
+        <div key={n} className="sb-stack-center-xs">
           <NotificationBadge count={n} />
-          <span className="text-xs text-[var(--color-foreground-muted)]">{n}</span>
+          <span className="sb-caption-muted">{n}</span>
         </div>
       ))}
     </div>
@@ -76,37 +76,37 @@ export const CountOverflow: Story = {
 
 export const OnButton: Story = {
   render: () => (
-    <div className="flex items-center gap-8">
-      <div className="relative inline-flex">
-        <button className="h-10 w-10 rounded-lg bg-[var(--color-background-subtle)] flex items-center justify-center text-lg">
+    <div className="sb-row-lg">
+      <div className="sb-relative-inline">
+        <button className="sb-icon-btn sb-icon-btn--tile">
           🔔
         </button>
         <NotificationBadge
           count={3}
           size="md"
-          className="absolute -top-1 -end-1"
+          className="sb-badge-overlay"
         />
       </div>
-      <div className="relative inline-flex">
-        <button className="h-10 w-10 rounded-full bg-[var(--color-primary-default)] flex items-center justify-center text-[var(--color-primary-foreground)] font-semibold">
+      <div className="sb-relative-inline">
+        <button className="sb-icon-btn sb-icon-btn--round-primary">
           JD
         </button>
         <NotificationBadge
           count={12}
           variant="danger"
           size="md"
-          className="absolute -top-1 -end-1"
+          className="sb-badge-overlay"
         />
       </div>
-      <div className="relative inline-flex">
-        <button className="h-10 w-10 rounded-lg bg-[var(--color-background-subtle)] flex items-center justify-center text-lg">
+      <div className="sb-relative-inline">
+        <button className="sb-icon-btn sb-icon-btn--tile">
           ✉️
         </button>
         <NotificationBadge
           count={150}
           variant="accent"
           size="lg"
-          className="absolute -top-1.5 -end-1.5"
+          className="sb-badge-overlay sb-badge-overlay--lg"
         />
       </div>
     </div>

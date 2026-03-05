@@ -1,0 +1,220 @@
+@layer components {
+  .travel-hotel-card {
+    overflow: hidden;
+    border-radius: var(--shape-preset-card);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface-card);
+  }
+
+  .travel-hotel-stars {
+    display: flex;
+    gap: 0.125rem;
+  }
+
+  .travel-hotel-star {
+    font-size: 0.75rem;
+  }
+
+  .travel-hotel-star--active {
+    color: var(--color-warning-default);
+  }
+
+  .travel-hotel-star--inactive {
+    color: var(--color-border-default);
+  }
+
+  .travel-hotel-image-wrap {
+    position: relative;
+  }
+
+  .travel-hotel-image-placeholder {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background-subtle);
+  }
+
+  .travel-hotel-image-placeholder-icon {
+    height: 3rem;
+    width: 3rem;
+    color: var(--color-foreground-subtle);
+  }
+
+  .travel-hotel-image-shell {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border-top-left-radius: var(--shape-preset-card);
+    border-top-right-radius: var(--shape-preset-card);
+  }
+
+  .travel-hotel-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .travel-hotel-image-nav {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    height: 1.75rem;
+    width: 1.75rem;
+    transform: translateY(-50%);
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: oklch(0% 0 0 / 0.5);
+    color: oklch(100% 0 0);
+    transition: background-color var(--duration-normal);
+  }
+
+  .travel-hotel-image-nav:hover {
+    background: oklch(0% 0 0 / 0.7);
+  }
+
+  .travel-hotel-image-nav--prev {
+    left: 0.5rem;
+  }
+
+  .travel-hotel-image-nav--next {
+    right: 0.5rem;
+  }
+
+  .travel-hotel-image-dots {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.375rem;
+  }
+
+  .travel-hotel-image-dot {
+    height: 0.375rem;
+    border-radius: 9999px;
+    transition: all var(--duration-fast);
+  }
+
+  .travel-hotel-image-dot--active {
+    width: 1rem;
+    background: oklch(100% 0 0);
+  }
+
+  .travel-hotel-image-dot--inactive {
+    width: 0.375rem;
+    background: oklch(100% 0 0 / 0.6);
+  }
+
+  .travel-hotel-favorite-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    height: 2rem;
+    width: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: oklch(100% 0 0 / 0.8);
+    backdrop-filter: blur(4px);
+    box-shadow: var(--shadow-sm);
+    transition: background-color var(--duration-normal);
+  }
+
+  .travel-hotel-favorite-btn:hover {
+    background: oklch(100% 0 0);
+  }
+
+  .travel-hotel-favorite-icon {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .travel-hotel-favorite-icon--active {
+    fill: var(--color-error-default);
+    color: var(--color-error-default);
+  }
+
+  .travel-hotel-favorite-icon--inactive {
+    color: var(--color-foreground-muted);
+  }
+
+  .travel-hotel-content {
+    padding: 1rem;
+  }
+
+  .travel-hotel-header-row {
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .travel-hotel-name {
+    color: var(--color-foreground-default);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .travel-hotel-review-badge {
+    flex-shrink: 0;
+  }
+
+  .travel-hotel-location {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .travel-hotel-review-count {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .travel-hotel-amenities {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .travel-hotel-amenity-pill {
+    border-radius: 9999px;
+    background: var(--color-background-subtle);
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .travel-hotel-amenity-more {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .travel-hotel-footer-row {
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .travel-hotel-price {
+    color: var(--color-foreground-default);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .travel-hotel-price-currency,
+  .travel-hotel-price-total {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+}

@@ -14,14 +14,14 @@ type Story = StoryObj<typeof RadioGroup>;
 export const CabinClass: Story = {
   name: 'Cabin class selection',
   render: () => (
-    <RadioGroup defaultValue="economy" className="gap-3">
+    <RadioGroup defaultValue="economy" className="sb-gap-3">
       {[
         { value: 'economy', label: 'Economy', sublabel: 'From $299' },
         { value: 'premium-economy', label: 'Premium Economy', sublabel: 'From $599' },
         { value: 'business', label: 'Business', sublabel: 'From $1,299' },
         { value: 'first', label: 'First Class', sublabel: 'From $3,499' },
       ].map(({ value, label, sublabel }) => (
-        <div key={value} className="flex items-center gap-3">
+        <div key={value} className="sb-row-md">
           <RadioGroupItem value={value} id={`cabin-${value}`} />
           <Label htmlFor={`cabin-${value}`} helperText={sublabel}>{label}</Label>
         </div>
@@ -33,9 +33,9 @@ export const CabinClass: Story = {
 export const TripType: Story = {
   name: 'Trip type (horizontal)',
   render: () => (
-    <RadioGroup defaultValue="round-trip" className="flex flex-row gap-6">
+    <RadioGroup defaultValue="round-trip" className="sb-row-lg">
       {['Round-trip', 'One-way', 'Multi-city'].map(type => (
-        <div key={type} className="flex items-center gap-2">
+        <div key={type} className="sb-row-sm">
           <RadioGroupItem value={type.toLowerCase().replace(' ', '-')} id={`trip-${type}`} />
           <Label htmlFor={`trip-${type}`}>{type}</Label>
         </div>
@@ -46,18 +46,18 @@ export const TripType: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <RadioGroup defaultValue="economy" className="gap-3">
-      <div className="flex items-center gap-3">
+    <RadioGroup defaultValue="economy" className="sb-gap-3">
+      <div className="sb-row-md">
         <RadioGroupItem value="economy" id="d-economy" />
         <Label htmlFor="d-economy">Economy</Label>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="sb-row-md">
         <RadioGroupItem value="business" id="d-business" disabled />
-        <Label htmlFor="d-business" className="opacity-50">Business (sold out)</Label>
+        <Label htmlFor="d-business" className="sb-opacity-50">Business (sold out)</Label>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="sb-row-md">
         <RadioGroupItem value="first" id="d-first" disabled />
-        <Label htmlFor="d-first" className="opacity-50">First (sold out)</Label>
+        <Label htmlFor="d-first" className="sb-opacity-50">First (sold out)</Label>
       </div>
     </RadioGroup>
   ),

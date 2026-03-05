@@ -13,6 +13,11 @@ function makeSteps(): BookingStep[] {
 }
 
 describe('BookingStepper', () => {
+  it('applies semantic root class', () => {
+    render(<BookingStepper steps={makeSteps()} />);
+    expect(screen.getByRole('navigation', { name: 'Booking progress' })).toHaveClass('travel-booking-stepper');
+  });
+
   it('renders all step labels', () => {
     render(<BookingStepper steps={makeSteps()} />);
     expect(screen.getByText('Search')).toBeInTheDocument();

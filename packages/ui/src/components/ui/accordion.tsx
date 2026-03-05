@@ -14,7 +14,7 @@ const AccordionItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={cn('border-b border-[var(--color-border-default)]', className)}
+    className={cn('ui-accordion-item', className)}
     {...props}
   />
 ));
@@ -24,21 +24,17 @@ const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex">
+  <AccordionPrimitive.Header className="ui-accordion-header">
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex flex-1 items-center justify-between py-4',
-        'text-sm font-medium text-[var(--color-foreground-default)]',
-        'transition-all hover:underline',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-default)]',
-        '[&[data-state=open]>svg]:rotate-180',
+        'ui-accordion-trigger',
         className,
       )}
       {...props}
     >
       {children}
-      <Icon icon={ChevronDown} size="sm" className="shrink-0 transition-transform duration-[var(--duration-normal)]" />
+      <Icon icon={ChevronDown} size="sm" className="ui-accordion-trigger-icon" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
@@ -51,13 +47,12 @@ const AccordionContent = React.forwardRef<
   <AccordionPrimitive.Content
     ref={ref}
     className={cn(
-      'overflow-hidden text-sm text-[var(--color-foreground-default)]',
-      'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
+      'ui-accordion-content',
       className,
     )}
     {...props}
   >
-    <div className="pb-4 pt-0">{children}</div>
+    <div className="ui-accordion-content-inner">{children}</div>
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;

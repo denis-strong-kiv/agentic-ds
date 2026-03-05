@@ -1,0 +1,101 @@
+@layer components {
+  .ui-table-container {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+  }
+
+  .ui-table {
+    width: 100%;
+    caption-side: bottom;
+    font-size: 0.875rem;
+  }
+
+  .ui-table-header .ui-table-row {
+    border-bottom: 1px solid var(--color-border-muted);
+  }
+
+  .ui-table-body .ui-table-row:last-child {
+    border-bottom: 0;
+  }
+
+  .ui-table-footer {
+    border-top: 1px solid var(--color-border-default);
+    background: var(--color-background-subtle);
+    font-weight: 500;
+  }
+
+  .ui-table-footer > .ui-table-row:last-child {
+    border-bottom: 0;
+  }
+
+  .ui-table-row {
+    border-bottom: 1px solid var(--color-border-muted);
+    transition: background-color var(--duration-normal);
+  }
+
+  .ui-table-row:hover {
+    background: var(--color-background-subtle);
+  }
+
+  .ui-table-row[data-state='selected'],
+  .ui-table-row--selected {
+    background: var(--color-background-subtle);
+  }
+
+  .ui-table-head {
+    height: 2.5rem;
+    padding-inline: 1rem;
+    text-align: start;
+    vertical-align: middle;
+    font-weight: 500;
+    color: var(--color-foreground-muted);
+  }
+
+  .ui-table-head:has([role='checkbox']) {
+    padding-inline-end: 0;
+  }
+
+  .ui-table-head > [role='checkbox'] {
+    transform: translateY(2px);
+  }
+
+  .ui-table-head--sortable {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ui-table-head--sortable:hover {
+    color: var(--color-foreground-default);
+  }
+
+  .ui-table-head-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ui-table-head-sort-indicator {
+    margin-inline-start: 0.25rem;
+  }
+
+  .ui-table-cell {
+    padding: 1rem;
+    vertical-align: middle;
+    color: var(--color-foreground-default);
+  }
+
+  .ui-table-cell:has([role='checkbox']) {
+    padding-inline-end: 0;
+  }
+
+  .ui-table-cell > [role='checkbox'] {
+    transform: translateY(2px);
+  }
+
+  .ui-table-caption {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-foreground-muted);
+  }
+}

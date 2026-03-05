@@ -12,20 +12,20 @@ type Story = StoryObj<typeof Separator>;
 export const Horizontal: Story = {
   name: 'Horizontal (between sections)',
   render: () => (
-    <div className="max-w-sm space-y-4">
+    <div className="sb-max-sm sb-stack-md">
       <div>
-        <p className="text-sm font-medium text-[var(--color-foreground-default)]">Outbound flight</p>
-        <p className="text-sm text-[var(--color-foreground-muted)]">LHR → BCN · Jun 15 · 09:45</p>
+        <p className="sb-title-sm">Outbound flight</p>
+        <p className="sb-text-sm-muted">LHR → BCN · Jun 15 · 09:45</p>
       </div>
       <Separator />
       <div>
-        <p className="text-sm font-medium text-[var(--color-foreground-default)]">Return flight</p>
-        <p className="text-sm text-[var(--color-foreground-muted)]">BCN → LHR · Jun 22 · 18:20</p>
+        <p className="sb-title-sm">Return flight</p>
+        <p className="sb-text-sm-muted">BCN → LHR · Jun 22 · 18:20</p>
       </div>
       <Separator />
       <div>
-        <p className="text-sm font-medium text-[var(--color-foreground-default)]">Total</p>
-        <p className="text-lg font-bold text-[var(--color-primary-default)]">$842</p>
+        <p className="sb-title-sm">Total</p>
+        <p className="sb-price-primary">$842</p>
       </div>
     </div>
   ),
@@ -34,11 +34,11 @@ export const Horizontal: Story = {
 export const Vertical: Story = {
   name: 'Vertical (inline items)',
   render: () => (
-    <div className="flex items-center gap-2 text-sm text-[var(--color-foreground-muted)]">
+    <div className="sb-row-sm sb-text-sm-muted">
       <span>2 stops</span>
-      <Separator orientation="vertical" className="h-4" />
+      <Separator orientation="vertical" className="sb-h-4" />
       <span>14h 30m</span>
-      <Separator orientation="vertical" className="h-4" />
+      <Separator orientation="vertical" className="sb-h-4" />
       <span>Economy</span>
     </div>
   ),
@@ -47,8 +47,8 @@ export const Vertical: Story = {
 export const Semantic: Story = {
   name: 'Semantic (non-decorative)',
   render: () => (
-    <div className="max-w-sm">
-      <p className="text-sm text-[var(--color-foreground-muted)] mb-2">
+    <div className="sb-max-sm">
+      <p className="sb-text-sm-muted sb-mb-sm">
         Decorative by default; set <code>decorative=false</code> for semantic separation.
       </p>
       <Separator decorative={false} />

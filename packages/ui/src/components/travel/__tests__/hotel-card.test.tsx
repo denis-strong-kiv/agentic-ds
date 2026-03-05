@@ -12,6 +12,11 @@ const PROPS: HotelCardProps = {
 };
 
 describe('HotelCard', () => {
+  it('applies semantic root class', () => {
+    const { container } = render(<HotelCard {...PROPS} />);
+    expect(container.firstElementChild).toHaveClass('travel-hotel-card');
+  });
+
   it('renders hotel name', () => {
     render(<HotelCard {...PROPS} />);
     expect(screen.getByText('Grand Plaza Hotel')).toBeInTheDocument();

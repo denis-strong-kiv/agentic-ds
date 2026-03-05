@@ -23,30 +23,30 @@ function ToastScene({ children }: { children: React.ReactNode }) {
 export const AllVariants: Story = {
   render: () => (
     <ToastScene>
-      <div className="flex flex-col gap-3 max-w-sm ms-auto">
+      <div className="sb-stack-md sb-max-sm sb-ms-auto">
         <Toast open variant="default">
-          <div className="flex-1">
+          <div className="sb-flex-1">
             <ToastTitle>Seat saved</ToastTitle>
             <ToastDescription>14A (window) has been reserved for 10 minutes.</ToastDescription>
           </div>
           <ToastClose />
         </Toast>
         <Toast open variant="success">
-          <div className="flex-1">
+          <div className="sb-flex-1">
             <ToastTitle>Booking confirmed!</ToastTitle>
             <ToastDescription>FL-204 · Jun 15 · Ref: TRV-8821</ToastDescription>
           </div>
           <ToastClose />
         </Toast>
         <Toast open variant="warning">
-          <div className="flex-1">
+          <div className="sb-flex-1">
             <ToastTitle>Check-in closes in 1 hour</ToastTitle>
             <ToastDescription>Complete online check-in before 08:00.</ToastDescription>
           </div>
           <ToastClose />
         </Toast>
         <Toast open variant="error">
-          <div className="flex-1">
+          <div className="sb-flex-1">
             <ToastTitle>Payment failed</ToastTitle>
             <ToastDescription>Card ending 4242 was declined.</ToastDescription>
           </div>
@@ -61,8 +61,8 @@ export const WithAction: Story = {
   name: 'With undo action',
   render: () => (
     <ToastScene>
-      <Toast open variant="default" className="max-w-sm ms-auto">
-        <div className="flex-1">
+      <Toast open variant="default" className="sb-max-sm sb-ms-auto">
+        <div className="sb-flex-1">
           <ToastTitle>Search removed</ToastTitle>
           <ToastDescription>London → Tokyo saved search was deleted.</ToastDescription>
         </div>
@@ -77,8 +77,8 @@ export const TitleOnly: Story = {
   name: 'Title only',
   render: () => (
     <ToastScene>
-      <Toast open variant="success" className="max-w-sm ms-auto">
-        <ToastTitle className="flex-1">Wishlist updated</ToastTitle>
+      <Toast open variant="success" className="sb-max-sm sb-ms-auto">
+        <ToastTitle className="sb-flex-1">Wishlist updated</ToastTitle>
         <ToastClose />
       </Toast>
     </ToastScene>

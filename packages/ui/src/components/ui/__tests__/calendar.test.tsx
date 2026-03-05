@@ -52,7 +52,7 @@ describe('Calendar', () => {
     render(<Calendar selected={selectedDate} />);
     const day15 = screen.queryByLabelText(new RegExp('15 '));
     if (day15) {
-      expect(day15.className).toContain('bg-[var(--color-primary-default)]');
+      expect(day15.className).toContain('ui-calendar-day--selected');
     }
   });
 
@@ -92,7 +92,7 @@ describe('Calendar', () => {
       // Day 12 should be in range
       const day12 = screen.queryByLabelText(new RegExp('12 '));
       if (day12) {
-        expect(day12.className).toContain('bg-[var(--color-background-subtle)]');
+        expect(day12.className).toContain('ui-calendar-day--in-range');
       }
     });
   });

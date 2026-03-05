@@ -1,0 +1,56 @@
+@layer components {
+  .ui-alert {
+    position: relative;
+    width: 100%;
+    border-radius: var(--shape-preset-card);
+    border: 1px solid;
+    padding: 1rem;
+    color: var(--color-foreground-default);
+  }
+
+  .ui-alert--info {
+    border-color: var(--color-info-default);
+    background: var(--color-info-subtle);
+  }
+
+  .ui-alert--success {
+    border-color: var(--color-success-default);
+    background: var(--color-success-subtle);
+  }
+
+  .ui-alert--warning {
+    border-color: var(--color-warning-default);
+    background: var(--color-warning-subtle);
+  }
+
+  .ui-alert--error {
+    border-color: var(--color-error-default);
+    background: var(--color-error-subtle);
+  }
+
+  .ui-alert-dismiss {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    opacity: 0.7;
+  }
+
+  .ui-alert-dismiss:hover {
+    opacity: 1;
+  }
+
+  .ui-alert-title {
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .ui-alert-description {
+    font-size: 0.875rem;
+  }
+
+  .ui-alert-description p {
+    line-height: 1.625;
+  }
+}

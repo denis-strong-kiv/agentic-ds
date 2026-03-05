@@ -32,7 +32,7 @@ export const Default: Story = {
 export const AllSides: Story = {
   name: 'All sides',
   render: () => (
-    <div className="grid grid-cols-3 gap-8 place-items-center p-12">
+    <div className="sb-tooltip-grid">
       {(['top', 'right', 'bottom', 'left'] as const).map(side => (
         <Tooltip key={side}>
           <TooltipTrigger asChild>
@@ -50,12 +50,12 @@ export const AllSides: Story = {
 export const OnIconButton: Story = {
   name: 'Info icon with tooltip',
   render: () => (
-    <div className="flex items-center gap-2 text-sm text-[var(--color-foreground-default)]">
+    <div className="sb-row-sm sb-text-sm-default">
       <span>Baggage allowance</span>
       <Tooltip>
         <TooltipTrigger asChild>
           <button
-            className="h-4 w-4 rounded-full text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]"
+            className="sb-tooltip-icon-btn"
             aria-label="Baggage allowance info"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

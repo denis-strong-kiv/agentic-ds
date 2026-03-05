@@ -1,0 +1,10 @@
+@layer components {
+  .ui-breadcrumb-list { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; font-size: 0.875rem; color: var(--color-foreground-muted); }
+  @media (min-width: 640px) { .ui-breadcrumb-list { gap: 0.625rem; } }
+  .ui-breadcrumb-item { display: inline-flex; align-items: center; gap: 0.375rem; }
+  .ui-breadcrumb-link { transition: color var(--duration-normal); }
+  .ui-breadcrumb-link:hover { color: var(--color-foreground-default); }
+  .ui-breadcrumb-page { font-weight: 400; color: var(--color-foreground-default); }
+  .ui-breadcrumb-ellipsis { height: 2.25rem; width: 2.25rem; display: flex; align-items: center; justify-content: center; }
+  .ui-breadcrumb-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+}

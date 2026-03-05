@@ -15,7 +15,7 @@ export const CabinClass: Story = {
   name: 'Cabin class',
   render: () => (
     <Select defaultValue="economy">
-      <SelectTrigger className="w-48" aria-label="Cabin class">
+      <SelectTrigger className="sb-w-48" aria-label="Cabin class">
         <SelectValue placeholder="Select cabin" />
       </SelectTrigger>
       <SelectContent>
@@ -32,7 +32,7 @@ export const WithGroups: Story = {
   name: 'Grouped with labels',
   render: () => (
     <Select>
-      <SelectTrigger className="w-56" aria-label="Sort results">
+      <SelectTrigger className="sb-w-56" aria-label="Sort results">
         <SelectValue placeholder="Sort by…" />
       </SelectTrigger>
       <SelectContent>
@@ -62,7 +62,7 @@ export const Placeholder: Story = {
   name: 'Unselected placeholder',
   render: () => (
     <Select>
-      <SelectTrigger className="w-48" aria-label="Number of bags">
+      <SelectTrigger className="sb-w-48" aria-label="Number of bags">
         <SelectValue placeholder="Number of bags" />
       </SelectTrigger>
       <SelectContent>
@@ -77,7 +77,7 @@ export const Placeholder: Story = {
 export const Disabled: Story = {
   render: () => (
     <Select disabled>
-      <SelectTrigger className="w-48" aria-label="Upgrades unavailable">
+      <SelectTrigger className="sb-w-48" aria-label="Upgrades unavailable">
         <SelectValue placeholder="No upgrades available" />
       </SelectTrigger>
       <SelectContent>

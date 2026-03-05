@@ -11,7 +11,7 @@ type Story = StoryObj;
 export const WithFallbackInitials: Story = {
   name: 'Fallback initials (no image)',
   render: () => (
-    <div className="flex items-center gap-4">
+    <div className="sb-row-md">
       <Avatar>
         <AvatarImage src="/broken.jpg" alt="Emma Wilson" />
         <AvatarFallback>EW</AvatarFallback>
@@ -29,16 +29,16 @@ export const WithFallbackInitials: Story = {
 export const AllStatuses: Story = {
   name: 'Status indicators',
   render: () => (
-    <div className="flex items-center gap-6">
+    <div className="sb-row-lg">
       {(['online', 'away', 'busy', 'offline'] as const).map(status => (
-        <div key={status} className="flex flex-col items-center gap-2">
-          <div className="relative inline-flex">
+        <div key={status} className="sb-stack-center-sm">
+          <div className="sb-relative-inline">
             <Avatar>
               <AvatarFallback>{status[0].toUpperCase()}</AvatarFallback>
             </Avatar>
             <AvatarStatus status={status} />
           </div>
-          <span className="text-xs text-[var(--color-foreground-muted)] capitalize">{status}</span>
+          <span className="sb-caption-muted">{status}</span>
         </div>
       ))}
     </div>
@@ -48,11 +48,11 @@ export const AllStatuses: Story = {
 export const AvatarGroup: Story = {
   name: 'Stacked group',
   render: () => (
-    <div className="flex flex-col gap-4">
-      <p className="text-sm text-[var(--color-foreground-muted)]">Passengers on booking</p>
-      <div className="flex -space-x-2">
+    <div className="sb-stack-md">
+      <p className="sb-text-sm-muted">Passengers on booking</p>
+      <div className="sb-avatar-group">
         {['EW', 'JD', 'SA', 'MK', '+2'].map((initials, i) => (
-          <Avatar key={i} className="border-2 border-[var(--color-surface-card)]">
+          <Avatar key={i} className="sb-avatar-ring">
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         ))}
@@ -63,10 +63,10 @@ export const AvatarGroup: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="flex items-end gap-4">
-      {(['h-6 w-6', 'h-8 w-8', 'h-10 w-10', 'h-12 w-12', 'h-16 w-16'] as const).map((size, i) => (
+    <div className="sb-row-end-md">
+      {(['sb-avatar-size-xs', 'sb-avatar-size-sm', 'sb-avatar-size-md', 'sb-avatar-size-lg', 'sb-avatar-size-xl'] as const).map((size, i) => (
         <Avatar key={i} className={size}>
-          <AvatarFallback className="text-xs">AB</AvatarFallback>
+          <AvatarFallback className="sb-text-xs">AB</AvatarFallback>
         </Avatar>
       ))}
     </div>

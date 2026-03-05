@@ -39,15 +39,15 @@ function RatingStars({ score }: { score: number }) {
   const full = Math.floor(score);
   const half = score % 1 >= 0.5;
   return (
-    <div className="flex items-center gap-0.5" aria-label={`${score} out of 5`}>
+    <div className="travel-activity-card-stars" aria-label={`${score} out of 5`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <span
           key={i}
           className={cn(
-            'text-sm',
-            i < full ? 'text-[var(--color-warning-default)]'
-            : i === full && half ? 'text-[var(--color-warning-default)] opacity-60'
-            : 'text-[var(--color-border-default)]',
+            'travel-activity-card-star',
+            i < full ? 'travel-activity-card-star--filled'
+            : i === full && half ? 'travel-activity-card-star--half'
+            : 'travel-activity-card-star--empty',
           )}
           aria-hidden
         >
@@ -80,19 +80,18 @@ export function ActivityCard({
   return (
     <div
       className={cn(
-        'rounded-[var(--shape-preset-card)] border border-[var(--color-border-default)]',
-        'bg-[var(--color-surface-card)] overflow-hidden',
+        'travel-activity-card',
         className,
       )}
     >
       {/* Cover image with category overlay */}
-      <div className="relative">
+      <div className="travel-activity-card-media-wrap">
         <AspectRatio ratio={16 / 9}>
           {imageUrl ? (
-            <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
+            <img src={imageUrl} alt={title} className="travel-activity-card-image" />
           ) : (
-            <div className="h-full w-full bg-[var(--color-background-subtle)] flex items-center justify-center text-[var(--color-foreground-subtle)]">
-              <svg className="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <div className="travel-activity-card-image-fallback">
+              <svg className="travel-activity-card-image-fallback-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z" />
                 <path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
                 <path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z" />
@@ -106,30 +105,30 @@ export function ActivityCard({
           )}
         </AspectRatio>
         {/* Category overlay */}
-        <div className="absolute top-2 left-2">
-          <Badge variant="default" className="bg-black/60 text-white border-0 backdrop-blur-sm">
+        <div className="travel-activity-card-category-wrap">
+          <Badge variant="default" className="travel-activity-card-category-badge">
             {category}
           </Badge>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <h3 className="font-semibold text-[var(--color-foreground-default)] line-clamp-2 mb-2">{title}</h3>
+      <div className="travel-activity-card-content">
+        <h3 className="travel-activity-card-title">{title}</h3>
 
         {description && (
-          <p className="text-xs text-[var(--color-foreground-muted)] line-clamp-2 mb-2">{description}</p>
+          <p className="travel-activity-card-description">{description}</p>
         )}
 
         {/* Meta badges */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          <Badge variant="outline" className="text-xs">
+        <div className="travel-activity-card-meta-badges">
+          <Badge variant="outline" className="travel-activity-card-meta-badge">
             ⏱ {duration}
           </Badge>
           {difficulty && (
             <Badge
               variant={difficulty === 'Easy' ? 'deal' : difficulty === 'Challenging' || difficulty === 'Expert' ? 'destructive' : 'popular'}
-              className="text-xs"
+              className="travel-activity-card-meta-badge"
             >
               {difficulty}
             </Badge>
@@ -138,33 +137,33 @@ export function ActivityCard({
 
         {/* Rating */}
         {ratingScore !== undefined && (
-          <div className="flex items-center gap-2 mb-3">
+          <div className="travel-activity-card-rating">
             <RatingStars score={ratingScore} />
-            <span className="text-sm font-medium text-[var(--color-foreground-default)]">{ratingScore.toFixed(1)}</span>
+            <span className="travel-activity-card-rating-score">{ratingScore.toFixed(1)}</span>
             {reviewCount !== undefined && (
-              <span className="text-xs text-[var(--color-foreground-muted)]">({reviewCount.toLocaleString()} reviews)</span>
+              <span className="travel-activity-card-rating-count">({reviewCount.toLocaleString()} reviews)</span>
             )}
           </div>
         )}
 
         {/* Confirmation + cancellation badges */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {instantConfirmation && <Badge variant="deal" className="text-xs">⚡ Instant Confirmation</Badge>}
-          {freeCancellation && <Badge variant="deal" className="text-xs">✓ Free Cancellation</Badge>}
+        <div className="travel-activity-card-confirmation-badges">
+          {instantConfirmation && <Badge variant="deal" className="travel-activity-card-meta-badge">⚡ Instant Confirmation</Badge>}
+          {freeCancellation && <Badge variant="deal" className="travel-activity-card-meta-badge">✓ Free Cancellation</Badge>}
         </div>
 
         {/* Available dates */}
         {availableDates && (
-          <p className="text-xs text-[var(--color-foreground-muted)] mb-3">
+          <p className="travel-activity-card-availability">
             Available from {availableDates.earliest} ({availableDates.count} dates)
           </p>
         )}
 
         {/* Price + CTA */}
-        <div className="flex items-end justify-between">
-          <div>
-            <p className="text-2xl font-bold text-[var(--color-foreground-default)]">{pricePerPerson}</p>
-            <p className="text-xs text-[var(--color-foreground-muted)]">{currency} per person</p>
+        <div className="travel-activity-card-footer">
+          <div className="travel-activity-card-price-wrap">
+            <p className="travel-activity-card-price">{pricePerPerson}</p>
+            <p className="travel-activity-card-price-meta">{currency} per person</p>
           </div>
           <Button onClick={onBook}>Book Now</Button>
         </div>

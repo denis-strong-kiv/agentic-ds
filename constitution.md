@@ -53,8 +53,28 @@ Every component and widget must use UI kit components wherever one exists. Raw H
 
 ### Variants
 - Use CVA (`class-variance-authority`) for all variant/size composition
+- Prefer semantic class contracts (`ui-button`, `ui-button--primary`, etc.) over long inline Tailwind token chains in TSX
+- Keep utility-heavy styling in `src/styles/components/*.css` under `@layer components`
 - Named exports only; no default component exports
 - File naming: `kebab-case.tsx`; export naming: `PascalCase`
+
+### Semantic class contract standard (repo-wide, mandatory)
+- Applies to **all render surfaces**: `packages/ui`, `packages/storybook`, `apps/web`, and any future app/package in this monorepo
+- TSX/JSX should output semantic classes only (examples: `ui-*`, `travel-*`, `web-*`, `sb-*`) plus optional state/modifier classes
+- Keep class composition in TSX short and semantic; move visual token details to CSS component layers
+- Long utility chains in TSX are forbidden for new code; existing debt must be migrated when touched
+- Every new component/page/story wrapper must ship with a corresponding CSS contract file or a clearly named section in an existing contract file
+- Class naming pattern is required:
+	- Block: `.namespace-component`
+	- Modifier: `.namespace-component--variant`
+	- Element: `.namespace-component-element`
+- Interaction and theme styles (hover/active/focus/disabled/dark/RTL) live in CSS contracts, not inline utility literals
+- If directionality is needed, use logical properties in CSS contracts (`margin-inline-start`, `padding-inline-end`, etc.)
+
+### Migration guardrail when editing existing code
+- If a file still has long utility class strings and you modify that file, migrate the edited region to semantic class contracts in the same change
+- Do not introduce new inline hardcoded color/shadow/spacing literals while migrating
+- Update tests to assert semantic class contracts where style contracts are part of behavior
 
 ### Tokens
 - Button hover/active: derived in CSS via OKLCH relative color — no token entries needed
@@ -67,6 +87,8 @@ Every component and widget must use UI kit components wherever one exists. Raw H
 3. Add to `src/components/ui/index.ts` barrel
 4. Decide story list upfront; create `packages/storybook/stories/ui/[name].stories.tsx`
 5. Check Figma spec before implementing — confirm variants match token system before deviating
+6. Add semantic CSS contract in `src/styles/components/[name].css` and register import in `src/styles/components.css`
+7. Ensure no long inline utility class literals remain in the new file
 
 ---
 
@@ -75,7 +97,7 @@ Every component and widget must use UI kit components wherever one exists. Raw H
 ### Tailwind / CSS setup
 - `@tailwindcss/vite` must be **first** in the `viteFinal` plugins array in `.storybook/main.ts`
 - `theme.css` must have `@source` directives covering `packages/ui/src/` and `packages/storybook/stories/` — auto-detection is unreliable in monorepos
-- `preview.ts` imports `theme.css` and `motion.css` from `packages/ui/src/styles/`
+- `preview.ts` imports `globals.css` from `packages/ui/src/styles/`
 
 ### BrandDecorator
 - Spreads brand tokens as **inline styles** on the wrapper div — never inject a `<style>` tag on `:root`
@@ -101,10 +123,16 @@ Every component and widget must use UI kit components wherever one exists. Raw H
 ## Tests
 
 - Vitest + React Testing Library; environment: `jsdom`
-- Test class names for variant correctness (e.g. `toContain('bg-[var(--color-primary-default)]')`)
+- Test class contracts for variant correctness (e.g. `toContain('ui-button--primary')`)
 - Test accessibility attributes (`aria-label`, `aria-busy`, `role`)
 - Test count capping and edge cases for numeric components
-- All 357+ tests must pass on every commit
+- All test suites must pass on every commit (current baseline is 379+ in `@travel/ui`)
+
+## Enforcement
+
+- ESLint no-restricted-syntax rules are used to block long inline class token chains in migrated scopes
+- As additional repo areas are migrated, expand ESLint scope to keep semantic contracts enforced
+- PRs that add new long inline utility chains in component/page/story files should be rejected
 
 ---
 

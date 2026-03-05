@@ -50,49 +50,49 @@ describe('NotificationBadge', () => {
   describe('variants', () => {
     it('renders brand variant', () => {
       render(<NotificationBadge count={1} variant="brand" />);
-      expect(screen.getByText('1').className).toContain('bg-[var(--color-primary-default)]');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--brand');
     });
 
     it('renders accent variant', () => {
       render(<NotificationBadge count={1} variant="accent" />);
-      expect(screen.getByText('1').className).toContain('bg-[var(--color-accent-default)]');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--accent');
     });
 
     it('renders success variant', () => {
       render(<NotificationBadge count={1} variant="success" />);
-      expect(screen.getByText('1').className).toContain('bg-[var(--color-success-default)]');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--success');
     });
 
     it('renders warning variant', () => {
       render(<NotificationBadge count={1} variant="warning" />);
-      expect(screen.getByText('1').className).toContain('bg-[var(--color-warning-default)]');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--warning');
     });
 
     it('renders danger variant', () => {
       render(<NotificationBadge count={1} variant="danger" />);
-      expect(screen.getByText('1').className).toContain('bg-[var(--color-error-default)]');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--danger');
     });
 
     it('renders neutral variant', () => {
       render(<NotificationBadge count={1} variant="neutral" />);
-      expect(screen.getByText('1').className).toContain('bg-[var(--color-foreground-default)]');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--neutral');
     });
 
     it('renders inverted variant', () => {
       render(<NotificationBadge count={1} variant="inverted" />);
-      expect(screen.getByText('1').className).toContain('bg-[oklch(100%_0_0)]');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--inverted');
     });
   });
 
   describe('sizes', () => {
     it('renders lg size', () => {
       render(<NotificationBadge count={1} size="lg" />);
-      expect(screen.getByText('1').className).toContain('h-5');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--lg');
     });
 
     it('renders md size', () => {
       render(<NotificationBadge count={1} size="md" />);
-      expect(screen.getByText('1').className).toContain('h-4');
+      expect(screen.getByText('1').className).toContain('ui-notification-badge--md');
     });
   });
 

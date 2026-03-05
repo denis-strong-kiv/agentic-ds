@@ -24,7 +24,7 @@ export interface BookingStepperProps {
 // ─── Default step icons ───────────────────────────────────────────────────────
 
 const CheckIcon = () => (
-  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+  <svg className="travel-booking-stepper-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
     <path d="M20 6L9 17l-5-5" />
   </svg>
 );
@@ -36,15 +36,15 @@ export function BookingStepper({ steps, onStepClick, className, 'aria-label': ar
     <nav
       aria-label={ariaLabel}
       className={cn(
-        'w-full overflow-x-auto',
+        'travel-booking-stepper',
         className,
       )}
     >
-      <ol className="flex items-center min-w-max px-2">
+      <ol className="travel-booking-stepper-list">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             {/* Step */}
-            <li className="flex flex-col items-center gap-1.5">
+            <li className="travel-booking-stepper-item">
               <button
                 type="button"
                 onClick={() => step.status === 'completed' && onStepClick?.(step.id)}
@@ -52,22 +52,15 @@ export function BookingStepper({ steps, onStepClick, className, 'aria-label': ar
                 aria-current={step.status === 'active' ? 'step' : undefined}
                 aria-label={`${step.label}${step.status === 'completed' ? ' (completed)' : step.status === 'active' ? ' (current)' : ''}`}
                 className={cn(
-                  'h-10 w-10 rounded-full flex items-center justify-center border-2 transition-colors',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-default)]',
+                  'travel-booking-stepper-step-btn',
                   step.status === 'completed' && [
-                    'bg-[var(--color-primary-default)] border-[var(--color-primary-default)]',
-                    'text-[var(--color-primary-foreground)]',
-                    'cursor-pointer hover:opacity-90',
+                    'travel-booking-stepper-step-btn--completed',
                   ],
                   step.status === 'active' && [
-                    'bg-white border-[var(--color-primary-default)]',
-                    'text-[var(--color-primary-default)]',
-                    'ring-4 ring-[var(--color-primary-default)]/20',
+                    'travel-booking-stepper-step-btn--active',
                   ],
                   step.status === 'upcoming' && [
-                    'bg-[var(--color-background-subtle)] border-[var(--color-border-muted)]',
-                    'text-[var(--color-foreground-subtle)]',
-                    'cursor-not-allowed',
+                    'travel-booking-stepper-step-btn--upcoming',
                   ],
                 )}
               >
@@ -76,15 +69,15 @@ export function BookingStepper({ steps, onStepClick, className, 'aria-label': ar
                 ) : step.icon ? (
                   step.icon
                 ) : (
-                  <span className="text-sm font-medium">{index + 1}</span>
+                  <span className="travel-booking-stepper-step-index">{index + 1}</span>
                 )}
               </button>
               <span
                 className={cn(
-                  'text-xs font-medium text-center whitespace-nowrap',
-                  step.status === 'active' && 'text-[var(--color-primary-default)]',
-                  step.status === 'completed' && 'text-[var(--color-foreground-default)]',
-                  step.status === 'upcoming' && 'text-[var(--color-foreground-subtle)]',
+                  'travel-booking-stepper-step-label',
+                  step.status === 'active' && 'travel-booking-stepper-step-label--active',
+                  step.status === 'completed' && 'travel-booking-stepper-step-label--completed',
+                  step.status === 'upcoming' && 'travel-booking-stepper-step-label--upcoming',
                 )}
               >
                 {step.label}
@@ -96,10 +89,10 @@ export function BookingStepper({ steps, onStepClick, className, 'aria-label': ar
               <div
                 aria-hidden
                 className={cn(
-                  'h-0.5 flex-1 mx-2 min-w-[32px]',
+                  'travel-booking-stepper-connector',
                   steps[index + 1].status === 'upcoming'
-                    ? 'bg-[var(--color-border-muted)]'
-                    : 'bg-[var(--color-primary-default)]',
+                    ? 'travel-booking-stepper-connector--upcoming'
+                    : 'travel-booking-stepper-connector--complete',
                 )}
               />
             )}

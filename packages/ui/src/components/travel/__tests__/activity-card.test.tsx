@@ -12,6 +12,11 @@ const PROPS: ActivityCardProps = {
 };
 
 describe('ActivityCard', () => {
+  it('applies semantic root class', () => {
+    const { container } = render(<ActivityCard {...PROPS} />);
+    expect(container.firstElementChild).toHaveClass('travel-activity-card');
+  });
+
   it('renders title', () => {
     render(<ActivityCard {...PROPS} />);
     expect(screen.getByText('Eiffel Tower Skip-the-Line Tour')).toBeInTheDocument();

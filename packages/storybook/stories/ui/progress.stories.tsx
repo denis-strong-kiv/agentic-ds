@@ -11,10 +11,29 @@ const meta: Meta<typeof Progress> = {
 export default meta;
 type Story = StoryObj<typeof Progress>;
 
+function AnimatedUploadProgress() {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setValue(v => (v >= 100 ? 0 : v + 5)), 200);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="sb-stack-sm sb-max-sm">
+      <div className="sb-row-between sb-caption-muted">
+        <span>Uploading passport scan…</span>
+        <span>{value}%</span>
+      </div>
+      <Progress value={value} aria-label="Uploading passport scan" />
+    </div>
+  );
+}
+
 export const BookingSteps: Story = {
   name: 'Booking step progress',
   render: () => (
-    <div className="flex flex-col gap-6 max-w-sm">
+    <div className="sb-stack-lg sb-max-sm">
       {[
         { label: 'Search', value: 100 },
         { label: 'Passenger details', value: 75 },
@@ -22,8 +41,8 @@ export const BookingSteps: Story = {
         { label: 'Payment', value: 25 },
         { label: 'Not started', value: 0 },
       ].map(({ label, value }) => (
-        <div key={label} className="flex flex-col gap-1.5">
-          <div className="flex justify-between text-xs text-[var(--color-foreground-muted)]">
+        <div key={label} className="sb-stack-sm">
+          <div className="sb-row-between sb-caption-muted">
             <span>{label}</span>
             <span>{value}%</span>
           </div>
@@ -37,7 +56,7 @@ export const BookingSteps: Story = {
 export const Indeterminate: Story = {
   name: 'Indeterminate (loading)',
   render: () => (
-    <div className="max-w-sm">
+    <div className="sb-max-sm">
       <Progress value={undefined} aria-label="Loading" />
     </div>
   ),
@@ -45,28 +64,13 @@ export const Indeterminate: Story = {
 
 export const Animated: Story = {
   name: 'Animated upload',
-  render: () => {
-    const [value, setValue] = useState(0);
-    useEffect(() => {
-      const id = setInterval(() => setValue(v => (v >= 100 ? 0 : v + 5)), 200);
-      return () => clearInterval(id);
-    }, []);
-    return (
-      <div className="flex flex-col gap-2 max-w-sm">
-        <div className="flex justify-between text-xs text-[var(--color-foreground-muted)]">
-          <span>Uploading passport scan…</span>
-          <span>{value}%</span>
-        </div>
-        <Progress value={value} aria-label="Uploading passport scan" />
-      </div>
-    );
-  },
+  render: () => <AnimatedUploadProgress />,
 };
 
 export const Controlled: Story = {
   args: { value: 60 },
   render: (args) => (
-    <div className="max-w-sm">
+    <div className="sb-max-sm">
       <Progress {...args} aria-label="Upload progress" />
     </div>
   ),

@@ -68,12 +68,12 @@ describe('Input', () => {
 
     it('adds padding-left when leftSlot is provided', () => {
       render(<Input leftSlot={<span />} />);
-      expect(screen.getByRole('textbox').className).toContain('pl-9');
+      expect(screen.getByRole('textbox').className).toContain('ui-input--with-left-slot');
     });
 
     it('adds padding-right when rightSlot is provided', () => {
       render(<Input rightSlot={<span />} />);
-      expect(screen.getByRole('textbox').className).toContain('pr-9');
+      expect(screen.getByRole('textbox').className).toContain('ui-input--with-right-slot');
     });
   });
 

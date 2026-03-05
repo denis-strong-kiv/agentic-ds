@@ -14,7 +14,7 @@ type Story = StoryObj<typeof Alert>;
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="flex flex-col gap-4 max-w-lg">
+    <div className="sb-stack-md sb-max-lg">
       <Alert variant="info">
         <AlertTitle>Flight update</AlertTitle>
         <AlertDescription>Your flight FL-204 has been moved to Gate B14.</AlertDescription>
@@ -44,7 +44,7 @@ export const AllVariants: Story = {
 export const WithDismiss: Story = {
   name: 'Dismissible alert',
   render: () => (
-    <div className="max-w-lg">
+    <div className="sb-max-lg">
       <Alert variant="info" onDismiss={() => {}}>
         <AlertTitle>Price drop alert</AlertTitle>
         <AlertDescription>
@@ -57,7 +57,7 @@ export const WithDismiss: Story = {
 
 export const TitleOnly: Story = {
   render: () => (
-    <div className="flex flex-col gap-4 max-w-lg">
+    <div className="sb-stack-md sb-max-lg">
       <Alert variant="success">
         <AlertTitle>Seat selection saved.</AlertTitle>
       </Alert>
@@ -70,9 +70,9 @@ export const TitleOnly: Story = {
 
 export const WithIcon: Story = {
   render: () => (
-    <div className="flex flex-col gap-4 max-w-lg">
+    <div className="sb-stack-md sb-max-lg">
       <Alert variant="error">
-        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg className="sb-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="10" />
           <path d="M12 8v4m0 4h.01" />
         </svg>
@@ -83,7 +83,7 @@ export const WithIcon: Story = {
         </AlertDescription>
       </Alert>
       <Alert variant="info">
-        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg className="sb-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="10" />
           <path d="M12 16v-4m0-4h.01" />
         </svg>

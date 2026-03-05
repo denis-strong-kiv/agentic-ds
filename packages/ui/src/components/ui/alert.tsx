@@ -5,35 +5,14 @@ import { cn } from '../../utils/cn.js';
 import { Icon } from './icon.js';
 
 const alertVariants = cva(
-  [
-    'relative w-full rounded-[var(--shape-preset-card)]',
-    'border p-4',
-    '[&>svg~*]:ps-7 [&>svg+div]:translate-y-[-3px]',
-    '[&>svg]:absolute [&>svg]:start-4 [&>svg]:top-4 [&>svg]:h-4 [&>svg]:w-4',
-  ],
+  ['ui-alert'],
   {
     variants: {
       variant: {
-        info: [
-          'border-[var(--color-info-default)] bg-[var(--color-info-subtle)]',
-          'text-[var(--color-foreground-default)]',
-          '[&>svg]:text-[var(--color-info-default)]',
-        ],
-        success: [
-          'border-[var(--color-success-default)] bg-[var(--color-success-subtle)]',
-          'text-[var(--color-foreground-default)]',
-          '[&>svg]:text-[var(--color-success-default)]',
-        ],
-        warning: [
-          'border-[var(--color-warning-default)] bg-[var(--color-warning-subtle)]',
-          'text-[var(--color-foreground-default)]',
-          '[&>svg]:text-[var(--color-warning-default)]',
-        ],
-        error: [
-          'border-[var(--color-error-default)] bg-[var(--color-error-subtle)]',
-          'text-[var(--color-foreground-default)]',
-          '[&>svg]:text-[var(--color-error-default)]',
-        ],
+        info: ['ui-alert--info'],
+        success: ['ui-alert--success'],
+        warning: ['ui-alert--warning'],
+        error: ['ui-alert--error'],
       },
     },
     defaultVariants: { variant: 'info' },
@@ -54,7 +33,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
       {onDismiss && (
         <button
           onClick={onDismiss}
-          className="absolute right-4 top-4 opacity-70 hover:opacity-100"
+          className="ui-alert-dismiss"
           aria-label="Dismiss"
         >
           <Icon icon={X} size="sm" />
@@ -69,7 +48,7 @@ const AlertTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<H
   ({ className, ...props }, ref) => (
     <h5
       ref={ref}
-      className={cn('mb-1 font-medium leading-none tracking-tight', className)}
+      className={cn('ui-alert-title', className)}
       {...props}
     />
   ),
@@ -78,7 +57,7 @@ AlertTitle.displayName = 'AlertTitle';
 
 const AlertDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('text-sm [&_p]:leading-relaxed', className)} {...props} />
+    <div ref={ref} className={cn('ui-alert-description', className)} {...props} />
   ),
 );
 AlertDescription.displayName = 'AlertDescription';

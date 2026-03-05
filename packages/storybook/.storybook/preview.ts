@@ -1,5 +1,5 @@
-import '../../../packages/ui/src/styles/theme.css';
-import '../../../packages/ui/src/styles/motion.css';
+import '../../../packages/ui/src/styles/globals.css';
+import '../stories/styles/story-layout.css';
 
 import type { Preview } from '@storybook/react';
 import React from 'react';

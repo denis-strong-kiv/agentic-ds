@@ -1,0 +1,10 @@
+@layer components {
+  .ui-date-picker-trigger { width: 100%; justify-content: flex-start; text-align: start; font-weight: 400; }
+  .ui-date-picker-trigger--placeholder { color: var(--color-foreground-subtle); }
+  .ui-date-picker-trigger-icon { margin-inline-end: 0.5rem; height: 1rem; width: 1rem; flex-shrink: 0; }
+  .ui-date-picker-popover { width: auto; padding: 0; }
+  .ui-date-range-picker-trigger { width: 100%; justify-content: flex-start; text-align: left; font-weight: 400; gap: 0.5rem; }
+  .ui-date-range-picker-value--placeholder { color: var(--color-foreground-subtle); }
+  .ui-date-range-picker-separator, .ui-date-range-picker-stage { color: var(--color-foreground-muted); }
+  .ui-date-range-picker-stage { padding-inline: 0.75rem; padding-bottom: 0.75rem; font-size: 0.75rem; }
+}

@@ -1,0 +1,55 @@
+@layer components {
+  .ui-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--shape-preset-badge);
+    border: 1px solid transparent;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: color var(--duration-normal), background-color var(--duration-normal), border-color var(--duration-normal);
+  }
+
+  .ui-badge:focus {
+    outline: none;
+  }
+
+  .ui-badge:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-primary-default);
+  }
+
+  .ui-badge--default {
+    background: var(--color-background-subtle);
+    color: var(--color-foreground-default);
+  }
+
+  .ui-badge--secondary {
+    background: var(--color-secondary-default);
+    color: var(--color-secondary-foreground);
+  }
+
+  .ui-badge--outline {
+    border-color: var(--color-border-default);
+    color: var(--color-foreground-default);
+  }
+
+  .ui-badge--destructive {
+    background: var(--color-error-default);
+    color: var(--color-error-foreground);
+  }
+
+  .ui-badge--deal {
+    background: var(--color-success-default);
+    color: var(--color-success-foreground);
+  }
+
+  .ui-badge--new {
+    background: var(--color-accent-default);
+    color: var(--color-accent-foreground);
+  }
+
+  .ui-badge--popular {
+    background: var(--color-warning-default);
+    color: var(--color-warning-foreground);
+  }
+}

@@ -1,0 +1,55 @@
+@layer components {
+  .ui-switch {
+    display: inline-flex;
+    height: 1.5rem;
+    width: 2.75rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    align-items: center;
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background: var(--color-border-default);
+    transition: background-color var(--duration-normal);
+  }
+
+  .ui-switch[data-state='checked'] { background: var(--color-primary-default); }
+
+  .ui-switch:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-primary-default);
+  }
+
+  .ui-switch:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .ui-switch-thumb {
+    pointer-events: none;
+    display: block;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 9999px;
+    background: oklch(100% 0 0);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-normal);
+  }
+
+  .ui-switch-thumb[data-state='checked'] { transform: translateX(1.25rem); }
+  .ui-switch-thumb[data-state='unchecked'] { transform: translateX(0); }
+
+  .ui-switch-label-wrap {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .ui-switch-label-wrap--disabled { cursor: not-allowed; }
+
+  .ui-switch-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-foreground-default);
+  }
+}

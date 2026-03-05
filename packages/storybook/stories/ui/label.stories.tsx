@@ -38,7 +38,7 @@ export const RequiredWithHelper: Story = {
 export const PairedWithInput: Story = {
   name: 'Paired with input',
   render: () => (
-    <div className="flex flex-col gap-1.5 max-w-xs">
+    <div className="sb-stack-sm sb-max-xs">
       <Label htmlFor="passport" required helperText="As shown on your travel document">
         Passport number
       </Label>
@@ -50,8 +50,8 @@ export const PairedWithInput: Story = {
 export const PairedWithCheckbox: Story = {
   name: 'Paired with checkbox',
   render: () => (
-    <div className="flex items-start gap-2">
-      <Checkbox id="terms" className="mt-0.5" />
+    <div className="sb-row-start-sm">
+      <Checkbox id="terms" className="sb-mt-half" />
       <Label htmlFor="terms" helperText="You can unsubscribe at any time.">
         Send me price alerts for this route
       </Label>

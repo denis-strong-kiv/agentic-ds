@@ -104,7 +104,7 @@ describe('Table', () => {
     it('applies selected styling to selected row', () => {
       render(<TableFixture />);
       const selectedRow = screen.getByText('United').closest('tr')!;
-      expect(selectedRow.className).toContain('bg-[var(--color-background-subtle)]');
+      expect(selectedRow.className).toContain('ui-table-row--selected');
     });
 
     it('sets aria-selected on selected row', () => {

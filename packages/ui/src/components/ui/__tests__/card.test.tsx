@@ -6,12 +6,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 describe('Card', () => {
   it('renders with outlined variant by default', () => {
     render(<Card data-testid="card">Content</Card>);
-    expect(screen.getByTestId('card').className).toContain('shadow-[var(--shadow-sm)]');
+    expect(screen.getByTestId('card').className).toContain('ui-card--outlined');
   });
 
   it('renders with elevated variant', () => {
     render(<Card variant="elevated" data-testid="card">Content</Card>);
-    expect(screen.getByTestId('card').className).toContain('shadow-[var(--shadow-md)]');
+    expect(screen.getByTestId('card').className).toContain('ui-card--elevated');
   });
 
   it('renders header slot', () => {

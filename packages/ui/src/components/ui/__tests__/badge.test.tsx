@@ -7,38 +7,38 @@ describe('Badge', () => {
     render(<Badge>Default</Badge>);
     const badge = screen.getByText('Default');
     expect(badge).toBeInTheDocument();
-    expect(badge.className).toContain('bg-[var(--color-background-subtle)]');
+    expect(badge.className).toContain('ui-badge--default');
   });
 
   it('renders secondary variant', () => {
     render(<Badge variant="secondary">Secondary</Badge>);
-    expect(screen.getByText('Secondary').className).toContain('bg-[var(--color-secondary-default)]');
+    expect(screen.getByText('Secondary').className).toContain('ui-badge--secondary');
   });
 
   it('renders outline variant', () => {
     render(<Badge variant="outline">Outline</Badge>);
-    expect(screen.getByText('Outline').className).toContain('border-[var(--color-border-default)]');
+    expect(screen.getByText('Outline').className).toContain('ui-badge--outline');
   });
 
   it('renders destructive variant', () => {
     render(<Badge variant="destructive">Error</Badge>);
-    expect(screen.getByText('Error').className).toContain('bg-[var(--color-error-default)]');
+    expect(screen.getByText('Error').className).toContain('ui-badge--destructive');
   });
 
   describe('travel-specific variants', () => {
     it('renders deal variant', () => {
       render(<Badge variant="deal">Deal</Badge>);
-      expect(screen.getByText('Deal').className).toContain('bg-[var(--color-success-default)]');
+      expect(screen.getByText('Deal').className).toContain('ui-badge--deal');
     });
 
     it('renders new variant', () => {
       render(<Badge variant="new">New</Badge>);
-      expect(screen.getByText('New').className).toContain('bg-[var(--color-accent-default)]');
+      expect(screen.getByText('New').className).toContain('ui-badge--new');
     });
 
     it('renders popular variant', () => {
       render(<Badge variant="popular">Popular</Badge>);
-      expect(screen.getByText('Popular').className).toContain('bg-[var(--color-warning-default)]');
+      expect(screen.getByText('Popular').className).toContain('ui-badge--popular');
     });
   });
 

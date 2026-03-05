@@ -7,7 +7,7 @@ const meta: Meta<typeof Combobox> = {
   component: Combobox,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
-  decorators: [Story => <div className="w-72"><Story /></div>],
+  decorators: [Story => <div className="sb-slider-wrap"><Story /></div>],
 };
 export default meta;
 type Story = StoryObj<typeof Combobox>;
@@ -95,7 +95,7 @@ export const Disabled: Story = {
 export const InForm: Story = {
   name: 'In a form',
   render: () => (
-    <div className="flex flex-col gap-1.5">
+    <div className="sb-stack-sm">
       <Label htmlFor="airline" required>Preferred airline</Label>
       <Combobox
         options={AIRLINES}

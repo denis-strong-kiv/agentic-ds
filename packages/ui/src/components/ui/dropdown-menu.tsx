@@ -14,22 +14,11 @@ const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
 const contentClasses = [
-  'z-50 min-w-[8rem] overflow-hidden rounded-[var(--shape-preset-card)]',
-  'border border-[var(--color-border-default)]',
-  'bg-[var(--color-surface-popover)] p-1',
-  'shadow-[var(--shadow-md)]',
-  'data-[state=open]:animate-in data-[state=closed]:animate-out',
-  'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-  'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+  'ui-dropdown-content',
 ];
 
 const itemClasses = [
-  'relative flex cursor-default select-none items-center gap-2',
-  'rounded-sm px-2 py-1.5 text-sm',
-  'text-[var(--color-foreground-default)]',
-  'outline-none transition-colors',
-  'focus:bg-[var(--color-background-subtle)]',
-  'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+  'ui-dropdown-item',
 ];
 
 const DropdownMenuContent = React.forwardRef<
@@ -57,13 +46,13 @@ const DropdownMenuItem = React.forwardRef<
 >(({ className, inset, icon, shortcut, children, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
-    className={cn(itemClasses, inset && 'ps-8', className)}
+    className={cn(itemClasses, inset && 'ui-dropdown-item--inset', className)}
     {...props}
   >
-    {icon && <span className="text-[var(--color-foreground-muted)]">{icon}</span>}
-    <span className="flex-1">{children}</span>
+    {icon && <span className="ui-dropdown-item-icon">{icon}</span>}
+    <span className="ui-dropdown-item-label">{children}</span>
     {shortcut && (
-      <span className="ml-auto text-xs tracking-widest text-[var(--color-foreground-subtle)]">
+      <span className="ui-dropdown-item-shortcut">
         {shortcut}
       </span>
     )}
@@ -77,10 +66,10 @@ const DropdownMenuCheckboxItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
-    className={cn(itemClasses, 'pl-8', className)}
+    className={cn(itemClasses, 'ui-dropdown-check-item', className)}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="ui-dropdown-indicator-wrap">
       <DropdownMenuPrimitive.ItemIndicator>
         <Icon icon={Check} size="sm" />
       </DropdownMenuPrimitive.ItemIndicator>
@@ -96,10 +85,10 @@ const DropdownMenuRadioItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
-    className={cn(itemClasses, 'pl-8', className)}
+    className={cn(itemClasses, 'ui-dropdown-radio-item', className)}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="ui-dropdown-indicator-wrap">
       <DropdownMenuPrimitive.ItemIndicator>
         <Icon icon={Circle} size="xs" fill="currentColor" />
       </DropdownMenuPrimitive.ItemIndicator>
@@ -115,7 +104,7 @@ const DropdownMenuLabel = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
-    className={cn('px-2 py-1.5 text-sm font-semibold text-[var(--color-foreground-default)]', inset && 'pl-8', className)}
+    className={cn('ui-dropdown-label', inset && 'ui-dropdown-label--inset', className)}
     {...props}
   />
 ));
@@ -127,7 +116,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn('-mx-1 my-1 h-px bg-[var(--color-border-muted)]', className)}
+    className={cn('ui-dropdown-separator', className)}
     {...props}
   />
 ));
@@ -139,11 +128,11 @@ const DropdownMenuSubTrigger = React.forwardRef<
 >(({ className, inset, children, ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
-    className={cn(itemClasses, 'data-[state=open]:bg-[var(--color-background-subtle)]', inset && 'pl-8', className)}
+    className={cn(itemClasses, 'ui-dropdown-sub-trigger', inset && 'ui-dropdown-sub-trigger--inset', className)}
     {...props}
   >
     {children}
-    <Icon icon={ChevronRight} size="sm" className="ml-auto" />
+    <Icon icon={ChevronRight} size="sm" className="ui-dropdown-sub-icon" />
   </DropdownMenuPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;

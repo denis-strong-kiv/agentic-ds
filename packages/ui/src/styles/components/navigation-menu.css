@@ -1,0 +1,29 @@
+@layer components {
+  .ui-navigation-root { position: relative; z-index: 10; display: flex; max-width: max-content; flex: 1; align-items: center; justify-content: center; }
+  .ui-navigation-list { display: flex; flex: 1; list-style: none; align-items: center; justify-content: center; gap: 0.25rem; }
+  .ui-navigation-trigger {
+    display: inline-flex; height: 2.5rem; width: max-content; align-items: center; justify-content: center;
+    border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+    color: var(--color-foreground-default); background: var(--color-surface-card);
+    transition: background-color var(--duration-normal);
+  }
+  .ui-navigation-trigger:hover,
+  .ui-navigation-trigger:focus,
+  .ui-navigation-trigger[data-active],
+  .ui-navigation-trigger[data-state='open'] { background: var(--color-background-subtle); outline: none; }
+  .ui-navigation-trigger:disabled { pointer-events: none; opacity: 0.5; }
+  .ui-navigation-trigger-icon { position: relative; top: 1px; margin-inline-start: 0.25rem; transition: transform var(--duration-normal); }
+  .ui-navigation-trigger[data-state='open'] .ui-navigation-trigger-icon { transform: rotate(180deg); }
+  .ui-navigation-content { left: 0; top: 0; width: 100%; }
+  @media (min-width: 768px) { .ui-navigation-content { position: absolute; width: auto; } }
+  .ui-navigation-viewport-wrap { position: absolute; left: 0; top: 100%; display: flex; justify-content: center; }
+  .ui-navigation-viewport {
+    position: relative; margin-top: 0.375rem; width: 100%; overflow: hidden;
+    height: var(--radix-navigation-menu-viewport-height);
+    border: 1px solid var(--color-border-default); border-radius: var(--shape-preset-card);
+    background: var(--color-surface-popover); box-shadow: var(--shadow-md);
+  }
+  @media (min-width: 768px) { .ui-navigation-viewport { width: var(--radix-navigation-menu-viewport-width); } }
+  .ui-navigation-indicator { top: 100%; z-index: 1; display: flex; height: 0.375rem; align-items: flex-end; justify-content: center; overflow: hidden; }
+  .ui-navigation-indicator-arrow { position: relative; top: 60%; height: 0.5rem; width: 0.5rem; transform: rotate(45deg); border-radius: 2px 0 0 0; background: var(--color-border-default); box-shadow: var(--shadow-md); }
+}

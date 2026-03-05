@@ -120,15 +120,11 @@ export function Combobox({
   }
 
   return (
-    <div className={cn('relative', className)} onBlur={handleBlur}>
+    <div className={cn('ui-combobox-root', className)} onBlur={handleBlur}>
       <div
         className={cn(
-          'flex h-10 items-center rounded-[var(--shape-preset-input)]',
-          'border border-[var(--color-border-default)]',
-          'bg-[var(--color-surface-card)] transition-shadow',
-          'focus-within:border-[var(--color-primary-default)]',
-          'focus-within:ring-2 focus-within:ring-[var(--color-primary-default)]',
-          disabled && 'opacity-50',
+          'ui-combobox-shell',
+          disabled && 'ui-combobox-shell--disabled',
         )}
       >
         <input
@@ -148,10 +144,8 @@ export function Combobox({
           placeholder={placeholder}
           disabled={disabled}
           className={cn(
-            'flex-1 h-full bg-transparent px-3 text-sm outline-none',
-            'text-[var(--color-foreground-default)]',
-            'placeholder:text-[var(--color-foreground-subtle)]',
-            disabled && 'cursor-not-allowed',
+            'ui-combobox-input',
+            disabled && 'ui-combobox-input--disabled',
           )}
         />
         {/* Chevron — mouseDown prevents blur on input */}
@@ -167,9 +161,9 @@ export function Combobox({
               setIsFiltering(false);
             }
           }}
-          className="flex h-full items-center px-2 text-[var(--color-foreground-muted)]"
+          className="ui-combobox-toggle"
         >
-          <Icon icon={ChevronDown} size="sm" className={cn('transition-transform duration-150', open && 'rotate-180')} />
+          <Icon icon={ChevronDown} size="sm" className={cn('ui-combobox-toggle-icon', open && 'ui-combobox-toggle-icon--open')} />
         </button>
       </div>
 
@@ -178,15 +172,11 @@ export function Combobox({
           id={listboxId}
           role="listbox"
           className={cn(
-            'absolute z-50 mt-1 w-full overflow-auto py-1',
-            'max-h-60 rounded-[var(--shape-preset-card)]',
-            'border border-[var(--color-border-default)]',
-            'bg-[var(--color-surface-popover)] shadow-[var(--shadow-md)]',
-            'animate-in fade-in-0 zoom-in-95',
+            'ui-combobox-listbox',
           )}
         >
           {filtered.length === 0 ? (
-            <li className="px-3 py-2 text-sm text-[var(--color-foreground-muted)]">
+            <li className="ui-combobox-empty">
               No options found.
             </li>
           ) : (
@@ -203,16 +193,15 @@ export function Combobox({
                 }}
                 onMouseEnter={() => { if (!option.disabled) setActiveIndex(i); }}
                 className={cn(
-                  'flex cursor-pointer select-none items-center justify-between px-3 py-2 text-sm',
-                  'text-[var(--color-foreground-default)]',
-                  activeIndex === i && !option.disabled && 'bg-[var(--color-background-subtle)]',
-                  option.value === value && 'font-medium',
-                  option.disabled && 'cursor-not-allowed opacity-40',
+                  'ui-combobox-option',
+                  activeIndex === i && !option.disabled && 'ui-combobox-option--active',
+                  option.value === value && 'ui-combobox-option--selected',
+                  option.disabled && 'ui-combobox-option--disabled',
                 )}
               >
                 {option.label}
                 {option.value === value && (
-                  <Icon icon={Check} size="sm" className="shrink-0 text-[var(--color-primary-default)]" />
+                  <Icon icon={Check} size="sm" className="ui-combobox-check" />
                 )}
               </li>
             ))

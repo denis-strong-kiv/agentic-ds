@@ -38,11 +38,11 @@ export const Playground: Story = {
 export const Sizes: Story = {
   name: 'All sizes',
   render: () => (
-    <div className="flex items-end gap-6">
+    <div className="sb-row-end-lg">
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map(size => (
-        <div key={size} className="flex flex-col items-center gap-2">
-          <Icon icon={Plane} size={size} className="text-[var(--color-foreground-default)]" />
-          <span className="text-xs text-[var(--color-foreground-muted)]">{size}</span>
+        <div key={size} className="sb-stack-center-sm">
+          <Icon icon={Plane} size={size} className="sb-text-foreground-default" />
+          <span className="sb-caption-muted">{size}</span>
         </div>
       ))}
     </div>
@@ -53,11 +53,11 @@ export const Sizes: Story = {
 
 function IconGrid({ icons }: { icons: { icon: React.ComponentType<React.SVGProps<SVGSVGElement> & { size?: number | string; strokeWidth?: number }>; name: string }[] }) {
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(96px,1fr))] gap-4">
+    <div className="sb-icon-grid">
       {icons.map(({ icon, name }) => (
-        <div key={name} className="flex flex-col items-center gap-2 rounded-[var(--shape-preset-card)] border border-[var(--color-border-muted)] p-3">
-          <Icon icon={icon as Parameters<typeof Icon>[0]['icon']} size="md" className="text-[var(--color-foreground-default)]" />
-          <span className="text-center text-xs text-[var(--color-foreground-muted)]">{name}</span>
+        <div key={name} className="sb-icon-grid-item">
+          <Icon icon={icon as Parameters<typeof Icon>[0]['icon']} size="md" className="sb-text-foreground-default" />
+          <span className="sb-caption-muted sb-text-center">{name}</span>
         </div>
       ))}
     </div>
@@ -131,22 +131,22 @@ export const UIIcons: Story = {
 export const StatusIcons: Story = {
   name: 'Status & feedback',
   render: () => (
-    <div className="flex gap-6">
-      <div className="flex items-center gap-2">
-        <Icon icon={CircleCheck} size="md" className="text-[var(--color-success-default)]" />
-        <span className="text-sm text-[var(--color-foreground-default)]">Confirmed</span>
+    <div className="sb-row-lg">
+      <div className="sb-row-sm">
+        <Icon icon={CircleCheck} size="md" className="sb-text-success-default" />
+        <span className="sb-text-sm-default">Confirmed</span>
       </div>
-      <div className="flex items-center gap-2">
-        <Icon icon={Info} size="md" className="text-[var(--color-info-default)]" />
-        <span className="text-sm text-[var(--color-foreground-default)]">Info</span>
+      <div className="sb-row-sm">
+        <Icon icon={Info} size="md" className="sb-text-info-default" />
+        <span className="sb-text-sm-default">Info</span>
       </div>
-      <div className="flex items-center gap-2">
-        <Icon icon={TriangleAlert} size="md" className="text-[var(--color-warning-default)]" />
-        <span className="text-sm text-[var(--color-foreground-default)]">Warning</span>
+      <div className="sb-row-sm">
+        <Icon icon={TriangleAlert} size="md" className="sb-text-warning-default" />
+        <span className="sb-text-sm-default">Warning</span>
       </div>
-      <div className="flex items-center gap-2">
-        <Icon icon={CircleAlert} size="md" className="text-[var(--color-error-default)]" />
-        <span className="text-sm text-[var(--color-foreground-default)]">Error</span>
+      <div className="sb-row-sm">
+        <Icon icon={CircleAlert} size="md" className="sb-text-error-default" />
+        <span className="sb-text-sm-default">Error</span>
       </div>
     </div>
   ),
@@ -157,14 +157,14 @@ export const StatusIcons: Story = {
 export const Accessible: Story = {
   name: 'Standalone (with label)',
   render: () => (
-    <div className="flex flex-col gap-4">
-      <p className="text-sm text-[var(--color-foreground-muted)]">
+    <div className="sb-stack-md">
+      <p className="sb-text-sm-muted">
         Icons with a <code>label</code> prop are announced by screen readers — use for standalone icons outside a button.
       </p>
-      <div className="flex gap-4">
-        <Icon icon={Plane} size="lg" label="Flight" className="text-[var(--color-primary-default)]" />
-        <Icon icon={Bell} size="lg" label="Notifications" className="text-[var(--color-foreground-default)]" />
-        <Icon icon={ShieldCheck} size="lg" label="Secure booking" className="text-[var(--color-success-default)]" />
+      <div className="sb-row-md">
+        <Icon icon={Plane} size="lg" label="Flight" className="sb-text-primary-default" />
+        <Icon icon={Bell} size="lg" label="Notifications" className="sb-text-foreground-default" />
+        <Icon icon={ShieldCheck} size="lg" label="Secure booking" className="sb-text-success-default" />
       </div>
     </div>
   ),

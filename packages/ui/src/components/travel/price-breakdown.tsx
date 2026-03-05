@@ -52,34 +52,33 @@ export function PriceBreakdown({
   return (
     <div
       className={cn(
-        'rounded-[var(--shape-preset-card)] border border-[var(--color-border-default)]',
-        'bg-[var(--color-surface-card)] overflow-hidden',
-        sticky && 'md:sticky md:top-4',
+        'travel-price-breakdown',
+        sticky && 'travel-price-breakdown--sticky',
         className,
       )}
       aria-label="Price breakdown"
     >
       {/* Header */}
-      <div className="px-4 py-3 border-b border-[var(--color-border-muted)] bg-[var(--color-background-subtle)]">
-        <h2 className="text-sm font-semibold text-[var(--color-foreground-default)]">Price Summary</h2>
+      <div className="travel-price-breakdown-header">
+        <h2 className="travel-price-breakdown-title">Price Summary</h2>
       </div>
 
-      <div className="p-4 space-y-0">
+      <div className="travel-price-breakdown-body">
         {/* Passenger breakdown (collapsible) */}
         {passengerBreakdown.length > 0 && (
           <Accordion type="single" collapsible>
-            <AccordionItem value="passengers" className="border-none">
-              <AccordionTrigger className="text-sm py-2 text-[var(--color-foreground-default)]">
+            <AccordionItem value="passengers" className="travel-price-breakdown-accordion-item">
+              <AccordionTrigger className="travel-price-breakdown-accordion-trigger travel-price-breakdown-accordion-trigger--primary">
                 Passenger details
               </AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-1.5 pb-2">
+                <div className="travel-price-breakdown-accordion-content">
                   {passengerBreakdown.map((p, i) => (
-                    <div key={i} className="flex justify-between text-sm">
-                      <span className="text-[var(--color-foreground-muted)]">
+                    <div key={i} className="travel-price-breakdown-row">
+                      <span className="travel-price-breakdown-row-label">
                         {p.count}× {p.type} @ {p.priceEach}
                       </span>
-                      <span className="text-[var(--color-foreground-default)] font-medium">{p.subtotal}</span>
+                      <span className="travel-price-breakdown-row-amount travel-price-breakdown-row-amount--strong">{p.subtotal}</span>
                     </div>
                   ))}
                 </div>
@@ -89,16 +88,16 @@ export function PriceBreakdown({
         )}
 
         {/* Base fare + fees */}
-        <div className="space-y-2 py-2">
+        <div className="travel-price-breakdown-section">
           {baseItems.map((item, i) => (
-            <div key={i} className="flex justify-between text-sm">
+            <div key={i} className="travel-price-breakdown-row">
               <div>
-                <span className="text-[var(--color-foreground-muted)]">{item.label}</span>
+                <span className="travel-price-breakdown-row-label">{item.label}</span>
                 {item.description && (
-                  <p className="text-xs text-[var(--color-foreground-subtle)]">{item.description}</p>
+                  <p className="travel-price-breakdown-row-description">{item.description}</p>
                 )}
               </div>
-              <span className="text-[var(--color-foreground-default)]">{item.amount}</span>
+              <span className="travel-price-breakdown-row-amount">{item.amount}</span>
             </div>
           ))}
         </div>
@@ -106,16 +105,16 @@ export function PriceBreakdown({
         {/* Taxes (collapsible) */}
         {taxItems.length > 0 && (
           <Accordion type="single" collapsible>
-            <AccordionItem value="taxes" className="border-none">
-              <AccordionTrigger className="text-sm py-2 text-[var(--color-foreground-muted)]">
+            <AccordionItem value="taxes" className="travel-price-breakdown-accordion-item">
+              <AccordionTrigger className="travel-price-breakdown-accordion-trigger">
                 Taxes &amp; fees
               </AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-1.5 pb-2">
+                <div className="travel-price-breakdown-accordion-content">
                   {taxItems.map((item, i) => (
-                    <div key={i} className="flex justify-between text-sm">
-                      <span className="text-[var(--color-foreground-subtle)]">{item.label}</span>
-                      <span className="text-[var(--color-foreground-muted)]">{item.amount}</span>
+                    <div key={i} className="travel-price-breakdown-row">
+                      <span className="travel-price-breakdown-row-label travel-price-breakdown-row-label--subtle">{item.label}</span>
+                      <span className="travel-price-breakdown-row-amount travel-price-breakdown-row-amount--muted">{item.amount}</span>
                     </div>
                   ))}
                 </div>
@@ -126,32 +125,32 @@ export function PriceBreakdown({
 
         {/* Discounts */}
         {discountItems.map((item, i) => (
-          <div key={i} className="flex justify-between text-sm py-1">
-            <span className="text-[var(--color-success-default)]">{item.label}</span>
-            <span className="text-[var(--color-success-default)] font-medium">{item.amount}</span>
+          <div key={i} className="travel-price-breakdown-row travel-price-breakdown-row--compact">
+            <span className="travel-price-breakdown-discount">{item.label}</span>
+            <span className="travel-price-breakdown-discount travel-price-breakdown-discount--strong">{item.amount}</span>
           </div>
         ))}
 
         {/* Promo code */}
         {promoCode && promoDiscount && (
-          <div className="flex justify-between text-sm py-1">
-            <span className="flex items-center gap-1.5 text-[var(--color-success-default)]">
-              <Badge variant="deal" className="text-xs">PROMO</Badge>
+          <div className="travel-price-breakdown-row travel-price-breakdown-row--compact">
+            <span className="travel-price-breakdown-promo">
+              <Badge variant="deal" className="travel-price-breakdown-promo-badge">PROMO</Badge>
               {promoCode}
             </span>
-            <span className="text-[var(--color-success-default)] font-medium">−{promoDiscount}</span>
+            <span className="travel-price-breakdown-discount travel-price-breakdown-discount--strong">−{promoDiscount}</span>
           </div>
         )}
 
-        <Separator className="my-3" />
+        <Separator className="travel-price-breakdown-separator" />
 
         {/* Total */}
-        <div className="flex justify-between items-end">
+        <div className="travel-price-breakdown-total">
           <div>
-            <p className="text-base font-bold text-[var(--color-foreground-default)]">Total</p>
-            <p className="text-xs text-[var(--color-foreground-muted)]">{currency} incl. all taxes</p>
+            <p className="travel-price-breakdown-total-label">Total</p>
+            <p className="travel-price-breakdown-total-meta">{currency} incl. all taxes</p>
           </div>
-          <p className="text-2xl font-bold text-[var(--color-foreground-default)]">{totalAmount}</p>
+          <p className="travel-price-breakdown-total-amount">{totalAmount}</p>
         </div>
       </div>
     </div>
