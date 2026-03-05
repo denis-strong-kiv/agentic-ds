@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { ComponentType } from 'react';
-import { useRef, useState } from 'react';
 import { TravelSearchForm } from '@travel/ui/components/travel/search-form';
 import type { TravelSearchPayload } from '@travel/ui/components/travel/search-form';
+import { ResizablePreview } from '../utils/resizable-preview';
 
 const AIRPORTS = [
   { iata: 'JFK', city: 'New York', country: 'United States' },
@@ -27,92 +27,6 @@ const AIRPORTS = [
   { iata: 'ZRH', city: 'Zurich', country: 'Switzerland' },
 ];
 
-// ─── Resizable preview wrapper ────────────────────────────────────────────────
-// Drag the right handle to test responsiveness at any container width.
-
-function ResizablePreview({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState<number | null>(null);
-  const dragging = useRef(false);
-  const startX = useRef(0);
-  const startW = useRef(0);
-
-  function onMouseDown(e: React.MouseEvent) {
-    e.preventDefault();
-    dragging.current = true;
-    startX.current = e.clientX;
-    startW.current = ref.current?.offsetWidth ?? 800;
-
-    function onMove(e: MouseEvent) {
-      if (!dragging.current) return;
-      setWidth(Math.max(320, startW.current + (e.clientX - startX.current)));
-    }
-    function onUp() {
-      dragging.current = false;
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onUp);
-    }
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-  }
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        position: 'relative',
-        width: width != null ? `${width}px` : '100%',
-        maxWidth: '100%',
-        minWidth: 320,
-        padding: '2rem 3rem',
-        boxSizing: 'border-box',
-      }}
-    >
-      {children}
-
-      {/* Drag handle */}
-      <div
-        onMouseDown={onMouseDown}
-        title="Drag to resize"
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          bottom: 0,
-          width: 12,
-          cursor: 'ew-resize',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          userSelect: 'none',
-        }}
-      >
-        <div style={{
-          width: 3,
-          height: 32,
-          borderRadius: 2,
-          background: 'rgba(0,0,0,0.18)',
-        }} />
-      </div>
-
-      {/* Width badge */}
-      {width != null && (
-        <div style={{
-          position: 'absolute',
-          right: 16,
-          top: 8,
-          fontSize: 11,
-          lineHeight: 1,
-          fontFamily: 'monospace',
-          color: 'rgba(0,0,0,0.4)',
-          pointerEvents: 'none',
-        }}>
-          {width}px
-        </div>
-      )}
-    </div>
-  );
-}
 
 const meta: Meta<typeof TravelSearchForm> = {
   title: 'Travel/SearchForm',
