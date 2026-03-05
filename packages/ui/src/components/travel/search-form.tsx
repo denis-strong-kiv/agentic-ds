@@ -110,13 +110,11 @@ function FieldSeparator({
   const { active } = React.useContext(ActiveFieldCtx);
   const hidden = active === left || active === right;
   return (
-    <div className="z-0 flex shrink-0 items-center self-stretch py-3" aria-hidden="true">
+    <div className="tsf-separator-shell" aria-hidden="true">
       <div
         className={cn(
-          'h-full w-px shrink-0 origin-center transform-gpu bg-[var(--color-border-default)]',
-          hidden
-            ? 'scale-y-0 transition-none'
-            : 'scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
+          'tsf-separator',
+          hidden ? 'tsf-separator--hidden' : 'tsf-separator--visible',
           className,
         )}
       />
@@ -139,7 +137,7 @@ function SearchField({
   const { setHoverActive, setLockActive } = React.useContext(ActiveFieldCtx);
   return (
     <div
-      className={cn('relative z-0 flex h-full min-w-0 items-stretch focus-within:z-20', className)}
+      className={cn('tsf-field-shell', className)}
       onMouseEnter={() => setHoverActive(id)}
       onMouseLeave={() => setHoverActive(null)}
       onFocusCapture={() => setLockActive(id)}
@@ -157,39 +155,26 @@ function SearchField({
 // ─── Shared field button styles ───────────────────────────────────────────────
 
 const fieldBtn = cn(
-  'flex h-16 min-w-0 flex-1 items-center gap-2 rounded-full px-5 text-start',
-  'ring-0 ring-transparent transition-[background-color,box-shadow,outline-color] duration-[260ms] ease-out',
-  'hover:bg-[var(--color-background-subtle)]',
-  'focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary-default)]',
+  'tsf-field-button',
 );
 
 const pillShell = cn(
-  'relative flex h-16 items-center overflow-visible rounded-full bg-[var(--color-surface-card)]',
-  'after:pointer-events-none after:absolute after:inset-0 after:z-10 after:rounded-full after:border after:border-[var(--color-border-default)] after:content-[""]',
+  'tsf-pill-shell',
 );
 
 const tabBtn = (active: boolean) => cn(
-  'border-b-2 px-10 py-3 text-[34px] font-medium',
-  'transition-colors duration-[var(--duration-fast,100ms)]',
-  active
-    ? 'border-[var(--color-foreground-default)] text-[var(--color-foreground-default)]'
-    : 'border-transparent text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
+  'tsf-tab-button',
+  active ? 'tsf-tab-button--active' : 'tsf-tab-button--inactive',
 );
 
 const tripTypeLabel = (active: boolean) => cn(
-  'flex cursor-pointer items-center gap-1.5 rounded-full py-1 pe-1',
-  'text-[14px] font-medium transition-colors duration-[var(--duration-fast,100ms)]',
-  active
-    ? 'text-[var(--color-foreground-default)]'
-    : 'text-[var(--color-foreground-muted)] hover:text-[var(--color-foreground-default)]',
+  'tsf-trip-type-label',
+  active ? 'tsf-trip-type-label--active' : 'tsf-trip-type-label--inactive',
 );
 
 const tripTypeIndicator = (active: boolean) => cn(
-  'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border',
-  'transition-colors duration-[var(--duration-fast,100ms)]',
-  active
-    ? 'border-[var(--color-foreground-default)]'
-    : 'border-[var(--color-border-default)]',
+  'tsf-trip-type-indicator',
+  active ? 'tsf-trip-type-indicator--active' : 'tsf-trip-type-indicator--inactive',
 );
 
 function SearchActionButton({ onClick }: { onClick: () => void }) {
@@ -199,10 +184,7 @@ function SearchActionButton({ onClick }: { onClick: () => void }) {
       size={null}
       aria-label="Search"
       onClick={onClick}
-      className={cn(
-        'h-full overflow-hidden rounded-full',
-        'w-auto justify-center gap-2 px-4',
-      )}
+      className={cn('tsf-search-action-btn')}
     >
       <Icon icon={Search} size="md" aria-hidden className="shrink-0" />
       <span className="whitespace-nowrap text-base font-semibold">
@@ -214,7 +196,7 @@ function SearchActionButton({ onClick }: { onClick: () => void }) {
 
 function SearchActionSlot({ onClick }: { onClick: () => void }) {
   return (
-    <div className="flex h-16 shrink-0 items-center p-2">
+    <div className="tsf-search-action-slot">
       <SearchActionButton onClick={onClick} />
     </div>
   );
@@ -306,7 +288,9 @@ function AirportField({
 }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
+  const [activeIndex, setActiveIndex] = React.useState(-1);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const optionRefs = React.useRef<Array<HTMLLIElement | null>>([]);
   const listId = React.useId();
   const { setLockActive } = React.useContext(ActiveFieldCtx);
 
@@ -317,10 +301,16 @@ function AirportField({
       )
     : options.slice(0, 8);
 
+  React.useEffect(() => {
+    if (!open || activeIndex < 0) return;
+    optionRefs.current[activeIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [activeIndex, open]);
+
   function select(opt: AirportOption) {
     onChange(opt);
     setOpen(false);
     setQuery('');
+    setActiveIndex(-1);
     setLockActive(null);
   }
 
@@ -328,6 +318,7 @@ function AirportField({
     setOpen(true);
     setLockActive(id);
     setQuery('');
+    setActiveIndex(-1);
     requestAnimationFrame(() => inputRef.current?.focus());
   }
 
@@ -337,6 +328,13 @@ function AirportField({
         type="button"
         aria-label={value ? `${value.city} ${value.iata} — change ${placeholder}` : placeholder}
         onClick={handleOpen}
+        onKeyDown={e => {
+          if (e.key === 'Escape' && open) {
+            e.preventDefault();
+            setOpen(false);
+            setLockActive(null);
+          }
+        }}
         className={cn(
           fieldBtn,
           buttonClassName,
@@ -382,6 +380,46 @@ function AirportField({
               role="combobox"
               aria-expanded={open}
               aria-controls={listId}
+              aria-activedescendant={open && activeIndex >= 0 ? `${listId}-opt-${activeIndex}` : undefined}
+              onKeyDown={e => {
+                if (!filtered.length) return;
+
+                if (e.key === 'ArrowDown') {
+                  e.preventDefault();
+                  setActiveIndex(prev => (prev + 1) % filtered.length);
+                  return;
+                }
+
+                if (e.key === 'ArrowUp') {
+                  e.preventDefault();
+                  setActiveIndex(prev => (prev <= 0 ? filtered.length - 1 : prev - 1));
+                  return;
+                }
+
+                if (e.key === 'Home') {
+                  e.preventDefault();
+                  setActiveIndex(0);
+                  return;
+                }
+
+                if (e.key === 'End') {
+                  e.preventDefault();
+                  setActiveIndex(filtered.length - 1);
+                  return;
+                }
+
+                if (e.key === 'Enter' && activeIndex >= 0) {
+                  e.preventDefault();
+                  select(filtered[activeIndex] as AirportOption);
+                  return;
+                }
+
+                if (e.key === 'Escape') {
+                  e.preventDefault();
+                  setOpen(false);
+                  setLockActive(null);
+                }
+              }}
               onBlur={() => setOpen(false)}
               onBlurCapture={e => {
                 if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
@@ -398,15 +436,19 @@ function AirportField({
             {filtered.length === 0 ? (
               <li className="px-3 py-2 text-sm text-[var(--color-foreground-muted)]">No airports found.</li>
             ) : (
-              filtered.map(opt => (
+              filtered.map((opt, index) => (
                 <li
                   key={opt.iata}
+                  id={`${listId}-opt-${index}`}
+                  ref={el => { optionRefs.current[index] = el; }}
                   role="option"
-                  aria-selected={value?.iata === opt.iata}
+                  aria-selected={value?.iata === opt.iata || activeIndex === index}
+                  onMouseEnter={() => setActiveIndex(index)}
                   onMouseDown={() => select(opt)}
                   className={cn(
                     'flex cursor-pointer items-center gap-3 px-3 py-2',
                     'hover:bg-[var(--color-background-subtle)]',
+                    activeIndex === index && 'bg-[var(--color-background-subtle)]',
                     value?.iata === opt.iata && 'text-[var(--color-primary-default)]',
                   )}
                 >
@@ -689,41 +731,24 @@ function HotelDestinationField({
   id,
   value,
   onChange,
+  options,
 }: {
   id: string;
-  value: string;
-  onChange: (v: string) => void;
+  value: AirportOption | null;
+  onChange: (v: AirportOption | null) => void;
+  options: AirportOption[];
 }) {
-  const { setHoverActive, setLockActive } = React.useContext(ActiveFieldCtx);
   return (
-    <div
-      className="relative flex h-full flex-[2_0_0] min-w-0 items-stretch"
-      onMouseEnter={() => setHoverActive(id)}
-      onMouseLeave={() => setHoverActive(null)}
-    >
-      <div
-        className={cn(
-          'flex h-16 min-w-0 flex-1 items-center rounded-full px-4',
-          'transition-[background-color,outline-color] duration-[var(--duration-normal,200ms)] ease-out',
-          'hover:bg-[var(--color-background-subtle)]',
-          'has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[var(--color-primary-default)]',
-        )}
-      >
-        <input
-          type="text"
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          placeholder="Where to?"
-          aria-label="Hotel destination"
-          onFocus={() => setLockActive(id)}
-          onBlur={() => setLockActive(null)}
-          className={cn(
-            'h-full min-w-0 flex-1 bg-transparent text-sm font-medium outline-none',
-            'text-[var(--color-foreground-default)] placeholder:text-[var(--color-foreground-subtle)]',
-          )}
-        />
-      </div>
-    </div>
+    <AirportField
+      id={id}
+      value={value}
+      onChange={onChange}
+      placeholder="Where to?"
+      options={options}
+      icon={Search}
+      className="flex-[2_0_0]"
+      buttonClassName="ps-4"
+    />
   );
 }
 
@@ -782,7 +807,7 @@ export function TravelSearchForm({
   const [swapRotationDeg, setSwapRotationDeg] = React.useState(0);
 
   // Hotels state
-  const [hotelDest, setHotelDest] = React.useState('');
+  const [hotelDest, setHotelDest] = React.useState<AirportOption | null>(null);
   const [checkIn, setCheckIn] = React.useState<Date | null>(null);
   const [checkOut, setCheckOut] = React.useState<Date | null>(null);
   const [occupancy, setOccupancy] = React.useState<OccupancyConfig>(DEFAULT_OCCUPANCY);
@@ -812,7 +837,7 @@ export function TravelSearchForm({
     } else {
       onSearch?.({
         tab: 'hotels',
-        destination: hotelDest,
+        destination: hotelDest ? `${hotelDest.city} (${hotelDest.iata})` : '',
         checkIn,
         checkOut,
         occupancy,
@@ -1063,7 +1088,7 @@ export function TravelSearchForm({
         {/* ── Hotels form ──────────────────────────────────────────────────── */}
         {activeTab === 'hotels' && (
           <SearchPill onSearch={handleSearch}>
-            <HotelDestinationField id="hotel-dest" value={hotelDest} onChange={setHotelDest} />
+            <HotelDestinationField id="hotel-dest" value={hotelDest} onChange={setHotelDest} options={airportOptions} />
             <FieldSeparator left="hotel-dest" right="checkin" />
             <DateField id="checkin" value={checkIn} onChange={setCheckIn} placeholder="Check-in" />
             <FieldSeparator left="checkin" right="checkout" />
