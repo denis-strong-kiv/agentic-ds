@@ -34,7 +34,7 @@ describe('TravelSearchForm', () => {
     render(<TravelSearchForm />);
     await user.click(screen.getByRole('tab', { name: /hotels/i }));
     expect(screen.getByRole('tab', { name: /hotels/i })).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByPlaceholderText('City, hotel or airport')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Where to?')).toBeInTheDocument();
   });
 
   // ── Trip type ────────────────────────────────────────────────────────────
@@ -103,13 +103,13 @@ describe('TravelSearchForm', () => {
 
   it('shows passenger field with default label', () => {
     render(<TravelSearchForm />);
-    expect(screen.getByRole('button', { name: /1 Adult/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /1, Economy/i })).toBeInTheDocument();
   });
 
   it('opens passenger popover', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm />);
-    await user.click(screen.getByRole('button', { name: /1 Adult/i }));
+    await user.click(screen.getByRole('button', { name: /1, Economy/i }));
     expect(screen.getByText('Adults')).toBeInTheDocument();
     expect(screen.getByText('Children')).toBeInTheDocument();
     expect(screen.getByText('Infants')).toBeInTheDocument();
@@ -118,22 +118,22 @@ describe('TravelSearchForm', () => {
   it('increments adult count', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm />);
-    await user.click(screen.getByRole('button', { name: /1 Adult/i }));
+    await user.click(screen.getByRole('button', { name: /1, Economy/i }));
     await user.click(screen.getByRole('button', { name: /increase adults/i }));
-    expect(screen.getByRole('button', { name: /2 Adults/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /2, Economy/i })).toBeInTheDocument();
   });
 
   it('decrease children is disabled at zero', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm />);
-    await user.click(screen.getByRole('button', { name: /1 Adult/i }));
+    await user.click(screen.getByRole('button', { name: /1, Economy/i }));
     expect(screen.getByRole('button', { name: /decrease children/i })).toBeDisabled();
   });
 
   it('closes passenger popover on Done', async () => {
     const user = userEvent.setup();
     render(<TravelSearchForm />);
-    await user.click(screen.getByRole('button', { name: /1 Adult/i }));
+    await user.click(screen.getByRole('button', { name: /1, Economy/i }));
     expect(screen.getByText('Adults')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /^Done$/i }));
     expect(screen.queryByText('Cabin class')).not.toBeInTheDocument();
