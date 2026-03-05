@@ -785,8 +785,8 @@ export function TravelSearchForm({
         {/* ── Form pill ─────────────────────────────────────────────────────── */}
         {activeTab === 'flights' && tripType !== 'multi-city' && (
           <SearchPill onSearch={handleSearch}>
-            {/* Origin + Destination — widest group, no own border */}
-            <div className="relative flex flex-[2_0_0] min-w-0 items-stretch">
+            {/* Origin + Destination — takes most space */}
+            <div className="relative flex flex-[3_0_0] min-w-0 items-stretch">
               <AirportField
                 id="origin"
                 value={origin}
@@ -829,10 +829,10 @@ export function TravelSearchForm({
               placeholder="Depart"
             />
 
-            {/* Return date — slides in for round-trip */}
+            {/* Return date — same flex weight as departure, collapses for one-way */}
             <div
               className={cn(
-                'flex overflow-hidden items-stretch',
+                'flex-[1_0_0] flex overflow-hidden items-stretch',
                 'transition-all duration-[var(--duration-normal,200ms)] ease-out motion-safe:transition-all',
                 tripType === 'round-trip' ? 'max-w-[500px] opacity-100' : 'max-w-0 opacity-0',
               )}
@@ -868,8 +868,8 @@ export function TravelSearchForm({
                   'border border-[var(--color-border-default)] bg-[var(--color-surface-card)]',
                 )}
               >
-                {/* O+D group — widest, no own border */}
-                <div className="relative flex flex-[2_0_0] min-w-0 items-stretch">
+                {/* O+D group — takes most space */}
+                <div className="relative flex flex-[3_0_0] min-w-0 items-stretch">
                   <AirportField
                     id={`mc-origin-${i}`}
                     value={leg.origin}
