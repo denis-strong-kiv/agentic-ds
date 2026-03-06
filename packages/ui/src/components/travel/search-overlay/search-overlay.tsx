@@ -33,6 +33,7 @@ export function SearchOverlay({ isOpen, onClose, children }: SearchOverlayProps)
     if (isOpen) {
       setIsVisible(true);
       setIsExiting(false);
+      return undefined;
     } else if (isVisible) {
       setIsExiting(true);
       const t = setTimeout(() => {
@@ -41,6 +42,7 @@ export function SearchOverlay({ isOpen, onClose, children }: SearchOverlayProps)
       }, EXIT_DURATION);
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Body scroll lock

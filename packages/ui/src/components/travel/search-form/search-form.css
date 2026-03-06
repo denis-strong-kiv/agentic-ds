@@ -831,6 +831,18 @@
     flex-direction: column;
     gap: 0.5rem;
   }
+  /* First leg stays static (visually continuous with the single pill above) */
+  /* Second+ legs and the actions row grow in from the top edge downward */
+  .tsf-multicity-row-pill:not(:first-child) {
+    animation: tsf-row-enter 220ms cubic-bezier(0, 0, 0.2, 1) both;
+  }
+  .tsf-multicity-row-pill:nth-child(2) { animation-delay: 30ms; }
+  .tsf-multicity-row-pill:nth-child(3) { animation-delay: 60ms; }
+  .tsf-multicity-row-pill:nth-child(4) { animation-delay: 90ms; }
+  .tsf-multicity-actions-row {
+    animation: tsf-row-enter 220ms cubic-bezier(0, 0, 0.2, 1) both;
+    animation-delay: 50ms;
+  }
 
   .tsf-multicity-row-pill {
     align-items: stretch;
@@ -894,5 +906,16 @@
       opacity: 1;
       transform: translateY(0);
     }
+  }
+}
+
+@keyframes tsf-row-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

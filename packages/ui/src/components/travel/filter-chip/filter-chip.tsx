@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { ChevronDown, CircleX, SlidersHorizontal } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { Popover, PopoverTrigger, PopoverContent } from '../../ui/popover/index';
 
@@ -39,12 +40,11 @@ export function FilterChip({
 }: FilterChipProps) {
   const displayLabel = isActive && activeLabel ? activeLabel : label;
 
-  const chipContent = (
+  // Shared inner content
+  const chipInner = (
     <span className="travel-filter-chip-inner">
       {isAllFilters && (
-        <svg className="travel-filter-chip-filter-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-          <path d="M1 3h12M3 7h8M5 11h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
+        <SlidersHorizontal size={14} className="travel-filter-chip-filter-icon" aria-hidden />
       )}
       <span className="travel-filter-chip-label">{displayLabel}</span>
       {count !== undefined && count > 0 && (
@@ -53,14 +53,12 @@ export function FilterChip({
         </span>
       )}
       {!isAllFilters && !isActive && (
-        <svg className="travel-filter-chip-arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-          <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <ChevronDown size={12} className="travel-filter-chip-arrow" aria-hidden />
       )}
     </span>
   );
 
-  // AllFilters chip — no popover, just onClick
+  // Simple button chips (all-filters, toggle-only)
   if (isAllFilters || !popoverContent) {
     return (
       <button
@@ -68,43 +66,57 @@ export function FilterChip({
         className={cn(
           'travel-filter-chip',
           isAllFilters && 'travel-filter-chip--all-filters',
-          isActive && 'travel-filter-chip--active',
+          isActive && 'travel-filter-chip--set',
+          !onClear && isActive && 'travel-filter-chip--set-full',
           className,
         )}
         onClick={onClick}
         aria-pressed={isActive}
       >
-        {chipContent}
+        {chipInner}
+        {isActive && onClear && (
+          <span
+            role="button"
+            tabIndex={0}
+            className="travel-filter-chip-clear-icon"
+            aria-label={`Remove ${label} filter`}
+            onClick={e => { e.stopPropagation(); onClear(); }}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear(); } }}
+          >
+            <CircleX size={16} aria-hidden />
+          </span>
+        )}
       </button>
     );
   }
 
-  // Chip with popover
+  // Chip with popover — split into trigger + clear to avoid nested buttons
   return (
-    <div className={cn('travel-filter-chip-wrap', className)}>
+    <div className={cn('travel-filter-chip-wrap', isActive && 'travel-filter-chip-wrap--set', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <button
             type="button"
             className={cn(
               'travel-filter-chip',
-              isActive && 'travel-filter-chip--active',
+              isActive && 'travel-filter-chip--set',
+              isActive && onClear && 'travel-filter-chip--set-split',
             )}
             aria-pressed={isActive}
           >
-            {chipContent}
+            {chipInner}
+            {/* Clear icon inside trigger when no external clear handler needed */}
+            {isActive && !onClear && (
+              <CircleX size={16} className="travel-filter-chip-clear-icon" aria-hidden />
+            )}
           </button>
         </PopoverTrigger>
-        <PopoverContent
-          className="travel-filter-chip-popover"
-          align="start"
-          sideOffset={6}
-        >
+        <PopoverContent className="travel-filter-chip-popover" align="start" sideOffset={6}>
           {popoverContent}
         </PopoverContent>
       </Popover>
 
-      {/* Clear button — separate from trigger so it doesn't open the popover */}
+      {/* Separate clear button — avoids nested <button> */}
       {isActive && onClear && (
         <button
           type="button"
@@ -112,9 +124,7 @@ export function FilterChip({
           onClick={onClear}
           aria-label={`Remove ${label} filter`}
         >
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-            <path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
+          <CircleX size={16} aria-hidden />
         </button>
       )}
     </div>
