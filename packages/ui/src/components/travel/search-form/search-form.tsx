@@ -86,7 +86,7 @@ export interface OccupancyConfig {
   rooms: number;
 }
 
-export interface FlightLeg {
+export interface SearchFormLeg {
   origin: DestinationOption | null;
   destination: DestinationOption | null;
   departureDate: Date | null;
@@ -95,7 +95,7 @@ export interface FlightLeg {
 export interface FlightSearchPayload {
   tab: 'flights';
   tripType: TripType;
-  legs: FlightLeg[];
+  legs: SearchFormLeg[];
   returnDate: Date | null;
   passengers: PassengerConfig;
 }
@@ -1058,7 +1058,7 @@ const TRIP_TYPES: { id: TripType; label: string }[] = [
 
 const DEFAULT_PASSENGERS: PassengerConfig = { adults: 1, children: 0, infants: 0, cabinClass: 'economy' };
 const DEFAULT_OCCUPANCY: OccupancyConfig = { adults: 2, children: 0, rooms: 1 };
-const DEFAULT_LEG: FlightLeg = { origin: null, destination: null, departureDate: null };
+const DEFAULT_LEG: SearchFormLeg = { origin: null, destination: null, departureDate: null };
 
 export function TravelSearchForm({
   defaultTab = 'flights',
@@ -1077,7 +1077,7 @@ export function TravelSearchForm({
   const [departureDate, setDepartureDate] = React.useState<Date | null>(null);
   const [returnDate, setReturnDate] = React.useState<Date | null>(null);
   const [passengers, setPassengers] = React.useState<PassengerConfig>(DEFAULT_PASSENGERS);
-  const [legs, setLegs] = React.useState<FlightLeg[]>([{ ...DEFAULT_LEG }, { ...DEFAULT_LEG }]);
+  const [legs, setLegs] = React.useState<SearchFormLeg[]>([{ ...DEFAULT_LEG }, { ...DEFAULT_LEG }]);
   const [swapRotationDeg, setSwapRotationDeg] = React.useState(0);
 
   // Hotels state
@@ -1126,7 +1126,7 @@ export function TravelSearchForm({
     }
   }
 
-  function updateLeg(i: number, patch: Partial<FlightLeg>) {
+  function updateLeg(i: number, patch: Partial<SearchFormLeg>) {
     setLegs(ls => ls.map((l, j) => j === i ? { ...l, ...patch } : l));
   }
 

@@ -1,0 +1,119 @@
+@layer components {
+  .travel-nav-bar {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-inline: 1.25rem;
+    background: var(--color-surface-card);
+    border-bottom: 1px solid var(--color-border-muted);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+
+  /* ── Brand ───────────────────────────────────────────────────────────────── */
+  .travel-nav-bar-brand {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+  .travel-nav-bar-brand-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-primary-default);
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Mini search widget ──────────────────────────────────────────────────── */
+  .travel-nav-bar-search {
+    flex: 1;
+    max-width: 28rem;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4375rem 0.875rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 9999px;
+    background: var(--color-background-default);
+    font-size: 0.875rem;
+    color: var(--color-foreground-default);
+    transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+  }
+  .travel-nav-bar-search:hover {
+    border-color: var(--color-primary-default);
+  }
+  .travel-nav-bar-search:focus-visible {
+    outline: 2px solid var(--color-primary-default);
+    outline-offset: 2px;
+  }
+  .travel-nav-bar-search-route {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .travel-nav-bar-search-divider {
+    color: var(--color-foreground-muted);
+    flex-shrink: 0;
+  }
+  .travel-nav-bar-search-dates,
+  .travel-nav-bar-search-pax {
+    white-space: nowrap;
+    color: var(--color-foreground-muted);
+  }
+  .travel-nav-bar-search-icon {
+    margin-inline-start: auto;
+    flex-shrink: 0;
+    color: var(--color-primary-default);
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Right actions ───────────────────────────────────────────────────────── */
+  .travel-nav-bar-actions {
+    margin-inline-start: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+  .travel-nav-bar-support {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    text-decoration: none;
+  }
+  @media (min-width: 768px) {
+    .travel-nav-bar-support { display: flex; }
+  }
+  .travel-nav-bar-support-label {
+    font-size: 0.6875rem;
+    color: var(--color-foreground-muted);
+    line-height: 1;
+  }
+  .travel-nav-bar-support-phone {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-foreground-default);
+  }
+  .travel-nav-bar-support:hover .travel-nav-bar-support-phone {
+    color: var(--color-primary-default);
+  }
+  .travel-nav-bar-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    color: var(--color-foreground-default);
+    transition: background var(--duration-fast);
+  }
+  .travel-nav-bar-icon-btn:hover {
+    background: var(--color-background-subtle);
+  }
+  .travel-nav-bar-icon-btn:focus-visible {
+    outline: 2px solid var(--color-primary-default);
+    outline-offset: 2px;
+  }
+}

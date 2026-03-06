@@ -5,15 +5,20 @@ import { Button } from '../../ui/button/index.js';
 import { Badge } from '../../ui/badge/index.js';
 import { Checkbox } from '../../ui/checkbox/index.js';
 import { Slider } from '../../ui/slider/index.js';
+import { Switch } from '../../ui/switch/index.js';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../ui/accordion/index.js';
 import { Label } from '../../ui/label/index.js';
+import { RadioGroup, RadioGroupItem } from '../../ui/radio-group/index.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+export type SortOption = 'cheap-and-fast' | 'lowest-price' | 'fastest' | 'earliest-departure';
 
 export interface FilterState {
   priceRange: [number, number];
   stops: ('nonstop' | '1-stop' | '2-plus')[];
   airlines: string[];
+  alliances: string[];
   departureRange: [number, number];
   arrivalRange: [number, number];
   amenities: string[];
@@ -30,14 +35,15 @@ export interface FilterPanelProps {
   filters: FilterState;
   onChange: (filters: FilterState) => void;
   onClearAll?: () => void;
-  /** Available airline/provider options */
+  sortBy?: SortOption;
+  onSortChange?: (sort: SortOption) => void;
   providerOptions?: FilterOption[];
-  /** Available amenity options */
   amenityOptions?: FilterOption[];
-  /** Max price for the slider */
+  allianceOptions?: FilterOption[];
   maxPrice?: number;
-  /** Show hotel-specific filters (star rating, amenities) */
   mode?: 'flights' | 'hotels' | 'cars';
+  /** Controlled open state — false collapses the sidebar */
+  isOpen?: boolean;
   className?: string;
 }
 
@@ -52,6 +58,19 @@ const DEFAULT_AMENITIES: FilterOption[] = [
   { value: 'pet-friendly', label: 'Pet Friendly' },
 ];
 
+const DEFAULT_ALLIANCES: FilterOption[] = [
+  { value: 'star-alliance', label: 'Star Alliance' },
+  { value: 'skyteam', label: 'SkyTeam' },
+  { value: 'oneworld', label: 'Oneworld' },
+];
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'cheap-and-fast', label: 'Cheap and fast' },
+  { value: 'lowest-price', label: 'Lowest price' },
+  { value: 'fastest', label: 'Fastest' },
+  { value: 'earliest-departure', label: 'Earliest departure' },
+];
+
 function formatHour(h: number) {
   if (h === 0) return '12am';
   if (h < 12) return `${h}am`;
@@ -63,13 +82,12 @@ function toggleItem<T>(arr: T[], item: T): T[] {
   return arr.includes(item) ? arr.filter(i => i !== item) : [...arr, item];
 }
 
-// ─── Active filter count ──────────────────────────────────────────────────────
-
 function countActiveFilters(filters: FilterState, maxPrice: number): number {
   let count = 0;
   if (filters.priceRange[0] > 0 || filters.priceRange[1] < maxPrice) count++;
   if (filters.stops.length > 0) count += filters.stops.length;
   if (filters.airlines.length > 0) count++;
+  if (filters.alliances.length > 0) count++;
   if (filters.departureRange[0] !== 0 || filters.departureRange[1] !== 24) count++;
   if (filters.arrivalRange[0] !== 0 || filters.arrivalRange[1] !== 24) count++;
   if (filters.amenities.length > 0) count++;
@@ -83,20 +101,32 @@ export function FilterPanel({
   filters,
   onChange,
   onClearAll,
+  sortBy = 'cheap-and-fast',
+  onSortChange,
   providerOptions = [],
   amenityOptions = DEFAULT_AMENITIES,
+  allianceOptions = DEFAULT_ALLIANCES,
   maxPrice = 2000,
   mode = 'flights',
+  isOpen = true,
   className,
 }: FilterPanelProps) {
   const activeCount = countActiveFilters(filters, maxPrice);
+  const allAirlinesSelected = providerOptions.length > 0 &&
+    providerOptions.every(o => filters.airlines.includes(o.value));
+
+  function handleSelectAllAirlines(checked: boolean) {
+    onChange({
+      ...filters,
+      airlines: checked ? providerOptions.map(o => o.value) : [],
+    });
+  }
+
+  if (!isOpen) return null;
 
   return (
     <aside
-      className={cn(
-        'travel-filter-panel',
-        className,
-      )}
+      className={cn('travel-filter-panel', className)}
       aria-label="Search filters"
     >
       {/* Header */}
@@ -104,7 +134,9 @@ export function FilterPanel({
         <h2 className="travel-filter-panel-title">
           Filters
           {activeCount > 0 && (
-            <Badge className="travel-filter-panel-active-count" variant="default">{activeCount}</Badge>
+            <Badge className="travel-filter-panel-active-count" variant="default">
+              {activeCount}
+            </Badge>
           )}
         </h2>
         {activeCount > 0 && (
@@ -118,31 +150,32 @@ export function FilterPanel({
         )}
       </div>
 
-      <Accordion type="multiple" defaultValue={['price', 'stops', 'times']}>
+      <Accordion type="multiple" defaultValue={['sort', 'price', 'stops', 'times']}>
 
-        {/* ── Price ──────────────────────────────────────────────────── */}
-        <AccordionItem value="price">
-          <AccordionTrigger>Price Range</AccordionTrigger>
-          <AccordionContent>
-            <div className="travel-filter-panel-section-body">
-              <Slider
-                min={0}
-                max={maxPrice}
-                step={10}
-                value={filters.priceRange}
-                onValueChange={v => onChange({ ...filters, priceRange: v as [number, number] })}
-                showValue
-                formatValue={v => `$${v}`}
-              />
-              <div className="travel-filter-panel-range-labels">
-                <span>$0</span>
-                <span>${maxPrice}+</span>
-              </div>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
+        {/* ── Sort ──────────────────────────────────────────────────────────── */}
+        {onSortChange && (
+          <AccordionItem value="sort">
+            <AccordionTrigger>Sort</AccordionTrigger>
+            <AccordionContent>
+              <RadioGroup
+                value={sortBy}
+                onValueChange={v => onSortChange(v as SortOption)}
+                className="travel-filter-panel-check-list"
+              >
+                {SORT_OPTIONS.map(opt => (
+                  <div key={opt.value} className="travel-filter-panel-check-item">
+                    <RadioGroupItem id={`sort-${opt.value}`} value={opt.value} />
+                    <Label htmlFor={`sort-${opt.value}`} className="travel-filter-panel-check-label">
+                      {opt.label}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-        {/* ── Stops (flights only) ────────────────────────────────────── */}
+        {/* ── Stops (flights only) ──────────────────────────────────────────── */}
         {mode === 'flights' && (
           <AccordionItem value="stops">
             <AccordionTrigger>Stops</AccordionTrigger>
@@ -171,35 +204,99 @@ export function FilterPanel({
           </AccordionItem>
         )}
 
-        {/* ── Airlines / Providers ────────────────────────────────────── */}
+        {/* ── Price ─────────────────────────────────────────────────────────── */}
+        <AccordionItem value="price">
+          <AccordionTrigger>Price</AccordionTrigger>
+          <AccordionContent>
+            <div className="travel-filter-panel-section-body">
+              <Slider
+                min={0}
+                max={maxPrice}
+                step={10}
+                value={filters.priceRange}
+                onValueChange={v => onChange({ ...filters, priceRange: v as [number, number] })}
+                showValue
+                formatValue={v => `$${v}`}
+              />
+              <div className="travel-filter-panel-range-labels">
+                <span>$0</span>
+                <span>${maxPrice}+</span>
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* ── Airlines / Providers ──────────────────────────────────────────── */}
         {providerOptions.length > 0 && (
           <AccordionItem value="providers">
             <AccordionTrigger>{mode === 'flights' ? 'Airlines' : 'Providers'}</AccordionTrigger>
             <AccordionContent>
-              <div className="travel-filter-panel-check-list travel-filter-panel-check-list--scrollable">
-                {providerOptions.map(opt => (
-                  <div key={opt.value} className="travel-filter-panel-check-item">
-                    <Checkbox
-                      id={`provider-${opt.value}`}
-                      checked={filters.airlines.includes(opt.value)}
-                      onCheckedChange={() =>
-                        onChange({ ...filters, airlines: toggleItem(filters.airlines, opt.value) })
-                      }
-                    />
-                    <Label htmlFor={`provider-${opt.value}`} className="travel-filter-panel-check-label travel-filter-panel-check-label--with-logo">
-                      {opt.logoUrl && (
-                        <img src={opt.logoUrl} alt="" className="travel-filter-panel-provider-logo" aria-hidden />
-                      )}
-                      {opt.label}
-                    </Label>
+              {/* Select all toggle */}
+              <div className="travel-filter-panel-select-all">
+                <Label htmlFor="select-all-airlines" className="travel-filter-panel-check-label">
+                  Select all airlines
+                </Label>
+                <Switch
+                  id="select-all-airlines"
+                  checked={allAirlinesSelected}
+                  onCheckedChange={handleSelectAllAirlines}
+                />
+              </div>
+
+              {/* Alliances */}
+              {allianceOptions.length > 0 && (
+                <div className="travel-filter-panel-subsection">
+                  <p className="travel-filter-panel-subsection-label">Alliances</p>
+                  <div className="travel-filter-panel-check-list">
+                    {allianceOptions.map(opt => (
+                      <div key={opt.value} className="travel-filter-panel-check-item">
+                        <Checkbox
+                          id={`alliance-${opt.value}`}
+                          checked={filters.alliances.includes(opt.value)}
+                          onCheckedChange={() =>
+                            onChange({ ...filters, alliances: toggleItem(filters.alliances, opt.value) })
+                          }
+                        />
+                        <Label htmlFor={`alliance-${opt.value}`} className="travel-filter-panel-check-label">
+                          {opt.label}
+                        </Label>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+              )}
+
+              {/* Individual airlines */}
+              <div className="travel-filter-panel-subsection">
+                <p className="travel-filter-panel-subsection-label">Airlines</p>
+                <div className="travel-filter-panel-check-list travel-filter-panel-check-list--scrollable">
+                  {providerOptions.map(opt => (
+                    <div key={opt.value} className="travel-filter-panel-check-item">
+                      <Checkbox
+                        id={`provider-${opt.value}`}
+                        checked={filters.airlines.includes(opt.value)}
+                        onCheckedChange={() =>
+                          onChange({ ...filters, airlines: toggleItem(filters.airlines, opt.value) })
+                        }
+                      />
+                      <Label
+                        htmlFor={`provider-${opt.value}`}
+                        className="travel-filter-panel-check-label travel-filter-panel-check-label--with-logo"
+                      >
+                        {opt.logoUrl && (
+                          <img src={opt.logoUrl} alt="" className="travel-filter-panel-provider-logo" aria-hidden />
+                        )}
+                        {opt.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </AccordionContent>
           </AccordionItem>
         )}
 
-        {/* ── Departure time ──────────────────────────────────────────── */}
+        {/* ── Departure time ────────────────────────────────────────────────── */}
         {mode === 'flights' && (
           <AccordionItem value="times">
             <AccordionTrigger>Departure Time</AccordionTrigger>
@@ -219,7 +316,7 @@ export function FilterPanel({
           </AccordionItem>
         )}
 
-        {/* ── Arrival time ────────────────────────────────────────────── */}
+        {/* ── Arrival time ──────────────────────────────────────────────────── */}
         {mode === 'flights' && (
           <AccordionItem value="arrival-times">
             <AccordionTrigger>Arrival Time</AccordionTrigger>
@@ -239,7 +336,7 @@ export function FilterPanel({
           </AccordionItem>
         )}
 
-        {/* ── Star rating (hotels only) ───────────────────────────────── */}
+        {/* ── Star rating (hotels only) ─────────────────────────────────────── */}
         {mode === 'hotels' && (
           <AccordionItem value="stars">
             <AccordionTrigger>Star Rating</AccordionTrigger>
@@ -269,7 +366,7 @@ export function FilterPanel({
           </AccordionItem>
         )}
 
-        {/* ── Amenities (hotels only) ─────────────────────────────────── */}
+        {/* ── Amenities (hotels only) ───────────────────────────────────────── */}
         {mode === 'hotels' && (
           <AccordionItem value="amenities">
             <AccordionTrigger>Amenities</AccordionTrigger>
@@ -303,13 +400,14 @@ export function FilterPanel({
   );
 }
 
-// ─── Default filter state factory ─────────────────────────────────────────────
+// ─── Factory ──────────────────────────────────────────────────────────────────
 
 export function createDefaultFilters(maxPrice = 2000): FilterState {
   return {
     priceRange: [0, maxPrice],
     stops: [],
     airlines: [],
+    alliances: [],
     departureRange: [0, 24],
     arrivalRange: [0, 24],
     amenities: [],

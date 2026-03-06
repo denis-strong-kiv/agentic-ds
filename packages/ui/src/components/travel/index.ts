@@ -19,3 +19,7 @@ export * from './room-gallery';
 export * from './search-form';
 export * from './seat-picker';
 export * from './support-chat';
+export * from './nav-bar';
+export * from './filter-chip';
+export * from './filter-bar';
+export * from './flight-details';

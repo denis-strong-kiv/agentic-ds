@@ -1,23 +1,34 @@
 @layer components {
   .travel-filter-panel { width: 100%; border: 1px solid var(--color-border-default); border-radius: var(--shape-preset-card); background: var(--color-surface-card); padding: 1rem; }
   .travel-filter-panel-header { margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; }
-  .travel-filter-panel-title { font-size: 1rem; font-weight: 600; color: var(--color-foreground-default); }
-  .travel-filter-panel-active-count { margin-inline-start: 0.5rem; }
+  .travel-filter-panel-title { font-size: 1rem; font-weight: 600; color: var(--color-foreground-default); display: flex; align-items: center; gap: 0.5rem; }
+  .travel-filter-panel-active-count { font-size: 0.75rem; }
   .travel-filter-panel-clear { font-size: 0.875rem; color: var(--color-primary-default); }
   .travel-filter-panel-clear:hover { text-decoration: underline; }
+
   .travel-filter-panel-section-body { padding-top: 0.5rem; padding-bottom: 1rem; }
   .travel-filter-panel-range-labels { margin-top: 0.5rem; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-foreground-muted); }
+
   .travel-filter-panel-check-list { padding-top: 0.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
   .travel-filter-panel-check-list--scrollable { max-height: 12rem; overflow-y: auto; }
   .travel-filter-panel-check-item { display: flex; align-items: center; gap: 0.5rem; }
   .travel-filter-panel-check-label { font-size: 0.875rem; font-weight: 400; cursor: pointer; }
   .travel-filter-panel-check-label--with-logo { display: inline-flex; align-items: center; gap: 0.5rem; }
   .travel-filter-panel-provider-logo { height: 1rem; width: auto; object-fit: contain; }
+
+  .travel-filter-panel-select-all { display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-border-muted); margin-bottom: 0.75rem; }
+
+  .travel-filter-panel-subsection { margin-top: 0.75rem; }
+  .travel-filter-panel-subsection-label { font-size: 0.75rem; font-weight: 600; color: var(--color-foreground-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+
   .travel-filter-panel-stars-wrap { padding-top: 0.25rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .travel-filter-panel-star-btn { border: 1px solid var(--color-border-default); border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.875rem; transition: all var(--duration-normal); }
   .travel-filter-panel-star-btn--active { border-color: transparent; background: var(--color-primary-default); color: var(--color-primary-foreground); }
   .travel-filter-panel-star-btn--inactive { color: var(--color-foreground-default); }
+  .travel-filter-panel-star-btn--inactive:hover { border-color: var(--color-primary-default); }
+
   .travel-filter-panel-amenities-grid { padding-top: 0.25rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+
   .travel-filter-panel-mobile-actions { margin-top: 1rem; }
   .travel-filter-panel-apply-btn { width: 100%; }
   @media (min-width: 768px) { .travel-filter-panel-mobile-actions { display: none; } }

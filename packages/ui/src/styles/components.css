@@ -39,3 +39,7 @@
 @import '../components/travel/filter-panel/filter-panel.css';
 @import '../components/travel/flight-card/flight-card.css';
 @import '../components/travel/price-breakdown/price-breakdown.css';
+@import '../components/travel/nav-bar/nav-bar.css';
+@import '../components/travel/filter-chip/filter-chip.css';
+@import '../components/travel/filter-bar/filter-bar.css';
+@import '../components/travel/flight-details/flight-details.css';

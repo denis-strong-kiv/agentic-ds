@@ -1,0 +1,116 @@
+@layer components {
+  /* ── Chip wrapper (for chips with clear button) ───────────────────────────── */
+  .travel-filter-chip-wrap {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* ── Base chip ───────────────────────────────────────────────────────────── */
+  .travel-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 2rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 9999px;
+    background: var(--color-surface-card);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-foreground-default);
+    white-space: nowrap;
+    transition: border-color var(--duration-fast), background var(--duration-fast), color var(--duration-fast);
+    cursor: pointer;
+  }
+  .travel-filter-chip:hover {
+    border-color: var(--color-primary-default);
+    color: var(--color-primary-default);
+  }
+  .travel-filter-chip:focus-visible {
+    outline: 2px solid var(--color-primary-default);
+    outline-offset: 2px;
+  }
+
+  /* ── Active state ─────────────────────────────────────────────────────────── */
+  .travel-filter-chip--active {
+    border-color: var(--color-primary-default);
+    background: var(--color-primary-default);
+    color: var(--color-primary-foreground);
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+  .travel-filter-chip--active:hover {
+    background: oklch(from var(--color-primary-default) calc(l - 0.05) c h);
+    color: var(--color-primary-foreground);
+  }
+
+  /* ── All filters chip ─────────────────────────────────────────────────────── */
+  .travel-filter-chip--all-filters {
+    gap: 0.375rem;
+    font-weight: 600;
+  }
+  .travel-filter-chip--all-filters.travel-filter-chip--active {
+    border-radius: 9999px;
+  }
+
+  /* ── Inner layout ─────────────────────────────────────────────────────────── */
+  .travel-filter-chip-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.3125rem;
+  }
+  .travel-filter-chip-label {
+    line-height: 1;
+  }
+  .travel-filter-chip-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.125rem;
+    height: 1.125rem;
+    padding-inline: 0.25rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    background: oklch(100% 0 0 / 0.25);
+    color: inherit;
+  }
+  .travel-filter-chip--active .travel-filter-chip-count {
+    background: oklch(100% 0 0 / 0.3);
+  }
+  .travel-filter-chip-arrow {
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  .travel-filter-chip-filter-icon {
+    flex-shrink: 0;
+  }
+
+  /* ── Clear (×) button ────────────────────────────────────────────────────── */
+  .travel-filter-chip-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 1.75rem;
+    border: 1px solid var(--color-primary-default);
+    border-inline-start: none;
+    border-start-end-radius: 9999px;
+    border-end-end-radius: 9999px;
+    background: var(--color-primary-default);
+    color: var(--color-primary-foreground);
+    transition: background var(--duration-fast);
+  }
+  .travel-filter-chip-clear:hover {
+    background: oklch(from var(--color-primary-default) calc(l - 0.07) c h);
+  }
+  .travel-filter-chip-clear:focus-visible {
+    outline: 2px solid var(--color-primary-default);
+    outline-offset: 2px;
+  }
+
+  /* ── Popover panel ────────────────────────────────────────────────────────── */
+  .travel-filter-chip-popover {
+    width: 18rem;
+    padding: 1rem;
+  }
+}

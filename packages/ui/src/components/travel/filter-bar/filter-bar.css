@@ -1,0 +1,60 @@
+@layer components {
+  .travel-filter-bar {
+    background: var(--color-surface-card);
+    border-bottom: 1px solid var(--color-border-muted);
+    position: sticky;
+    top: 3.5rem; /* below nav-bar */
+    z-index: 30;
+  }
+
+  .travel-filter-bar-scroll {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .travel-filter-bar-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .travel-filter-bar-divider {
+    width: 1px;
+    height: 1.5rem;
+    background: var(--color-border-default);
+    flex-shrink: 0;
+    margin-inline: 0.125rem;
+  }
+
+  /* ── Popover body shared styles ──────────────────────────────────────────── */
+  .travel-filter-bar-popover-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .travel-filter-bar-popover-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-foreground-default);
+  }
+  .travel-filter-bar-popover-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+  .travel-filter-bar-popover-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 14rem;
+    overflow-y: auto;
+  }
+  .travel-filter-bar-range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+}

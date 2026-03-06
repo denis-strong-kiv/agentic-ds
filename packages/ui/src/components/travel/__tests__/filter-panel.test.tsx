@@ -56,10 +56,10 @@ describe('FilterPanel', () => {
     expect(onClearAll).toHaveBeenCalledOnce();
   });
 
-  it('renders Price Range accordion trigger', () => {
+  it('renders Price accordion trigger', () => {
     const onChange = vi.fn();
     render(<FilterPanel filters={makeFilters()} onChange={onChange} />);
-    expect(screen.getByText('Price Range')).toBeInTheDocument();
+    expect(screen.getByText('Price')).toBeInTheDocument();
   });
 
   it('renders Stops section for flights mode', () => {

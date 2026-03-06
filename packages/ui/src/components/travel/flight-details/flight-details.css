@@ -1,0 +1,332 @@
+@layer components {
+  /* ── Panel shell ─────────────────────────────────────────────────────────── */
+  .travel-flight-details {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface-card);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--shape-preset-card);
+    overflow: hidden;
+    height: 100%;
+  }
+
+  /* ── Header ──────────────────────────────────────────────────────────────── */
+  .travel-flight-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border-muted);
+    flex-shrink: 0;
+  }
+  .travel-flight-details-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .travel-flight-details-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    color: var(--color-foreground-muted);
+    transition: background var(--duration-fast), color var(--duration-fast);
+  }
+  .travel-flight-details-close:hover {
+    background: var(--color-background-subtle);
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-close:focus-visible {
+    outline: 2px solid var(--color-primary-default);
+    outline-offset: 2px;
+  }
+
+  /* ── Scrollable body ─────────────────────────────────────────────────────── */
+  .travel-flight-details-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ── Nights divider ──────────────────────────────────────────────────────── */
+  .travel-flight-details-nights {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-foreground-muted);
+    border-top: 1px dashed var(--color-border-muted);
+    border-bottom: 1px dashed var(--color-border-muted);
+    margin-block: 0.75rem;
+    background: var(--color-background-subtle);
+    border-radius: var(--shape-preset-badge);
+  }
+
+  /* ── Leg section ─────────────────────────────────────────────────────────── */
+  .travel-flight-details-leg {
+    margin-bottom: 1rem;
+  }
+  .travel-flight-details-leg-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 0.875rem;
+    flex-wrap: wrap;
+  }
+  .travel-flight-details-leg-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1875rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--color-background-subtle);
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-leg-badge--depart {
+    background: var(--color-primary-default);
+    color: var(--color-primary-foreground);
+  }
+  .travel-flight-details-leg-badge--return {
+    background: var(--color-secondary-default, var(--color-primary-muted));
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-leg-date {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-leg-duration {
+    font-size: 0.8125rem;
+    color: var(--color-foreground-muted);
+    margin-inline-start: auto;
+  }
+
+  /* ── Segments ────────────────────────────────────────────────────────────── */
+  .travel-flight-details-leg-segments {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .travel-flight-details-segment {
+    display: grid;
+    grid-template-columns: 10rem 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--color-border-muted);
+  }
+  .travel-flight-details-segment:first-child {
+    border-top: none;
+  }
+
+  .travel-flight-details-segment-airline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .travel-flight-details-segment-logo {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+  }
+  .travel-flight-details-segment-logo-fallback {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.25rem;
+    background: var(--color-background-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: var(--color-foreground-muted);
+    flex-shrink: 0;
+  }
+  .travel-flight-details-segment-airline-name {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-segment-flight-number {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .travel-flight-details-segment-timeline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .travel-flight-details-segment-stop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+  }
+  .travel-flight-details-segment-time {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-foreground-default);
+    white-space: nowrap;
+  }
+  .travel-flight-details-segment-airport {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+    white-space: nowrap;
+  }
+  .travel-flight-details-segment-line {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-border-default);
+  }
+  .travel-flight-details-segment-line-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background: var(--color-border-default);
+    flex-shrink: 0;
+  }
+  .travel-flight-details-segment-line-track {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border-default);
+  }
+  .travel-flight-details-segment-plane {
+    color: var(--color-primary-default);
+    flex-shrink: 0;
+  }
+
+  .travel-flight-details-segment-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125rem;
+    font-size: 0.75rem;
+  }
+  .travel-flight-details-segment-duration {
+    font-weight: 500;
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-segment-aircraft,
+  .travel-flight-details-segment-class,
+  .travel-flight-details-segment-operated {
+    color: var(--color-foreground-muted);
+    text-align: end;
+  }
+
+  /* ── Layover ─────────────────────────────────────────────────────────────── */
+  .travel-flight-details-layover {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+  }
+  .travel-flight-details-layover-line {
+    width: 2rem;
+    height: 1px;
+    background: var(--color-warning-default);
+    flex-shrink: 0;
+    margin-inline-start: 10rem; /* align with timeline */
+  }
+  .travel-flight-details-layover-label {
+    font-size: 0.75rem;
+    color: var(--color-warning-default);
+    font-weight: 500;
+  }
+
+  /* ── Fare options ────────────────────────────────────────────────────────── */
+  .travel-flight-details-fares {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--color-border-muted);
+    padding-top: 1.25rem;
+  }
+  .travel-flight-details-fares-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-foreground-default);
+    margin-bottom: 1rem;
+  }
+  .travel-flight-details-fares-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .travel-flight-details-fare {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--shape-preset-card);
+    background: var(--color-surface-card);
+    position: relative;
+  }
+  .travel-flight-details-fare--recommended {
+    border-color: var(--color-primary-default);
+    box-shadow: 0 0 0 1px var(--color-primary-default);
+  }
+  .travel-flight-details-fare-badge {
+    font-size: 0.6875rem;
+    align-self: flex-start;
+  }
+  .travel-flight-details-fare-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-foreground-default);
+  }
+  .travel-flight-details-fare-class {
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+  .travel-flight-details-fare-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    margin-top: 0.25rem;
+  }
+  .travel-flight-details-fare-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: var(--color-foreground-muted);
+  }
+  .travel-flight-details-fare-feature-icon {
+    color: var(--color-success-default);
+    font-size: 0.625rem;
+    margin-top: 0.125rem;
+    flex-shrink: 0;
+  }
+  .travel-flight-details-fare-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-foreground-default);
+    margin-top: 0.25rem;
+  }
+  .travel-flight-details-fare-cta {
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+}
