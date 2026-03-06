@@ -32,16 +32,38 @@
   }
 }
 
+/* ── Exit state ───────────────────────────────────────────────────────────── */
+
+@layer components {
+  .travel-search-overlay--exiting {
+    animation: search-overlay-backdrop-out 280ms cubic-bezier(0.4, 0, 1, 1) both;
+  }
+  .travel-search-overlay--exiting .travel-search-overlay-panel {
+    animation: search-panel-exit 280ms cubic-bezier(0.4, 0, 1, 1) both;
+  }
+  .travel-search-overlay--exiting .travel-search-overlay-content {
+    animation: search-content-exit 200ms cubic-bezier(0.4, 0, 1, 1) both;
+  }
+}
+
 /* ── Keyframes (outside @layer so they're always available) ──────────────── */
 
 @keyframes search-overlay-backdrop {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+@keyframes search-overlay-backdrop-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
 
 @keyframes search-panel-reveal {
   from { clip-path: inset(0 0 100% 0); }
   to   { clip-path: inset(0 0 0% 0); }
+}
+@keyframes search-panel-exit {
+  from { clip-path: inset(0 0 0% 0); }
+  to   { clip-path: inset(0 0 100% 0); }
 }
 
 @keyframes search-content-enter {
@@ -52,5 +74,15 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+@keyframes search-content-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
   }
 }
