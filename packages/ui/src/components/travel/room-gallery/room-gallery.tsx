@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
-import { Button } from '../../ui/button/index.js';
-import { Badge } from '../../ui/badge/index.js';
-import { AspectRatio } from '../../ui/aspect-ratio/index.js';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog/index.js';
+import { cn } from '../../../utils/cn';
+import { Button } from '../../ui/button/index';
+import { Badge } from '../../ui/badge/index';
+import { AspectRatio } from '../../ui/aspect-ratio/index';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
-import { cn } from '../../../utils/cn.js';
+import { cn } from '../../../utils/cn';
 
 export interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
   /** Show formatted value labels above thumbs */

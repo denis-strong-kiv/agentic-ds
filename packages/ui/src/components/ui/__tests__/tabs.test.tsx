@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect } from 'vitest';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../tabs/index.js';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../tabs/index';
 
 function TabsFixture({ defaultValue = 'tab1' }: { defaultValue?: string }) {
   return (

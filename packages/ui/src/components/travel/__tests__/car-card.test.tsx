@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { CarCard } from '../car-card/index.js';
-import type { CarCardProps } from '../car-card/index.js';
+import { CarCard } from '../car-card/index';
+import type { CarCardProps } from '../car-card/index';
 
 const SPECS = {
   seats: 5,

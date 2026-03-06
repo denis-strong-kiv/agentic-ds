@@ -4,8 +4,8 @@ import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
-import { cn } from '../../../utils/cn.js';
-import { Icon } from '../icon/index.js';
+import { cn } from '../../../utils/cn';
+import { Icon } from '../icon/index';
 
 const Sheet = DialogPrimitive.Root;
 const SheetTrigger = DialogPrimitive.Trigger;

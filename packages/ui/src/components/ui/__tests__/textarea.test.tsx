@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
-import { Textarea } from '../textarea/index.js';
+import { Textarea } from '../textarea/index';
 
 describe('Textarea', () => {
   it('renders a textarea element', () => {

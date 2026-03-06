@@ -85,6 +85,8 @@ Located at `packages/ui/`.
 - `src/components/ui/` — base components (Button, Card, Input, Dialog, etc.)
 - `src/components/travel/` — travel-domain components (FlightCard, HotelCard, etc.)
 
+**Icons:** Always use `lucide-react` first. Only fall back to a custom inline SVG if the required icon does not exist in Lucide.
+
 **Adding a component:**
 1. Create `src/components/ui/[name].tsx` using Radix primitive + CVA variants
 2. Use `var(--color-*)`, `var(--shape-*)`, `var(--duration-*)` for all theming

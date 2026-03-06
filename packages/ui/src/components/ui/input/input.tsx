@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
+import { cn } from '../../../utils/cn';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** Error message — displayed below the input and sets aria-describedby */

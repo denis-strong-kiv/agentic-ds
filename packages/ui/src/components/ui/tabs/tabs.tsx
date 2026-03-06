@@ -3,8 +3,8 @@
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../utils/cn.js';
-import { NotificationBadge } from '../notification-badge/index.js';
+import { cn } from '../../../utils/cn';
+import { NotificationBadge } from '../notification-badge/index';
 
 const Tabs = TabsPrimitive.Root;
 

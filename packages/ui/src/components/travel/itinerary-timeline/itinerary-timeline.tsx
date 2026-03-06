@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
-import { Badge } from '../../ui/badge/index.js';
+import { cn } from '../../../utils/cn';
+import { Badge } from '../../ui/badge/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

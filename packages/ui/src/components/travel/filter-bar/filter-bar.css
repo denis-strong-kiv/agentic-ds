@@ -3,7 +3,7 @@
     background: var(--color-surface-card);
     border-bottom: 1px solid var(--color-border-muted);
     position: sticky;
-    top: 3.5rem; /* below nav-bar */
+    top: 4rem; /* below nav-bar */
     z-index: 30;
   }
 

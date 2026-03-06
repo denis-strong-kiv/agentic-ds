@@ -3,8 +3,8 @@
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
-import { cn } from '../../../utils/cn.js';
-import { Icon } from '../icon/index.js';
+import { cn } from '../../../utils/cn';
+import { Icon } from '../icon/index';
 
 const Accordion = AccordionPrimitive.Root;
 

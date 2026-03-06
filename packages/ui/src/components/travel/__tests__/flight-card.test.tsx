@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { FlightCard } from '../flight-card/index.js';
-import type { FlightCardProps, FlightLeg } from '../flight-card/index.js';
+import { FlightCard } from '../flight-card/index';
+import type { FlightCardProps, FlightLeg } from '../flight-card/index';
 
 const LEG: FlightLeg = {
   duration: '5h 30m',
@@ -106,11 +106,11 @@ describe('FlightCard', () => {
     expect(screen.getByRole('button', { name: 'Select' })).toBeInTheDocument();
   });
 
-  it('calls onSelect when Select is clicked', async () => {
+  it('calls onSelect when card is clicked', async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<FlightCard {...PROPS} onSelect={onSelect} />);
-    await user.click(screen.getByRole('button', { name: 'Select' }));
+    const { container } = render(<FlightCard {...PROPS} onSelect={onSelect} />);
+    await user.click(container.firstElementChild as HTMLElement);
     expect(onSelect).toHaveBeenCalledOnce();
   });
 
@@ -122,33 +122,6 @@ describe('FlightCard', () => {
   it('does not render fare breakdown when no items', () => {
     render(<FlightCard {...PROPS} />);
     expect(screen.queryByText('Fare breakdown')).not.toBeInTheDocument();
-  });
-
-  it('renders fare breakdown toggle when items provided', () => {
-    render(
-      <FlightCard
-        {...PROPS}
-        fareBreakdown={[
-          { label: 'Base fare', amount: '$299' },
-          { label: 'Taxes', amount: '$50', type: 'tax' },
-          { label: 'Total', amount: '$349', type: 'total' },
-        ]}
-      />,
-    );
-    expect(screen.getByText('Fare breakdown')).toBeInTheDocument();
-  });
-
-  it('expands fare breakdown on click', async () => {
-    const user = userEvent.setup();
-    render(
-      <FlightCard
-        {...PROPS}
-        fareBreakdown={[{ label: 'Base fare', amount: '$299' }]}
-      />,
-    );
-    await user.click(screen.getByText('Fare breakdown'));
-    expect(screen.getByText('Base fare')).toBeInTheDocument();
-    expect(screen.getByText('$299')).toBeInTheDocument();
   });
 
   it('renders multiple legs (round-trip)', () => {

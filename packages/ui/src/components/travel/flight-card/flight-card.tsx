@@ -1,9 +1,7 @@
 'use client';
 
-import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
-import { Button } from '../../ui/button/index.js';
-import { Badge } from '../../ui/badge/index.js';
+import { cn } from '../../../utils/cn';
+import { Button } from '../../ui/button/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -54,108 +52,200 @@ export interface FlightCardProps {
   currency?: string;
   totalPrice?: string;
   fareClass?: string;
+  /** Accepted but not rendered — shown in the detail panel */
   fareBreakdown?: FareBreakdownItem[];
   baggage?: BaggageAllowance;
   isBestValue?: boolean;
   isCheapest?: boolean;
   seatsLeft?: number;
-  similarCount?: number;
-  /** Compact layout — set true when detail panel opens (iOS fallback for container queries) */
+  /** Compact layout — set true when shown in the 400px mini list */
   isCompact?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
-  onShowSimilar?: () => void;
   className?: string;
 }
 
-// ─── Airline Logo ─────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function AirlineLogo({ segment }: { segment: FlightSegment }) {
+function parseArrivalTime(time: string): { base: string; nextDay?: string } {
+  const match = time.match(/^(.+?)(\+\d+)$/);
+  return match ? { base: match[1].trim(), nextDay: match[2] } : { base: time };
+}
+
+// ─── Airline Emblem ───────────────────────────────────────────────────────────
+
+function AirlineEmblem({ segment }: { segment: FlightSegment }) {
   if (segment.airlineLogo) {
     return (
       <img
         src={segment.airlineLogo}
         alt={segment.airline}
-        className="travel-flight-card-airline-logo"
+        className="travel-flight-card-emblem-img"
       />
     );
   }
   return (
-    <div className="travel-flight-card-airline-fallback" aria-hidden>
+    <div className="travel-flight-card-emblem-fallback" aria-hidden>
       {segment.airline.slice(0, 2).toUpperCase()}
     </div>
   );
 }
 
-// ─── Leg Row ──────────────────────────────────────────────────────────────────
+// ─── Pin Icon ─────────────────────────────────────────────────────────────────
 
-function LegRow({ leg }: { leg: FlightLeg }) {
-  const first = leg.segments[0];
-  const last = leg.segments[leg.segments.length - 1];
-  const airlineLabel = leg.segments.length > 1
-    ? leg.segments.every(s => s.airline === first.airline)
-      ? first.airline
-      : 'Multiple airlines'
-    : first.airline;
-
+function PinIcon() {
   return (
-    <div className="travel-flight-card-leg">
-      <div className="travel-flight-card-leg-airline">
-        <AirlineLogo segment={first} />
-        <div>
-          <span className="travel-flight-card-leg-airline-name">{airlineLabel}</span>
-          <span className="travel-flight-card-leg-flight-number">{first.flightNumber}</span>
-        </div>
-      </div>
-
-      <div className="travel-flight-card-leg-times">
-        <span className="travel-flight-card-leg-time">{first.departureTime}</span>
-        <span className="travel-flight-card-leg-route">
-          <span className="travel-flight-card-leg-code">{first.origin}</span>
-          <span className="travel-flight-card-leg-arrow" aria-hidden>—</span>
-          <span className="travel-flight-card-leg-code">{last.destination}</span>
-        </span>
-        <span className="travel-flight-card-leg-time">{last.arrivalTime}</span>
-      </div>
-
-      <div className="travel-flight-card-leg-meta">
-        <span className="travel-flight-card-leg-duration">{leg.duration}</span>
-        <span
-          className={cn(
-            'travel-flight-card-leg-stops',
-            leg.stops === 0 && 'travel-flight-card-leg-stops--nonstop',
-          )}
-        >
-          {leg.stops === 0
-            ? 'nonstop'
-            : `${leg.stops} stop${leg.stops > 1 ? 's' : ''}`}
-        </span>
-        {leg.stopAirports && leg.stopAirports.length > 0 && (
-          <span className="travel-flight-card-leg-via">
-            {leg.stopAirports.join(', ')}
-          </span>
-        )}
-      </div>
-    </div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path d="M10.5 2.5h-5l.75 4.5h3.5l.75-4.5z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
+      <line x1="3.5" y1="7" x2="12.5" y2="7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      <line x1="8" y1="7" x2="8" y2="14" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
   );
 }
 
-// ─── Baggage Row ──────────────────────────────────────────────────────────────
+// ─── Baggage SVG Icons ────────────────────────────────────────────────────────
 
-function BaggageRow({ baggage }: { baggage: BaggageAllowance }) {
+function CarryOnIcon() {
   return (
-    <div className="travel-flight-card-baggage" aria-label="Baggage allowance">
-      <span className="travel-flight-card-baggage-item">
-        <span className="travel-flight-card-baggage-icon" aria-hidden>🧳</span>
-        {baggage.carryOn}
-      </span>
-      <span className="travel-flight-card-baggage-item">
-        <span className="travel-flight-card-baggage-icon" aria-hidden>💼</span>
-        {baggage.checked}
-        {baggage.checkedFee && (
-          <span className="travel-flight-card-baggage-fee">{baggage.checkedFee}</span>
-        )}
-      </span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <rect x="4.5" y="5.5" width="7" height="8" rx="0.75" stroke="currentColor" strokeWidth="1.1" />
+      <path d="M6 5.5V4.5a2 2 0 0 1 4 0v1" stroke="currentColor" strokeWidth="1.1" />
+      <line x1="8" y1="7.5" x2="8" y2="11.5" stroke="currentColor" strokeWidth="1.1" />
+      <line x1="5.5" y1="9.5" x2="10.5" y2="9.5" stroke="currentColor" strokeWidth="1.1" />
+    </svg>
+  );
+}
+
+function CheckedBagIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <rect x="3.5" y="5.5" width="9" height="8" rx="0.75" stroke="currentColor" strokeWidth="1.1" />
+      <path d="M6 5.5V4.5a2 2 0 0 1 4 0v1" stroke="currentColor" strokeWidth="1.1" />
+      <path d="M3.5 8.5h9" stroke="currentColor" strokeWidth="1.1" />
+    </svg>
+  );
+}
+
+// ─── Leg Row ──────────────────────────────────────────────────────────────────
+
+function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
+  const first = leg.segments[0];
+  const last = leg.segments[leg.segments.length - 1];
+
+  const airlineName =
+    leg.segments.length > 1
+      ? leg.segments.every((s) => s.airline === first.airline)
+        ? first.airline
+        : 'Multiple airlines'
+      : first.airline;
+
+  const arr = parseArrivalTime(last.arrivalTime);
+
+  const stopsLabel =
+    leg.stops === 0
+      ? 'nonstop'
+      : `${leg.stops} stop${leg.stops > 1 ? 's' : ''}`;
+
+  const stopCity = leg.stopAirports?.[0];
+
+  const originLabel = first.originCity
+    ? `${first.originCity} (${first.origin})`
+    : first.origin;
+  const destinationLabel = last.destinationCity
+    ? `${last.destinationCity} (${last.destination})`
+    : last.destination;
+
+  return (
+    <div className="travel-flight-card-leg">
+      {/* Airline emblem — CSS tooltip on hover */}
+      <div className="travel-flight-card-leg-emblem-wrap">
+        <AirlineEmblem segment={first} />
+        <span className="travel-flight-card-leg-tooltip" aria-hidden>
+          <span className="travel-flight-card-leg-airline-name">{airlineName}</span>
+          {' '}
+          <span className="travel-flight-card-leg-flight-num">{first.flightNumber}</span>
+        </span>
+      </div>
+
+      {/* Itinerary: times + route — flex-1, min-width 0 */}
+      <div className="travel-flight-card-leg-info">
+        <div className="travel-flight-card-leg-times-row">
+          <span className="travel-flight-card-leg-time">{first.departureTime}</span>
+          <span className="travel-flight-card-leg-dash" aria-hidden>–</span>
+          <span className="travel-flight-card-leg-time travel-flight-card-leg-time-arr">
+            {arr.base}
+            {arr.nextDay && (
+              <sup className="travel-flight-card-leg-next-day">{arr.nextDay}</sup>
+            )}
+          </span>
+        </div>
+
+        <div className="travel-flight-card-leg-route">
+          {isCompact ? (
+            <>
+              <span>{first.origin}</span>
+              <span aria-hidden> – </span>
+              <span>{last.destination}</span>
+              <span className="travel-flight-card-leg-route-dot" aria-hidden> · </span>
+              <span className="travel-flight-card-leg-duration-compact">{leg.duration}</span>
+            </>
+          ) : (
+            <>
+              <span>{originLabel}</span>
+              <span aria-hidden> – </span>
+              <span>{destinationLabel}</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop: duration column (96px) */}
+      {!isCompact && (
+        <div className="travel-flight-card-leg-duration-col">
+          <span className="travel-flight-card-leg-duration-val">{leg.duration}</span>
+        </div>
+      )}
+
+      {/* Stops column */}
+      {isCompact ? (
+        <div className="travel-flight-card-leg-stops-col">
+          <span
+            className={cn(
+              'travel-flight-card-leg-stops-text',
+              leg.stops === 0 && 'travel-flight-card-leg-stops-text--nonstop',
+            )}
+          >
+            {stopsLabel}
+          </span>
+          {stopCity && (
+            <span className="travel-flight-card-leg-stop-city-compact">{stopCity}</span>
+          )}
+        </div>
+      ) : (
+        <div className="travel-flight-card-leg-stops-desk">
+          <span
+            className={cn(
+              'travel-flight-card-leg-stops-val',
+              leg.stops === 0 && 'travel-flight-card-leg-stops-val--nonstop',
+            )}
+          >
+            {stopsLabel}
+          </span>
+          {stopCity && (
+            <span className="travel-flight-card-leg-stop-city">{stopCity}</span>
+          )}
+        </div>
+      )}
+
+      {/* Pin segment button */}
+      <button
+        type="button"
+        className="travel-flight-card-leg-pin-btn"
+        aria-label="Pin this flight segment"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <PinIcon />
+      </button>
     </div>
   );
 }
@@ -167,20 +257,25 @@ export function FlightCard({
   price,
   totalPrice,
   fareClass,
-  fareBreakdown = [],
   baggage,
   isBestValue,
   isCheapest,
   seatsLeft,
-  similarCount,
   isCompact = false,
   isSelected = false,
   onSelect,
-  onShowSimilar,
   className,
 }: FlightCardProps) {
-  const [showBreakdown, setShowBreakdown] = React.useState(false);
   const displayLegs = legs.slice(0, 6);
+
+  const tagLabel = isBestValue ? 'Best value' : isCheapest ? 'Cheapest' : null;
+
+  const operatedBy = displayLegs
+    .flatMap((l) => l.segments)
+    .map((s) => s.operatedBy)
+    .filter(Boolean)[0];
+
+  const showUrgency = !isCompact && seatsLeft !== undefined && seatsLeft <= 9;
 
   return (
     <article
@@ -188,89 +283,92 @@ export function FlightCard({
       data-compact={isCompact || undefined}
       data-selected={isSelected || undefined}
       aria-selected={isSelected}
+      onClick={onSelect}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect?.(); } }}
+      tabIndex={0}
     >
-      <div className="travel-flight-card-body">
-        {/* Legs */}
-        <div className="travel-flight-card-legs">
-          {displayLegs.map((leg, i) => (
-            <LegRow key={i} leg={leg} />
-          ))}
-        </div>
-
-        {/* Price column */}
-        <div className="travel-flight-card-price-col">
-          {(isBestValue || isCheapest) && (
-            <div className="travel-flight-card-price-badge">
-              {isBestValue && <Badge variant="deal">Best value</Badge>}
-              {isCheapest && !isBestValue && <Badge variant="popular">Cheapest</Badge>}
+      <div className="travel-flight-card-inner">
+        {/* ── Content ── */}
+        <div className="travel-flight-card-content">
+          {tagLabel && (
+            <div
+              className={cn(
+                'travel-flight-card-tag',
+                isBestValue && 'travel-flight-card-tag--deal',
+                isCheapest && !isBestValue && 'travel-flight-card-tag--cheap',
+              )}
+            >
+              {tagLabel}
             </div>
           )}
 
-          {seatsLeft !== undefined && seatsLeft <= 9 && (
-            <p className="travel-flight-card-seats-left">
-              {seatsLeft} seat{seatsLeft !== 1 ? 's' : ''} left
-            </p>
+          <div className="travel-flight-card-legs">
+            {displayLegs.map((leg, i) => (
+              <LegRow key={i} leg={leg} isCompact={isCompact} />
+            ))}
+          </div>
+
+          {operatedBy && (
+            <p className="travel-flight-card-operated-by">{operatedBy}</p>
+          )}
+        </div>
+
+        {/* ── Price block ── */}
+        <div className="travel-flight-card-price-col">
+          {showUrgency && (
+            <div className="travel-flight-card-urgency">
+              <span className="travel-flight-card-urgency-badge">{seatsLeft}</span>
+              <span className="travel-flight-card-urgency-label">seats left</span>
+            </div>
           )}
 
-          <p className="travel-flight-card-price">{price}</p>
+          <div className="travel-flight-card-price-center">
+            <p className="travel-flight-card-price-display">{price}</p>
+            {totalPrice && (
+              <p className="travel-flight-card-total-price">{totalPrice} total</p>
+            )}
+            {!isCompact && fareClass && (
+              <p className="travel-flight-card-fare-class">{fareClass}</p>
+            )}
+          </div>
 
-          {totalPrice && (
-            <p className="travel-flight-card-total-price">{totalPrice} total</p>
+          {!isCompact && (
+            <Button size="sm" onClick={(e) => e.stopPropagation()} className="travel-flight-card-select-btn">
+              Select
+            </Button>
           )}
 
-          {fareClass && (
-            <Badge variant="outline" className="travel-flight-card-fare-class">{fareClass}</Badge>
+          {baggage && (
+            <div className="travel-flight-card-baggage">
+              <div className="travel-flight-card-baggage-icons">
+                <span
+                  className="travel-flight-card-baggage-item"
+                  aria-label={`${baggage.carryOn} carry-on bag`}
+                >
+                  <CarryOnIcon />
+                  <span className="travel-flight-card-baggage-count">{baggage.carryOn}</span>
+                </span>
+                <span
+                  className={cn(
+                    'travel-flight-card-baggage-item',
+                    baggage.checked === 0 && 'travel-flight-card-baggage-item--none',
+                  )}
+                  aria-label={`${baggage.checked} checked bag`}
+                >
+                  <CheckedBagIcon />
+                  <span className="travel-flight-card-baggage-count">{baggage.checked}</span>
+                </span>
+              </div>
+              {baggage.checkedFee && (
+                <p className="travel-flight-card-bag-fee">
+                  Optional bag (20kg){' '}
+                  <span className="travel-flight-card-bag-fee-price">{baggage.checkedFee}</span>
+                </p>
+              )}
+            </div>
           )}
-
-          {baggage && <BaggageRow baggage={baggage} />}
-
-          <Button size="sm" onClick={onSelect}>Select</Button>
         </div>
       </div>
-
-      {/* Fare breakdown */}
-      {fareBreakdown.length > 0 && (
-        <div className="travel-flight-card-breakdown-wrap">
-          <button
-            type="button"
-            className="travel-flight-card-breakdown-toggle"
-            onClick={() => setShowBreakdown(v => !v)}
-            aria-expanded={showBreakdown}
-          >
-            Fare breakdown
-            <span className="travel-flight-card-breakdown-chevron" aria-hidden>
-              {showBreakdown ? '▲' : '▼'}
-            </span>
-          </button>
-          {showBreakdown && (
-            <div className="travel-flight-card-breakdown-content">
-              {fareBreakdown.map((item, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    'travel-flight-card-breakdown-row',
-                    item.type === 'total' && 'travel-flight-card-breakdown-row--total',
-                  )}
-                >
-                  <span className="travel-flight-card-breakdown-label">{item.label}</span>
-                  <span className="travel-flight-card-breakdown-amount">{item.amount}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Similar flights */}
-      {similarCount !== undefined && similarCount > 0 && (
-        <button
-          type="button"
-          className="travel-flight-card-similar"
-          onClick={onShowSimilar}
-        >
-          Show {similarCount} similar flight{similarCount !== 1 ? 's' : ''} at this price
-        </button>
-      )}
     </article>
   );
 }

@@ -3,8 +3,8 @@
 import * as React from 'react';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
 import { ChevronDown } from 'lucide-react';
-import { cn } from '../../../utils/cn.js';
-import { Icon } from '../icon/index.js';
+import { cn } from '../../../utils/cn';
+import { Icon } from '../icon/index';
 
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,

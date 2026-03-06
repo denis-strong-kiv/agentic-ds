@@ -1,14 +1,14 @@
 'use client';
 
-import { cn } from '../../../utils/cn.js';
-import { Button } from '../../ui/button/index.js';
-import { Badge } from '../../ui/badge/index.js';
-import { Checkbox } from '../../ui/checkbox/index.js';
-import { Slider } from '../../ui/slider/index.js';
-import { Switch } from '../../ui/switch/index.js';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../ui/accordion/index.js';
-import { Label } from '../../ui/label/index.js';
-import { RadioGroup, RadioGroupItem } from '../../ui/radio-group/index.js';
+import { cn } from '../../../utils/cn';
+import { Button } from '../../ui/button/index';
+import { Badge } from '../../ui/badge/index';
+import { Checkbox } from '../../ui/checkbox/index';
+import { Slider } from '../../ui/slider/index';
+import { Switch } from '../../ui/switch/index';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../ui/accordion/index';
+import { Label } from '../../ui/label/index';
+import { RadioGroup, RadioGroupItem } from '../../ui/radio-group/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

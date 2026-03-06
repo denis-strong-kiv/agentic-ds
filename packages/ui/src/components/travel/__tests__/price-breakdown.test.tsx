@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { PriceBreakdown } from '../price-breakdown/index.js';
-import type { LineItem, PassengerBreakdown } from '../price-breakdown/index.js';
+import { PriceBreakdown } from '../price-breakdown/index';
+import type { LineItem, PassengerBreakdown } from '../price-breakdown/index';
 
 const BASE_ITEMS: LineItem[] = [
   { label: 'Base fare', amount: '$300', type: 'base' },

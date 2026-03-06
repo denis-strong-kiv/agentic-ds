@@ -1,9 +1,9 @@
 import { render, screen, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { BrandProvider, useBrand, useBrandContext } from '../../brand/BrandProvider.js';
-import { Button } from '../ui/button/index.js';
-import { Badge } from '../ui/badge/index.js';
-import { Card, CardContent } from '../ui/card/index.js';
+import { BrandProvider, useBrand, useBrandContext } from '../../brand/BrandProvider';
+import { Button } from '../ui/button/index';
+import { Badge } from '../ui/badge/index';
+import { Card, CardContent } from '../ui/card/index';
 
 // ─── Fetch mock ───────────────────────────────────────────────────────────────
 

@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
-import { buttonVariants } from '../button/index.js';
+import { cn } from '../../../utils/cn';
+import { buttonVariants } from '../button/index';
 
 type CalendarDate = Date;
 

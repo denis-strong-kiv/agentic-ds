@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../utils/cn.js';
+import { cn } from '../../../utils/cn';
 
 const skeletonVariants = cva('ui-skeleton', {
   variants: {

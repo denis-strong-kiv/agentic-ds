@@ -1,10 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '../popover/index.js';
-import { Button } from '../button/index.js';
-import { Calendar } from '../calendar/index.js';
-import { cn } from '../../../utils/cn.js';
+import { Popover, PopoverContent, PopoverTrigger } from '../popover/index';
+import { Button } from '../button/index';
+import { Calendar } from '../calendar/index';
+import { cn } from '../../../utils/cn';
 
 export interface DatePickerProps {
   value?: Date;

@@ -87,25 +87,47 @@
   }
 
   .tsf-tab-button {
-    border-bottom-width: 2px;
-    padding: 0.75rem 2.5rem;
-    font-size: 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 48px;
+    min-width: 88px;
+    padding-inline: 16px;
+    border-radius: 12px;
+    font-size: 14px;
     font-weight: 500;
-    transition: color var(--duration-fast, 100ms), border-color var(--duration-fast, 100ms);
+    line-height: 18px;
+    color: #555b6d;
+    transition: color var(--duration-fast, 100ms);
+  }
+
+  /* Pill underline via pseudo-element — hidden by default */
+  .tsf-tab-button::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: #3a3e4a;
+    opacity: 0;
+    flex-shrink: 0;
+    transition: width var(--duration-fast, 100ms), opacity var(--duration-fast, 100ms);
   }
 
   .tsf-tab-button--active {
-    border-color: var(--color-foreground-default);
-    color: var(--color-foreground-default);
+    font-weight: 600;
+    color: #171d2e;
+  }
+
+  .tsf-tab-button--active::after {
+    width: 16px;
+    opacity: 1;
   }
 
   .tsf-tab-button--inactive {
-    border-color: transparent;
-    color: var(--color-foreground-muted);
-  }
-
-  .tsf-tab-button--inactive:hover {
-    color: var(--color-foreground-default);
+    color: #555b6d;
   }
 
   .tsf-trip-type-label {
@@ -189,7 +211,7 @@
   .tsf-tablist {
     display: flex;
     justify-content: center;
-    border-block-end: 1px solid var(--color-border-default);
+    gap: 8px;
   }
 
   .tsf-trip-type-shell {

@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
-import { Popover, PopoverTrigger, PopoverContent } from '../../ui/popover/index.js';
+import { cn } from '../../../utils/cn';
+import { Popover, PopoverTrigger, PopoverContent } from '../../ui/popover/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

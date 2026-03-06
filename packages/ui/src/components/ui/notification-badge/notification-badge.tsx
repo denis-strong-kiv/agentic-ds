@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../utils/cn.js';
+import { cn } from '../../../utils/cn';
 
 // Circular badge for numeric counts, status dots, or icon indicators.
 // Distinct from Badge (tag/label) — always circular, designed to overlay other elements.

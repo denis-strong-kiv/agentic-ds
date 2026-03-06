@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BookingStepper, createBookingSteps } from '../booking-stepper/index.js';
-import type { BookingStep } from '../booking-stepper/index.js';
+import { BookingStepper, createBookingSteps } from '../booking-stepper/index';
+import type { BookingStep } from '../booking-stepper/index';
 
 function makeSteps(): BookingStep[] {
   return [

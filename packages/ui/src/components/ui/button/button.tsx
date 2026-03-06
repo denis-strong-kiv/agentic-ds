@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../utils/cn.js';
+import { cn } from '../../../utils/cn';
 
 // Hover/active states are derived in CSS via OKLCH relative color syntax:
 //   oklch(from <base> calc(l - 0.07) c h)  → 7% darker lightness, same chroma + hue

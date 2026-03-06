@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
-import { cn } from '../../../utils/cn.js';
-import { Icon } from '../icon/index.js';
+import { cn } from '../../../utils/cn';
+import { Icon } from '../icon/index';
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,

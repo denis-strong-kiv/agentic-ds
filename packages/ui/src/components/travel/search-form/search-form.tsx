@@ -13,15 +13,15 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cva } from 'class-variance-authority';
-import { cn } from '../../../utils/cn.js';
-import { Icon } from '../../ui/icon/index.js';
-import { Calendar } from '../../ui/calendar/index.js';
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover/index.js';
-import { Button } from '../../ui/button/index.js';
+import { cn } from '../../../utils/cn';
+import { Icon } from '../../ui/icon/index';
+import { Calendar } from '../../ui/calendar/index';
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover/index';
+import { Button } from '../../ui/button/index';
 import {
   DestinationItemContent,
   type DestinationDisplayType,
-} from '../destination-item-content/index.js';
+} from '../destination-item-content/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -116,6 +116,9 @@ export type SearchVertical = SearchTab;
 
 export interface TravelSearchFormProps {
   defaultTab?: SearchTab;
+  /** Controlled tab — when provided the internal tablist is hidden */
+  activeTab?: SearchTab;
+  onTabChange?: (tab: SearchTab) => void;
   destinationOptions?: DestinationOption[];
   airportOptions?: DestinationOption[];
   recentSearches?: RecentSearchItem[];
@@ -1062,13 +1065,20 @@ const DEFAULT_LEG: SearchFormLeg = { origin: null, destination: null, departureD
 
 export function TravelSearchForm({
   defaultTab = 'flights',
+  activeTab: controlledTab,
+  onTabChange,
   destinationOptions,
   airportOptions = [],
   recentSearches = [],
   onSearch,
   className,
 }: TravelSearchFormProps) {
-  const [activeTab, setActiveTab] = React.useState<SearchTab>(defaultTab);
+  const [internalTab, setInternalTab] = React.useState<SearchTab>(defaultTab);
+  const activeTab = controlledTab ?? internalTab;
+  function setActiveTab(tab: SearchTab) {
+    setInternalTab(tab);
+    onTabChange?.(tab);
+  }
   const [tripType, setTripType] = React.useState<TripType>('round-trip');
 
   // Flights state
@@ -1140,21 +1150,23 @@ export function TravelSearchForm({
     >
       <div className={cn('tsf-root', className)}>
 
-        {/* ── Top nav tabs ─────────────────────────────────────────────────── */}
-        <div className="tsf-tablist" role="tablist" aria-label="Travel type">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={tabBtn(activeTab === tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        {/* ── Top nav tabs — hidden when controlled externally ─────────────── */}
+        {controlledTab === undefined && (
+          <div className="tsf-tablist" role="tablist" aria-label="Travel type">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={tabBtn(activeTab === tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* ── Trip type radios (flights only, animated) ────────────────────── */}
         <div

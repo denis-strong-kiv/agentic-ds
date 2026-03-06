@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
-import { Input } from '../input/index.js';
+import { Input } from '../input/index';
 
 describe('Input', () => {
   it('renders an input element', () => {

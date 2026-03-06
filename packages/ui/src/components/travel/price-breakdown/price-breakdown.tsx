@@ -1,9 +1,9 @@
 'use client';
 
-import { cn } from '../../../utils/cn.js';
-import { Badge } from '../../ui/badge/index.js';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../ui/accordion/index.js';
-import { Separator } from '../../ui/separator/index.js';
+import { cn } from '../../../utils/cn';
+import { Badge } from '../../ui/badge/index';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../ui/accordion/index';
+import { Separator } from '../../ui/separator/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

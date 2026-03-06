@@ -11,8 +11,17 @@ const analyze = withBundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['@travel/ui'],
   experimental: {
     // typedRoutes: true, // enable when app routes are more complete
+  },
+  webpack: (config) => {
+    // Resolve TypeScript .js imports (ESM-style) for transpiled workspace packages
+    config.resolve.extensionAlias = {
+      '.js': ['.ts', '.tsx', '.js'],
+      '.mjs': ['.mts', '.mjs'],
+    };
+    return config;
   },
 };
 

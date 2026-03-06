@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ActivityCard } from '../activity-card/index.js';
-import type { ActivityCardProps } from '../activity-card/index.js';
+import { ActivityCard } from '../activity-card/index';
+import type { ActivityCardProps } from '../activity-card/index';
 
 const PROPS: ActivityCardProps = {
   title: 'Eiffel Tower Skip-the-Line Tour',

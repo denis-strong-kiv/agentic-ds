@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Building2, Globe2, Landmark, Map, MapPin, Plane } from 'lucide-react';
 import { cva } from 'class-variance-authority';
-import { Icon } from '../../ui/icon/index.js';
+import { Icon } from '../../ui/icon/index';
 
 export type DestinationDisplayType =
   | 'airport'

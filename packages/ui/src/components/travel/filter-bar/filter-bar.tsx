@@ -1,11 +1,11 @@
 'use client';
 
-import { cn } from '../../../utils/cn.js';
-import { Slider } from '../../ui/slider/index.js';
-import { Checkbox } from '../../ui/checkbox/index.js';
-import { Label } from '../../ui/label/index.js';
-import { FilterChip } from '../filter-chip/index.js';
-import type { FilterState, SortOption } from '../filter-panel/index.js';
+import { cn } from '../../../utils/cn';
+import { Slider } from '../../ui/slider/index';
+import { Checkbox } from '../../ui/checkbox/index';
+import { Label } from '../../ui/label/index';
+import { FilterChip } from '../filter-chip/index';
+import type { FilterState, SortOption } from '../filter-panel/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

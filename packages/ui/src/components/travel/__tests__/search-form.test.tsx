@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TravelSearchForm } from '../search-form/index.js';
-import type { TravelSearchPayload } from '../search-form/index.js';
+import { TravelSearchForm } from '../search-form/index';
+import type { TravelSearchPayload } from '../search-form/index';
 
 const AIRPORTS = [
   { iata: 'JFK', city: 'New York', country: 'United States' },

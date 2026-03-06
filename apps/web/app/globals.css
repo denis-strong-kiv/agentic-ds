@@ -1,8 +1,63 @@
 @import "tailwindcss";
 
+/* Brand token CSS custom properties (--color-*, --shape-*, --shadow-*, etc.) */
+@import "../../../packages/tokens/src/output/tokens.css";
+
+/* Ensure Tailwind scans UI component source for any utility classes */
+@source "../../../packages/ui/src";
+
+/* Motion keyframes */
+@import "../../../packages/ui/src/styles/motion.css";
+
+/* Component semantic CSS classes */
+@import "../../../packages/ui/src/styles/components.css";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* ── Default brand color tokens ─────────────────────────────────────────── */
+  --color-primary-default: oklch(0.50 0.22 250);
+  --color-primary-hover: oklch(0.44 0.22 250);
+  --color-primary-active: oklch(0.38 0.22 250);
+  --color-primary-foreground: oklch(0.98 0.01 250);
+  --color-accent-default: oklch(0.52 0.20 285);
+  --color-accent-hover: oklch(0.46 0.20 285);
+  --color-accent-active: oklch(0.40 0.20 285);
+  --color-accent-foreground: oklch(0.98 0.01 285);
+  --color-secondary-default: oklch(0.52 0.12 267);
+  --color-secondary-hover: oklch(0.46 0.12 267);
+  --color-secondary-foreground: oklch(0.98 0.01 267);
+  --color-background-default: oklch(0.99 0.002 250);
+  --color-background-subtle: oklch(0.96 0.004 250);
+  --color-surface-card: oklch(1 0 0);
+  --color-surface-popover: oklch(1 0 0);
+  --color-surface-overlay: oklch(0% 0 0 / 0.6);
+  --color-foreground-default: oklch(0.12 0.01 250);
+  --color-foreground-muted: oklch(0.45 0.01 250);
+  --color-foreground-subtle: oklch(0.52 0.01 250);
+  --color-foreground-on-emphasis: oklch(0.98 0.01 250);
+  --color-border-default: oklch(0.88 0.005 250);
+  --color-border-muted: oklch(0.93 0.003 250);
+  --color-success-default: oklch(0.52 0.17 145);
+  --color-success-foreground: oklch(0.98 0.02 145);
+  --color-success-subtle: oklch(0.94 0.04 145);
+  --color-warning-default: oklch(0.62 0.20 95);
+  --color-warning-foreground: oklch(0.22 0.07 80);
+  --color-warning-subtle: oklch(0.96 0.06 95);
+  --color-error-default: oklch(0.56 0.20 25);
+  --color-error-foreground: oklch(0.98 0.02 25);
+  --color-error-subtle: oklch(0.96 0.04 25);
+  --color-info-default: oklch(0.52 0.18 250);
+  --color-info-foreground: oklch(0.98 0.02 250);
+  --color-info-subtle: oklch(0.95 0.04 250);
+
+  /* Shape presets */
+  --shape-preset-button: 8px;
+  --shape-preset-card: 12px;
+  --shape-preset-input: 6px;
+  --shape-preset-dialog: 16px;
+  --shape-preset-badge: 6px;
 }
 
 @theme inline {
@@ -15,6 +70,41 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --color-primary-default: oklch(0.65 0.20 250);
+    --color-primary-hover: oklch(0.70 0.20 250);
+    --color-primary-active: oklch(0.75 0.20 250);
+    --color-primary-foreground: oklch(0.12 0.04 250);
+    --color-accent-default: oklch(0.65 0.18 285);
+    --color-accent-hover: oklch(0.70 0.18 285);
+    --color-accent-active: oklch(0.75 0.18 285);
+    --color-accent-foreground: oklch(0.12 0.04 285);
+    --color-secondary-default: oklch(0.62 0.10 267);
+    --color-secondary-hover: oklch(0.68 0.10 267);
+    --color-secondary-foreground: oklch(0.12 0.04 267);
+    --color-background-default: oklch(0.13 0.01 250);
+    --color-background-subtle: oklch(0.17 0.01 250);
+    --color-surface-card: oklch(0.17 0.01 250);
+    --color-surface-popover: oklch(0.20 0.01 250);
+    --color-surface-overlay: oklch(0% 0 0 / 0.75);
+    --color-foreground-default: oklch(0.94 0.005 250);
+    --color-foreground-muted: oklch(0.65 0.01 250);
+    --color-foreground-subtle: oklch(0.50 0.01 250);
+    --color-foreground-on-emphasis: oklch(0.12 0.01 250);
+    --color-border-default: oklch(0.28 0.01 250);
+    --color-border-muted: oklch(0.22 0.01 250);
+    --color-success-default: oklch(0.65 0.16 145);
+    --color-success-foreground: oklch(0.12 0.04 145);
+    --color-success-subtle: oklch(0.20 0.06 145);
+    --color-warning-default: oklch(0.75 0.19 95);
+    --color-warning-foreground: oklch(0.15 0.06 80);
+    --color-warning-subtle: oklch(0.22 0.07 95);
+    --color-error-default: oklch(0.68 0.18 25);
+    --color-error-foreground: oklch(0.12 0.04 25);
+    --color-error-subtle: oklch(0.20 0.06 25);
+    --color-info-default: oklch(0.65 0.17 250);
+    --color-info-foreground: oklch(0.12 0.04 250);
+    --color-info-subtle: oklch(0.20 0.06 250);
   }
 }
 
@@ -189,5 +279,103 @@ body {
     .web-root-home-cta {
       width: 158px;
     }
+  }
+
+  /* ── Search results page ─────────────────────────────────────────────────── */
+
+  .web-flights-page {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+    background: var(--color-background-default);
+  }
+
+  /* Body: sidebar | [mini-list] | main */
+  .web-flights-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* ── Sidebar — 320px, slides as a whole unit via negative margin ────────── */
+  .web-flights-sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    border-inline-end: 1px solid var(--color-border-muted);
+    background: var(--color-surface-card);
+    transition: margin-inline-start 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .web-flights-sidebar::-webkit-scrollbar { display: none; }
+  .web-flights-sidebar--closed {
+    margin-inline-start: -320px;
+  }
+
+  /* ── Mini flight list — 400px, shown only when detail open ──────────────── */
+  .web-flights-mini-list {
+    display: none;
+    width: 400px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    border-inline-end: 1px solid var(--color-border-muted);
+    background: var(--color-background-default);
+  }
+  .web-flights-mini-list::-webkit-scrollbar { display: none; }
+  .web-flights-body[data-detail-open] .web-flights-mini-list {
+    display: block;
+  }
+  .web-flights-mini-list-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  /* ── Main area — 800px for large cards, 720px for flight details ─────────── */
+  .web-flights-main {
+    width: 800px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background: var(--color-background-default);
+    border-inline-end: 1px solid var(--color-border-muted);
+  }
+  .web-flights-main::-webkit-scrollbar { display: none; }
+  .web-flights-body[data-detail-open] .web-flights-main {
+    width: 720px;
+  }
+  .web-flights-results-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  /* ── Map — fills all remaining space ─────────────────────────────────────── */
+  .web-flights-map {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+    background: var(--color-background-subtle);
+  }
+  .web-flights-map-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--color-foreground-muted);
+    font-size: 0.875rem;
+    background-image:
+      linear-gradient(var(--color-border-muted) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border-muted) 1px, transparent 1px);
+    background-size: 40px 40px;
   }
 }

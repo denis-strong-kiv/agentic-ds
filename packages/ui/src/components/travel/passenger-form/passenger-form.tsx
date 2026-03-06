@@ -1,13 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
-import { Button } from '../../ui/button/index.js';
-import { Input } from '../../ui/input/index.js';
-import { Label } from '../../ui/label/index.js';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../ui/select/index.js';
-import { Checkbox } from '../../ui/checkbox/index.js';
-import { Textarea } from '../../ui/textarea/index.js';
+import { cn } from '../../../utils/cn';
+import { Button } from '../../ui/button/index';
+import { Input } from '../../ui/input/index';
+import { Label } from '../../ui/label/index';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../ui/select/index';
+import { Checkbox } from '../../ui/checkbox/index';
+import { Textarea } from '../../ui/textarea/index';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '../../../utils/cn.js';
+import { cn } from '../../../utils/cn';
 
 export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   /** Mark field as required with a visual indicator */
