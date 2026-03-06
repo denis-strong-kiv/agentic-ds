@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { SupportChat } from '../support-chat.js';
+import { SupportChat } from '../support-chat/index.js';
 
 describe('SupportChat', () => {
   it('renders semantic root class and FAB', () => {

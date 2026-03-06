@@ -9,12 +9,12 @@
       "types": "./dist/index.d.ts"
     },
     "./components/ui/*": {
-      "import": "./src/components/ui/*.tsx",
-      "types": "./src/components/ui/*.tsx"
+      "import": "./src/components/ui/*/*.tsx",
+      "types": "./src/components/ui/*/*.tsx"
     },
     "./components/travel/*": {
-      "import": "./src/components/travel/*.tsx",
-      "types": "./src/components/travel/*.tsx"
+      "import": "./src/components/travel/*/*.tsx",
+      "types": "./src/components/travel/*/*.tsx"
     },
     "./brand/*": {
       "import": "./src/brand/*.tsx",

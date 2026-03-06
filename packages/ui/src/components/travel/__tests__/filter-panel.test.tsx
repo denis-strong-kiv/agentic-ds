@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { FilterPanel, createDefaultFilters } from '../filter-panel.js';
-import type { FilterState } from '../filter-panel.js';
+import { FilterPanel, createDefaultFilters } from '../filter-panel/index.js';
+import type { FilterState } from '../filter-panel/index.js';
 
 const PROVIDERS = [
   { value: 'AA', label: 'American Airlines' },

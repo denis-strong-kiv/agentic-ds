@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
   DialogHeader,
-} from '../dialog.js';
+} from '../dialog/index.js';
 
 function DialogFixture({
   size,

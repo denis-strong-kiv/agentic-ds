@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { NotificationBadge } from '../notification-badge.js';
+import { NotificationBadge } from '../notification-badge/index.js';
 
 describe('NotificationBadge', () => {
   describe('count rendering', () => {

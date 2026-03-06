@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../card.js';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../card/index.js';
 
 describe('Card', () => {
   it('renders with outlined variant by default', () => {

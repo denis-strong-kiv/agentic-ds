@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { FlightCard } from '../flight-card.js';
-import type { FlightCardProps, FlightSegment } from '../flight-card.js';
+import { FlightCard } from '../flight-card/index.js';
+import type { FlightCardProps, FlightSegment } from '../flight-card/index.js';
 
 const SEGMENT: FlightSegment = {
   airline: 'American Airlines',

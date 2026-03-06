@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import {
   Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption, TableFooter,
-} from '../table.js';
+} from '../table/index.js';
 
 function TableFixture({
   onSort,

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
-import { Alert, AlertTitle, AlertDescription } from '../alert.js';
+import { Alert, AlertTitle, AlertDescription } from '../alert/index.js';
 
 describe('Alert', () => {
   it('renders with role="alert"', () => {

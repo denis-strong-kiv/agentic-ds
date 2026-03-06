@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { HotelCard } from '../hotel-card.js';
-import type { HotelCardProps } from '../hotel-card.js';
+import { HotelCard } from '../hotel-card/index.js';
+import type { HotelCardProps } from '../hotel-card/index.js';
 
 const PROPS: HotelCardProps = {
   name: 'Grand Plaza Hotel',

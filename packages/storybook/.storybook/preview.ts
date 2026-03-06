@@ -10,11 +10,15 @@ import { brandTokens, type BrandId, type ColorMode } from '../stories/tokens/bra
 // Inline styles always win over any stylesheet (including Tailwind's injected CSS),
 // eliminating cascade ordering race conditions in Vite dev mode.
 // CSS custom properties are inherited, so all children resolve var() correctly.
-const BrandDecorator = (Story: React.FC, context: { globals: Record<string, string> }) => {
+const BrandDecorator = (
+  Story: React.FC,
+  context: { globals: Record<string, string>; viewMode?: 'docs' | 'story' }
+) => {
   const brand = (context.globals.brand ?? 'default') as BrandId;
   const mode = (context.globals.colorMode ?? 'light') as ColorMode;
   const locale = context.globals.locale ?? 'en';
   const isRTL = locale === 'ar';
+  const minHeight = context.viewMode === 'docs' ? 'auto' : '100dvh';
 
   const tokens = brandTokens[brand]?.[mode] ?? brandTokens.default.light;
 
@@ -43,7 +47,7 @@ const BrandDecorator = (Story: React.FC, context: { globals: Record<string, stri
         background: 'var(--color-background-default)',
         color: 'var(--color-foreground-default)',
         padding: '1.5rem',
-        minHeight: '100dvh',
+        minHeight,
       } as React.CSSProperties,
     },
     React.createElement(Story),

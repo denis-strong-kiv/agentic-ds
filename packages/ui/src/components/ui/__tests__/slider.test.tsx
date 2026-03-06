@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { Slider } from '../slider.js';
+import { Slider } from '../slider/index.js';
 
 describe('Slider', () => {
   it('renders a slider', () => {

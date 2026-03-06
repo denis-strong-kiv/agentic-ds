@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
-import { Combobox } from '../combobox.js';
+import { Combobox } from '../combobox/index.js';
 
 const options = [
   { value: 'economy', label: 'Economy' },

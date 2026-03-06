@@ -71,6 +71,13 @@ Every component and widget must use UI kit components wherever one exists. Raw H
 - Interaction and theme styles (hover/active/focus/disabled/dark/RTL) live in CSS contracts, not inline utility literals
 - If directionality is needed, use logical properties in CSS contracts (`margin-inline-start`, `padding-inline-end`, etc.)
 
+### Modern CSS structure targeting (mandatory)
+- Style internal DOM tree structure from CSS contracts using semantic roots and modern selectors (`:where(...)`, `:is(...)`, child `>`, adjacent `+`) rather than utility chains in TSX
+- Component TSX should expose stable semantic hooks (block/element/modifier classes or `data-*` state attributes) for internal parts that need styling
+- Prefer low-specificity contract patterns such as `.travel-component :where(.travel-component-element)` to keep overrides predictable
+- Keep interaction/state logic in CSS contracts (`:hover`, `:focus-visible`, `:disabled`, `[aria-*]`, `[data-state]`), not inline utility literals in JSX
+- Direct type/spacing/layout utility classes in JSX are disallowed in migrated files; use semantic class contracts exclusively
+
 ### Migration guardrail when editing existing code
 - If a file still has long utility class strings and you modify that file, migrate the edited region to semantic class contracts in the same change
 - Do not introduce new inline hardcoded color/shadow/spacing literals while migrating

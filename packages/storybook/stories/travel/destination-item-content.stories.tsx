@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Plane } from 'lucide-react';
+import { ArrowLeftRight } from 'lucide-react';
 import { DestinationItemContent } from '@travel/ui/components/travel/destination-item-content';
 import { Icon } from '@travel/ui/components/ui/icon';
 
@@ -29,27 +29,9 @@ type Story = StoryObj<typeof DestinationItemContent>;
 
 export const AirportRow: Story = {
   args: {
-    leading: (
-      <span
-        style={{
-          width: 48,
-          height: 48,
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 12,
-          background: 'var(--color-background-subtle)',
-          color: 'var(--color-foreground-muted)',
-          flexShrink: 0,
-        }}
-      >
-        <Icon icon={Plane} size="md" aria-hidden />
-      </span>
-    ),
-    title: 'John F. Kennedy Intl Airport',
-    trailing: <span style={{ fontWeight: 600, color: 'var(--color-foreground-subtle)' }}>JFK</span>,
+    destinationType: 'airport',
+    title: 'John F. Kennedy Intl Airport (JFK)',
     subtitle: '13 km from city center',
-    titleClassName: 'text-base font-semibold',
   },
   render: args => (
     <div className="flex items-center gap-3 rounded-lg px-2 py-2">
@@ -60,23 +42,24 @@ export const AirportRow: Story = {
 
 export const CityRow: Story = {
   args: {
-    leading: (
-      <span
-        style={{
-          width: 40,
-          textAlign: 'center',
-          fontSize: 12,
-          fontWeight: 600,
-          color: 'var(--color-foreground-subtle)',
-          flexShrink: 0,
-        }}
-      >
-        CITY
-      </span>
-    ),
+    destinationType: 'city',
     title: 'London',
     subtitle: 'England, United Kingdom',
-    meta: 'City',
+    imageUrl: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=160&q=60',
+    imageAlt: 'London skyline',
+  },
+  render: args => (
+    <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+      <DestinationItemContent {...args} />
+    </div>
+  ),
+};
+
+export const CityFallbackIcon: Story = {
+  args: {
+    destinationType: 'city',
+    title: 'Madrid',
+    subtitle: 'Spain',
   },
   render: args => (
     <div className="flex items-center gap-3 rounded-lg px-2 py-2">
@@ -87,12 +70,18 @@ export const CityRow: Story = {
 
 export const RecentSearchRow: Story = {
   args: {
-    leading: <Icon icon={Plane} size="sm" className="mt-1 shrink-0 text-[var(--color-foreground-muted)]" aria-hidden />,
-    title: 'New York (JFK) ⇄ London (LHR)',
+    destinationType: 'airport',
+    title: (
+      <span className="inline-flex items-center gap-1.5">
+        <span>New York (JFK)</span>
+        <Icon icon={ArrowLeftRight} size="sm" className="shrink-0 text-[var(--color-foreground-subtle)]" aria-hidden />
+        <span>London (LHR)</span>
+      </span>
+    ),
     subtitle: 'Oct 20 – Nov 26',
   },
   render: args => (
-    <div className="flex items-start gap-2 rounded-md px-2 py-2">
+    <div className="flex items-center gap-2 rounded-md px-2 py-2">
       <DestinationItemContent {...args} />
     </div>
   ),
@@ -103,50 +92,41 @@ export const DropdownGroup: Story = {
     <div className="space-y-1">
       <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-[var(--color-background-subtle)]">
         <DestinationItemContent
-          leading={
-            <span
-              style={{
-                width: 48,
-                height: 48,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 12,
-                background: 'var(--color-background-subtle)',
-                color: 'var(--color-foreground-muted)',
-                flexShrink: 0,
-              }}
-            >
-              <Icon icon={Plane} size="md" aria-hidden />
-            </span>
-          }
-          title="LaGuardia Airport"
-          trailing={<span style={{ fontWeight: 600, color: 'var(--color-foreground-subtle)' }}>LGA</span>}
+          destinationType="airport"
+          title="LaGuardia Airport (LGA)"
           subtitle="8 km from city center"
-          titleClassName="text-base font-semibold"
+        />
+      </div>
+
+      <div className="ms-10 flex w-[calc(100%-2.5rem)] items-center gap-3 rounded-lg px-2 py-2 hover:bg-[var(--color-background-subtle)]">
+        <DestinationItemContent
+          destinationType="airport-indented"
+          title="Newark Liberty Intl Airport (EWR)"
+          subtitle="17 km from city center"
         />
       </div>
 
       <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-[var(--color-background-subtle)]">
         <DestinationItemContent
-          leading={
-            <span style={{ width: 40, textAlign: 'center', fontSize: 12, fontWeight: 600, color: 'var(--color-foreground-subtle)', flexShrink: 0 }}>
-              CITY
-            </span>
-          }
           title="Berlin"
           subtitle="Germany"
-          meta="City"
+          destinationType="city"
         />
       </div>
 
       <div className="border-t border-[var(--color-border-default)] pt-2" />
 
-      <div className="flex items-start gap-2 rounded-md px-2 py-2 hover:bg-[var(--color-background-subtle)]">
+      <div className="flex items-center gap-2 rounded-md px-2 py-2 hover:bg-[var(--color-background-subtle)]">
         <DestinationItemContent
-          leading={<Icon icon={Plane} size="sm" className="mt-1 shrink-0 text-[var(--color-foreground-muted)]" aria-hidden />}
-          title="Newark (EWR) → London (LHR)"
+          title={(
+            <span className="inline-flex items-center gap-1.5">
+              <span>Newark (EWR)</span>
+              <Icon icon={ArrowLeftRight} size="sm" className="shrink-0 text-[var(--color-foreground-subtle)]" aria-hidden />
+              <span>London (LHR)</span>
+            </span>
+          )}
           subtitle="Oct 20"
+          destinationType="airport"
         />
       </div>
     </div>

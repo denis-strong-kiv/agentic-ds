@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react';
 import type { ComponentType } from 'react';
 import { TravelSearchForm } from '@travel/ui/components/travel/search-form';
 import type { TravelSearchPayload } from '@travel/ui/components/travel/search-form';
+import type { DestinationOption } from '@travel/ui/components/travel/search-form';
 import { ResizablePreview } from '../utils/resizable-preview';
 
-const AIRPORTS = [
+const AIRPORTS: DestinationOption[] = [
   {
     id: 'airport-jfk',
     iata: 'JFK',
@@ -109,7 +110,7 @@ const AIRPORTS = [
     city: 'New York',
     country: 'United States',
     shortName: 'Liberty Hotel',
-    itemType: 'hotel',
+    itemType: 'neighborhood',
     geographicBreadcrumbs: [
       { type: 'city', label: 'New York' },
       { type: 'country', label: 'United States' },
@@ -136,9 +137,24 @@ const AIRPORTS = [
 ];
 
 const RECENT_SEARCHES = [
-  { route: 'New York (JFK) ⇄ London (LHR)', dates: 'Oct 20 – Nov 26' },
-  { route: 'Newark (EWR) → London (LHR)', dates: 'Oct 20' },
-  { route: 'Newark (EWR) ⇄ London (LHR)', dates: 'Oct 20 – Nov 26' },
+  {
+    route: 'New York (JFK) ⇄ London (LHR)',
+    from: 'New York (JFK)',
+    to: 'London (LHR)',
+    dates: 'Oct 20 – Nov 26',
+  },
+  {
+    route: 'Newark (EWR) ⇄ London (LHR)',
+    from: 'Newark (EWR)',
+    to: 'London (LHR)',
+    dates: 'Oct 20',
+  },
+  {
+    route: 'Newark (EWR) ⇄ London (LHR)',
+    from: 'Newark (EWR)',
+    to: 'London (LHR)',
+    dates: 'Oct 20 – Nov 26',
+  },
 ];
 
 

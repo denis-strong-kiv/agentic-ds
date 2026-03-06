@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
-import { Calendar } from '../calendar.js';
+import { Calendar } from '../calendar/index.js';
 
 const today = new Date();
 const currentYear = today.getFullYear().toString();

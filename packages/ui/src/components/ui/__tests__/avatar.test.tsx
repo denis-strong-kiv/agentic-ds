@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { Avatar, AvatarImage, AvatarFallback, AvatarStatus } from '../avatar.js';
+import { Avatar, AvatarImage, AvatarFallback, AvatarStatus } from '../avatar/index.js';
 
 describe('Avatar', () => {
   it('renders fallback with initials when image is not provided', () => {
