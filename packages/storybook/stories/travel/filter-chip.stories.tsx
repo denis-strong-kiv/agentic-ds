@@ -18,73 +18,42 @@ const meta: Meta = {
 };
 export default meta;
 
-// ─── AllFiltersChip ───────────────────────────────────────────────────────────
+// ─── AllFiltersChip — all states ──────────────────────────────────────────────
 
-export const AllFilters: StoryObj = {
-  name: 'AllFiltersChip — default',
-  render: () => <AllFiltersChip onClick={() => {}} />,
-};
-
-export const AllFiltersActive: StoryObj = {
-  name: 'AllFiltersChip — sidebar open',
-  render: () => <AllFiltersChip isActive onClick={() => {}} />,
-};
-
-export const AllFiltersWithCount: StoryObj = {
-  name: 'AllFiltersChip — with count',
-  render: () => <AllFiltersChip isActive count={3} onClick={() => {}} />,
-};
-
-// ─── QuickFilterChip ──────────────────────────────────────────────────────────
-
-export const QuickFilter: StoryObj = {
-  name: 'QuickFilterChip — inactive',
-  render: () => <QuickFilterChip label="Nonstop only" onClick={() => {}} />,
-};
-
-export const QuickFilterActive: StoryObj = {
-  name: 'QuickFilterChip — active',
+export const AllFiltersChipStates: StoryObj = {
+  name: 'AllFiltersChip — all states',
   render: () => (
-    <QuickFilterChip label="Nonstop only" isActive onClick={() => {}} onClear={() => {}} />
+    <>
+      <AllFiltersChip onClick={() => {}} />
+      <AllFiltersChip isActive onClick={() => {}} />
+      <AllFiltersChip isActive count={3} onClick={() => {}} />
+    </>
   ),
 };
 
-export const QuickFilterToggle: StoryObj = {
+// ─── QuickFilterChip — interactive ───────────────────────────────────────────
+
+export const QuickFilterChipInteractive: StoryObj = {
   name: 'QuickFilterChip — interactive',
   render: () => {
     const [active, setActive] = useState(false);
+    const popover = (
+      <div style={{ padding: '1rem', fontSize: '0.875rem' }}>Filter options go here</div>
+    );
     return (
       <QuickFilterChip
         label="Nonstop only"
         isActive={active}
-        onClick={() => setActive(v => !v)}
-        onClear={active ? () => setActive(false) : undefined}
+        onClick={() => setActive(true)}
+        {...(active ? { popoverContent: popover, onClear: () => setActive(false) } : {})}
       />
     );
   },
 };
 
-// ─── FilterChip ───────────────────────────────────────────────────────────────
+// ─── FilterChip — interactive with real popovers ──────────────────────────────
 
-export const Default: StoryObj = {
-  name: 'FilterChip — inactive',
-  render: () => <FilterChip label="Price" popoverContent={<div style={{ padding: '1rem' }}>Filter UI</div>} />,
-};
-
-export const Active: StoryObj = {
-  name: 'FilterChip — active',
-  render: () => (
-    <FilterChip
-      label="Price"
-      isActive
-      activeLabel="Up to $800"
-      onClear={() => {}}
-      popoverContent={<div style={{ padding: '1rem' }}>Filter UI</div>}
-    />
-  ),
-};
-
-export const WithPricePopover: StoryObj = {
+export const FilterChipPrice: StoryObj = {
   name: 'FilterChip — price popover',
   render: () => {
     const [range, setRange] = useState<[number, number]>([0, 2000]);
@@ -93,15 +62,13 @@ export const WithPricePopover: StoryObj = {
       <FilterChip
         label="Price"
         isActive={isActive}
-        activeLabel={isActive ? `Up to $${range[1]}` : undefined}
-        onClear={isActive ? () => setRange([0, 2000]) : undefined}
+        {...(isActive ? { activeLabel: `Up to $${range[1]}` } : {})}
+        {...(isActive ? { onClear: () => setRange([0, 2000]) } : {})}
         popoverContent={
           <div style={{ padding: '1rem', width: '16rem' }}>
             <p style={{ fontWeight: 600, marginBottom: '0.75rem', fontSize: '0.875rem' }}>Price range</p>
             <Slider
-              min={0}
-              max={2000}
-              step={10}
+              min={0} max={2000} step={10}
               value={range}
               onValueChange={v => setRange(v as [number, number])}
               showValue
@@ -117,7 +84,7 @@ export const WithPricePopover: StoryObj = {
   },
 };
 
-export const WithStopsPopover: StoryObj = {
+export const FilterChipStops: StoryObj = {
   name: 'FilterChip — stops popover',
   render: () => {
     const [stops, setStops] = useState<string[]>([]);
@@ -126,8 +93,8 @@ export const WithStopsPopover: StoryObj = {
       <FilterChip
         label="Stops"
         isActive={stops.length > 0}
-        activeLabel={stops.length > 0 ? `${stops.length} selected` : undefined}
-        onClear={stops.length > 0 ? () => setStops([]) : undefined}
+        {...(stops.length > 0 ? { activeLabel: `${stops.length} selected` } : {})}
+        {...(stops.length > 0 ? { onClear: () => setStops([]) } : {})}
         popoverContent={
           <div style={{ padding: '1rem', width: '12rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {[
@@ -147,7 +114,7 @@ export const WithStopsPopover: StoryObj = {
   },
 };
 
-// ─── All three types together ─────────────────────────────────────────────────
+// ─── Composite — all three types together ─────────────────────────────────────
 
 export const ChipStrip: StoryObj = {
   name: 'All three types — strip',
