@@ -1,8 +1,8 @@
 @layer components {
-  /* ── Chip wrapper — unifies trigger + clear into one visual chip ─────────── */
+  /* ── Chip wrapper — contains popover trigger, provides FLIP anchor ────────── */
   .travel-filter-chip-wrap {
     display: inline-flex;
-    align-items: stretch;
+    align-items: center;
   }
 
   /* ── Base chip ───────────────────────────────────────────────────────────── */
@@ -21,6 +21,7 @@
     white-space: nowrap;
     transition: border-color var(--duration-fast), background var(--duration-fast), color var(--duration-fast);
     cursor: pointer;
+    will-change: transform; /* enables GPU layer for FLIP animation */
   }
   .travel-filter-chip:hover {
     border-color: #c5c8d3;
@@ -48,20 +49,19 @@
     border-color: #171d2e;
     background: #171d2e;
   }
-  /* Full radius when no separate clear button */
-  .travel-filter-chip--set-full {
-    border-radius: 8px;
-  }
-  /* Left side of split chip (trigger) — square end corners */
-  .travel-filter-chip--set-split {
-    border-start-end-radius: 0;
-    border-end-end-radius: 0;
-    border-inline-end: none;
-  }
-
-  /* ── All filters chip ─────────────────────────────────────────────────────── */
+  /* ── All filters chip ──────────────────────────────────────────────────────*/
   .travel-filter-chip--all-filters {
     font-weight: 600;
+  }
+  /* Sidebar-open state — darker than hover, lighter than set */
+  .travel-filter-chip--all-filters-open {
+    border-color: #9ea2af;
+    background: oklch(5% 0.03 250 / 0.1);
+    color: #252937;
+  }
+  .travel-filter-chip--all-filters-open:hover {
+    border-color: #8b8f9c;
+    background: oklch(5% 0.03 250 / 0.14);
   }
 
   /* ── Inner content layout ────────────────────────────────────────────────── */
@@ -71,6 +71,7 @@
     gap: 4px;
   }
   .travel-filter-chip-label {
+    padding-inline: 4px;
     line-height: 18px;
   }
   /* Purple badge — count of active filters (used on All Filters chip) */
@@ -88,11 +89,7 @@
     background: var(--color-primary-default);
     color: #ffffff;
   }
-  .travel-filter-chip--set .travel-filter-chip-count {
-    background: oklch(100% 0 0 / 0.2);
-    color: #ffffff;
-  }
-  .travel-filter-chip-arrow {
+.travel-filter-chip-arrow {
     opacity: 0.5;
     flex-shrink: 0;
   }
@@ -103,6 +100,7 @@
 
   /* ── Clear icon (inside button or as inline span) ────────────────────────── */
   .travel-filter-chip-clear-icon {
+    position: relative;
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
@@ -110,44 +108,16 @@
     cursor: pointer;
     transition: opacity var(--duration-fast);
   }
+  /* Extend hit zone by 8px in every direction — 16px icon + 8+8 = 32px total (full chip height) */
+  .travel-filter-chip-clear-icon::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    bottom: -8px;
+    left: -8px;
+  }
   .travel-filter-chip-clear-icon:hover {
-    opacity: 1;
-  }
-
-  /* ── Separate clear button (popover chips) ───────────────────────────────── */
-  .travel-filter-chip-clear {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding-inline: 6px;
-    height: 2rem;
-    border: 1px solid #3a3e4a;
-    border-inline-start: none;
-    border-start-end-radius: 8px;
-    border-end-end-radius: 8px;
-    background: #3a3e4a;
-    color: #ffffff;
-    opacity: 0.5;
-    transition: background var(--duration-fast), opacity var(--duration-fast);
-    cursor: pointer;
-  }
-  .travel-filter-chip-clear:hover {
-    background: #252937;
-    border-color: #252937;
-    opacity: 1;
-  }
-  .travel-filter-chip-clear:focus-visible {
-    outline: 2px solid var(--color-primary-default);
-    outline-offset: 2px;
-  }
-  /* Keep wrapper hover in sync */
-  .travel-filter-chip-wrap--set:hover .travel-filter-chip--set-split {
-    border-color: #252937;
-    background: #252937;
-  }
-  .travel-filter-chip-wrap--set:hover .travel-filter-chip-clear {
-    border-color: #252937;
-    background: #252937;
     opacity: 1;
   }
 

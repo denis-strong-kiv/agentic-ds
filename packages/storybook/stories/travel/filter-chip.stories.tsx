@@ -1,45 +1,91 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { FilterChip } from '@travel/ui/components/travel/filter-chip';
+import { AllFiltersChip, QuickFilterChip, FilterChip } from '@travel/ui/components/travel/filter-chip';
 import { Slider } from '@travel/ui/components/ui/slider';
 import { Checkbox } from '@travel/ui/components/ui/checkbox';
 import { Label } from '@travel/ui/components/ui/label';
 
-const meta: Meta<typeof FilterChip> = {
+const meta: Meta = {
   title: 'Travel/FilterChip',
-  component: FilterChip,
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', padding: '1.5rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', padding: '1.5rem', alignItems: 'center' }}>
         <Story />
       </div>
     ),
   ],
 };
 export default meta;
-type Story = StoryObj<typeof FilterChip>;
 
-export const Default: Story = {
-  args: { label: 'Price' },
+// ─── AllFiltersChip ───────────────────────────────────────────────────────────
+
+export const AllFilters: StoryObj = {
+  name: 'AllFiltersChip — default',
+  render: () => <AllFiltersChip onClick={() => {}} />,
 };
 
-export const Active: Story = {
-  args: { label: 'Price', isActive: true, activeLabel: 'Up to $800', onClear: () => {} },
+export const AllFiltersActive: StoryObj = {
+  name: 'AllFiltersChip — sidebar open',
+  render: () => <AllFiltersChip isActive onClick={() => {}} />,
 };
 
-export const AllFilters: Story = {
-  name: 'All filters chip',
-  args: { label: 'All filters', isAllFilters: true },
+export const AllFiltersWithCount: StoryObj = {
+  name: 'AllFiltersChip — with count',
+  render: () => <AllFiltersChip isActive count={3} onClick={() => {}} />,
 };
 
-export const AllFiltersWithCount: Story = {
-  name: 'All filters — with count',
-  args: { label: 'All filters', isAllFilters: true, isActive: true, count: 3 },
+// ─── QuickFilterChip ──────────────────────────────────────────────────────────
+
+export const QuickFilter: StoryObj = {
+  name: 'QuickFilterChip — inactive',
+  render: () => <QuickFilterChip label="Nonstop only" onClick={() => {}} />,
 };
 
-export const WithPricePopover: Story = {
-  name: 'With price popover',
+export const QuickFilterActive: StoryObj = {
+  name: 'QuickFilterChip — active',
+  render: () => (
+    <QuickFilterChip label="Nonstop only" isActive onClick={() => {}} onClear={() => {}} />
+  ),
+};
+
+export const QuickFilterToggle: StoryObj = {
+  name: 'QuickFilterChip — interactive',
+  render: () => {
+    const [active, setActive] = useState(false);
+    return (
+      <QuickFilterChip
+        label="Nonstop only"
+        isActive={active}
+        onClick={() => setActive(v => !v)}
+        onClear={active ? () => setActive(false) : undefined}
+      />
+    );
+  },
+};
+
+// ─── FilterChip ───────────────────────────────────────────────────────────────
+
+export const Default: StoryObj = {
+  name: 'FilterChip — inactive',
+  render: () => <FilterChip label="Price" popoverContent={<div style={{ padding: '1rem' }}>Filter UI</div>} />,
+};
+
+export const Active: StoryObj = {
+  name: 'FilterChip — active',
+  render: () => (
+    <FilterChip
+      label="Price"
+      isActive
+      activeLabel="Up to $800"
+      onClear={() => {}}
+      popoverContent={<div style={{ padding: '1rem' }}>Filter UI</div>}
+    />
+  ),
+};
+
+export const WithPricePopover: StoryObj = {
+  name: 'FilterChip — price popover',
   render: () => {
     const [range, setRange] = useState<[number, number]>([0, 2000]);
     const isActive = range[0] > 0 || range[1] < 2000;
@@ -47,8 +93,8 @@ export const WithPricePopover: Story = {
       <FilterChip
         label="Price"
         isActive={isActive}
-        {...(isActive ? { activeLabel: `Up to $${range[1]}` } : {})}
-        {...(isActive ? { onClear: () => setRange([0, 2000]) } : {})}
+        activeLabel={isActive ? `Up to $${range[1]}` : undefined}
+        onClear={isActive ? () => setRange([0, 2000]) : undefined}
         popoverContent={
           <div style={{ padding: '1rem', width: '16rem' }}>
             <p style={{ fontWeight: 600, marginBottom: '0.75rem', fontSize: '0.875rem' }}>Price range</p>
@@ -71,8 +117,8 @@ export const WithPricePopover: Story = {
   },
 };
 
-export const WithStopsPopover: Story = {
-  name: 'With stops popover',
+export const WithStopsPopover: StoryObj = {
+  name: 'FilterChip — stops popover',
   render: () => {
     const [stops, setStops] = useState<string[]>([]);
     const toggle = (v: string) => setStops(s => s.includes(v) ? s.filter(x => x !== v) : [...s, v]);
@@ -80,7 +126,8 @@ export const WithStopsPopover: Story = {
       <FilterChip
         label="Stops"
         isActive={stops.length > 0}
-        {...(stops.length > 0 ? { activeLabel: `${stops.length} selected`, onClear: () => setStops([]) } : {})}
+        activeLabel={stops.length > 0 ? `${stops.length} selected` : undefined}
+        onClear={stops.length > 0 ? () => setStops([]) : undefined}
         popoverContent={
           <div style={{ padding: '1rem', width: '12rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {[
@@ -89,11 +136,7 @@ export const WithStopsPopover: Story = {
               { value: '2-plus', label: '2+ Stops' },
             ].map(opt => (
               <div key={opt.value} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Checkbox
-                  id={opt.value}
-                  checked={stops.includes(opt.value)}
-                  onCheckedChange={() => toggle(opt.value)}
-                />
+                <Checkbox id={opt.value} checked={stops.includes(opt.value)} onCheckedChange={() => toggle(opt.value)} />
                 <Label htmlFor={opt.value}>{opt.label}</Label>
               </div>
             ))}
@@ -104,14 +147,17 @@ export const WithStopsPopover: Story = {
   },
 };
 
-export const ChipStrip: Story = {
-  name: 'Chip strip — all states',
+// ─── All three types together ─────────────────────────────────────────────────
+
+export const ChipStrip: StoryObj = {
+  name: 'All three types — strip',
   render: () => (
     <>
-      <FilterChip label="All filters" isAllFilters isActive count={2} />
-      <FilterChip label="Price" isActive activeLabel="Up to $800" onClear={() => {}} />
-      <FilterChip label="Stops" isActive activeLabel="Nonstop" onClear={() => {}} />
-      <FilterChip label="Airlines" />
+      <AllFiltersChip isActive count={2} onClick={() => {}} />
+      <QuickFilterChip label="Nonstop only" isActive onClear={() => {}} onClick={() => {}} />
+      <FilterChip label="Price" isActive activeLabel="Up to $800" onClear={() => {}}
+        popoverContent={<div style={{ padding: '1rem' }}>Price filter</div>} />
+      <FilterChip label="Airlines" popoverContent={<div style={{ padding: '1rem' }}>Airlines filter</div>} />
       <FilterChip label="Bags" />
       <FilterChip label="Departure" />
     </>

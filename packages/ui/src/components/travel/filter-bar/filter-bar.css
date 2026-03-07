@@ -19,14 +19,6 @@
     display: none;
   }
 
-  .travel-filter-bar-divider {
-    width: 1px;
-    height: 1.5rem;
-    background: var(--color-border-default);
-    flex-shrink: 0;
-    margin-inline: 0.125rem;
-  }
-
   /* ── Popover body shared styles ──────────────────────────────────────────── */
   .travel-filter-bar-popover-body {
     display: flex;

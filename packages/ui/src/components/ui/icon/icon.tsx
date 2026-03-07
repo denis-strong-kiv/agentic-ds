@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { type LucideIcon, type LucideProps } from 'lucide-react';
+import type { OtaIcon } from './ota-icons';
 
 const sizes = {
   xs: 12,
@@ -10,8 +11,8 @@ const sizes = {
 } as const;
 
 export interface IconProps extends Omit<LucideProps, 'size' | 'ref'> {
-  /** The Lucide icon component to render */
-  icon: LucideIcon;
+  /** A Lucide icon or a custom OTA icon component */
+  icon: LucideIcon | OtaIcon;
   /**
    * Named size from the design system scale, or an explicit pixel number.
    * @default 'md'
@@ -35,11 +36,13 @@ export interface IconProps extends Omit<LucideProps, 'size' | 'ref'> {
  *   <Icon icon={AlertCircle} label="Warning" />
  */
 export const Icon = React.forwardRef<SVGSVGElement, IconProps>(
-  ({ icon: LucideIcon, size = 'md', label, className, ...props }, ref) => {
+  ({ icon: IconComp, size = 'md', label, className, ...props }, ref) => {
     const px = typeof size === 'number' ? size : sizes[size];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const Comp = IconComp as React.ComponentType<any>;
 
     return (
-      <LucideIcon
+      <Comp
         ref={ref}
         size={px}
         strokeWidth={1.75}
