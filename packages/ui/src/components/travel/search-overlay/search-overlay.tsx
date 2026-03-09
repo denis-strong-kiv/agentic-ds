@@ -21,7 +21,7 @@ const FOCUSABLE = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(', ');
 
-const EXIT_DURATION = 280;
+const EXIT_DURATION = 0;
 
 export function SearchOverlay({ isOpen, onClose, children }: SearchOverlayProps) {
   const panelRef = React.useRef<HTMLDivElement>(null);

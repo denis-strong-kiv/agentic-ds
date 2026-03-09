@@ -791,11 +791,11 @@
   }
 
   .tsf-date-field-shell--round-trip {
-    flex: 1 0 0%;
+    flex: 0.8 0 0%;
   }
 
   .tsf-date-field-shell--one-way {
-    flex: 1.35 0 0%;
+    flex: 1.1 0 0%;
   }
 
   .tsf-return-field-shell {
@@ -809,7 +809,7 @@
 
   .tsf-return-field-shell--open {
     max-width: 500px;
-    flex: 1 0 0%;
+    flex: 0.8 0 0%;
     opacity: 1;
   }
 
@@ -821,8 +821,8 @@
   }
 
   .tsf-passenger-shell {
-    width: 120px;
-    min-width: 120px;
+    width: 150px;
+    min-width: 150px;
     flex: 0 0 auto;
   }
 
