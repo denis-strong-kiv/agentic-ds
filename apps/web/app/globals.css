@@ -316,7 +316,7 @@
     position: relative;
   }
 
-  /* ── Sidebar — 320px, slides as a whole unit via negative margin ────────── */
+  /* ── Sidebar — 320px, collapses via margin so map expands when closed ─────── */
   .web-flights-sidebar {
     width: 320px;
     flex-shrink: 0;
@@ -333,30 +333,32 @@
     margin-inline-start: -320px;
   }
 
-  /* ── Mini flight list — 400px, shown only when detail open ──────────────── */
+  /* ── Mini flight list — 400px, slides in when detail opens ──────────────── */
   .web-flights-mini-list {
-    display: none;
-    width: 400px;
+    width: 0;
     flex-shrink: 0;
-    overflow-y: auto;
+    overflow: hidden;
     scrollbar-width: none;
     border-inline-end: 1px solid var(--color-border-muted);
     background: var(--color-background-default);
     position: relative;
     z-index: 10;
+    transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
   .web-flights-mini-list::-webkit-scrollbar { display: none; }
   .web-flights-body[data-detail-open] .web-flights-mini-list {
-    display: block;
+    width: 400px;
+    overflow-y: auto;
   }
   .web-flights-mini-list-inner {
+    width: 400px; /* fixed inner width so content doesn't squish during transition */
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     padding: 0.75rem;
   }
 
-  /* ── Main area — 800px for large cards, 720px for flight details ─────────── */
+  /* ── Main area — 800px default, 720px when detail open ───────────────────── */
   .web-flights-main {
     width: 800px;
     flex-shrink: 0;
@@ -366,7 +368,8 @@
     border-inline-end: 1px solid var(--color-border-muted);
     position: relative;
     z-index: 10;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.05); /* optional shadow for separation */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+    transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
   .web-flights-main::-webkit-scrollbar { display: none; }
   .web-flights-body[data-detail-open] .web-flights-main {

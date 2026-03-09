@@ -1,45 +1,91 @@
 @layer components {
-  /* Core layout map wrapper */
+  /* ── Container ───────────────────────────────────────────────────────────── */
   .travel-flight-map-container {
     width: 100%;
     height: 100%;
     position: relative;
-    border-radius: var(--shape-preset-card);
-    overflow: hidden;
   }
 
-  /* Custom HTML marker styles */
+  /* ── Marker base ─────────────────────────────────────────────────────────── */
   .travel-flight-map-marker {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    transform: translate(-50%, -100%);
-    cursor: pointer;
+    gap: 4px;
+    cursor: default;
+    user-select: none;
   }
 
-  /* Dot portion of the marker */
+  /* ── Dot ─────────────────────────────────────────────────────────────────── */
   .travel-flight-map-marker-dot {
-    width: 12px;
-    height: 12px;
+    position: relative;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background-color: var(--color-primary-default);
-    border: 2px solid white;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    background: var(--color-primary-default);
+    border: 2px solid #fff;
+    box-shadow: var(--shadow-md);
   }
 
-  /* Label above the dot */
+  .travel-flight-map-marker--origin .travel-flight-map-marker-dot {
+    width: 13px;
+    height: 13px;
+    background: var(--color-primary-default);
+  }
+
+  .travel-flight-map-marker--destination .travel-flight-map-marker-dot {
+    width: 13px;
+    height: 13px;
+    background: var(--color-foreground-default);
+  }
+
+  .travel-flight-map-marker--stop .travel-flight-map-marker-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--color-foreground-subtle);
+    border-color: #fff;
+  }
+
+  /* ── Pulse ring (origin only) ────────────────────────────────────────────── */
+  .travel-flight-map-marker-pulse {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary-default);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .travel-flight-map-marker-pulse {
+      animation: flight-map-pulse 2.4s ease-out infinite;
+    }
+
+    @keyframes flight-map-pulse {
+      0%   { transform: scale(0.85); opacity: 0.7; }
+      100% { transform: scale(2.6);  opacity: 0; }
+    }
+  }
+
+  /* ── IATA label ──────────────────────────────────────────────────────────── */
   .travel-flight-map-marker-label {
-    background-color: var(--color-surface-card);
+    background: var(--color-surface-card);
     color: var(--color-foreground-default);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--color-border-muted);
-    white-space: nowrap;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--color-border-muted);
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+    pointer-events: none;
+    line-height: 1.4;
+  }
+
+  .travel-flight-map-marker--origin .travel-flight-map-marker-label,
+  .travel-flight-map-marker--destination .travel-flight-map-marker-label {
+    font-size: 10px;
   }
 }

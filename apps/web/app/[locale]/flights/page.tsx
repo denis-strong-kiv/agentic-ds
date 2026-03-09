@@ -9,6 +9,7 @@ import { FlightDetails } from '@travel/ui/components/travel/flight-details';
 import { SearchOverlay } from '@travel/ui/components/travel/search-overlay';
 import { TravelSearchForm } from '@travel/ui/components/travel/search-form';
 import { FlightMap } from '@travel/ui/components/travel/flight-map';
+import type { MapPadding } from '@travel/ui/components/travel/flight-map';
 import type { FilterState, SortOption } from '@travel/ui/components/travel/filter-panel';
 import type { FlightLeg, BaggageAllowance } from '@travel/ui/components/travel/flight-card';
 import type { FareOption } from '@travel/ui/components/travel/flight-details';
@@ -475,6 +476,15 @@ export default function FlightsPage() {
     return paths;
   }, [selectedFlight]);
 
+  // Camera padding: total width of panels overlaying the map from the left.
+  // map.fitBounds adds this offset so labels center in the visible (uncovered) area.
+  const mapPadding = useMemo((): MapPadding => {
+    let left = 0;
+    if (sidebarOpen) left += 320;                        // filter sidebar
+    left += detailOpen ? 400 + 720 : 800;                // mini-list+detail or main list
+    return { left, top: 0, bottom: 0, right: 0 };
+  }, [sidebarOpen, detailOpen]);
+
   function handleSelectFlight(id: string) {
     const isOpening = selectedId !== id;
     setSelectedId(prev => prev === id ? null : id);
@@ -611,14 +621,8 @@ export default function FlightsPage() {
           <FlightMap
             airports={mapAirports}
             paths={mapPaths}
-            // Fit bounds roughly around US East Coast & Western Europe
-            initialViewState={{
-              longitude: -40,
-              latitude: 45,
-              zoom: 2.2,
-              bearing: 0,
-              pitch: 0
-            }}
+            padding={mapPadding}
+            initialViewState={{ longitude: -40, latitude: 45, zoom: 2.2 }}
           />
         </div>
       </div>
