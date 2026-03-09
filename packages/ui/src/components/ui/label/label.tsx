@@ -10,25 +10,21 @@ export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> 
 
 export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
   ({ className, children, required, helperText, ...props }, ref) => (
-    <div className="flex flex-col gap-1">
+    <div className="ui-label-wrapper">
       <label
         ref={ref}
-        className={cn(
-          'text-sm font-medium text-[var(--color-foreground-default)] leading-none',
-          'peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-          className,
-        )}
+        className={cn('ui-label', className)}
         {...props}
       >
         {children}
         {required && (
-          <span className="ms-1 text-[var(--color-error-default)]" aria-hidden="true">
+          <span className="ui-label__required" aria-hidden="true">
             *
           </span>
         )}
       </label>
       {helperText && (
-        <p className="text-xs text-[var(--color-foreground-muted)]">{helperText}</p>
+        <p className="ui-label__helper">{helperText}</p>
       )}
     </div>
   ),

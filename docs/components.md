@@ -64,10 +64,10 @@ Every value must come from the design system — no exceptions.
 | Category | Use | Never |
 |---|---|---|
 | Colors | `var(--color-*)` | hex, `rgb()`, named colors |
-| Radii | `var(--shape-preset-*)` or `rounded-full` | literal `px`/`rem` values |
-| Spacing | Tailwind scale (`p-4`, `gap-2`) or `var(--spacing-*)` | literal `px`/`rem` values |
-| Typography | `text-sm`, `font-semibold`, `var(--font-*)` | literal `px` sizes, font-family strings |
-| Motion | `var(--duration-*)`, `var(--easing-*)`, `motion-safe:` | literal `ms`, cubic-bezier strings |
+| Radii | `var(--shape-preset-*)` or `var(--shape-preset-pill-*)` | literal `px`/`rem` values |
+| Spacing | `var(--spacing-*)` | literal `px`/`rem` values |
+| Typography | `var(--font-size-*)`, `var(--font-weight-*)`, `var(--font-*)` | literal `px` sizes, font-family strings |
+| Motion | `var(--duration-*)`, `var(--easing-*)`, `@media (prefers-reduced-motion)` | literal `ms`, cubic-bezier strings |
 | Shadows | `var(--shadow-*)` | literal `box-shadow` values |
 | Hover/active | `oklch(from var(--color-X) calc(l ± 0.07) c h)` | hardcoded colour |
 | White-alpha | `oklch(100% 0 0 / 0.8)` | `rgba(255,255,255,0.8)` or alpha token |

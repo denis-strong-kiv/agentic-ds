@@ -8,7 +8,7 @@
 |---|---|
 | Monorepo | Turborepo + pnpm workspaces |
 | UI components | React + Radix UI Primitives + CVA |
-| Styling | Tailwind CSS v4 + CSS custom properties |
+| Styling | Pure CSS + CSS custom properties (no Tailwind) |
 | Tokens | OKLCH two-seed model → CSS custom properties |
 | App | Next.js 16 + React 19 + next-intl v4 |
 | Testing | Vitest + React Testing Library + jsdom |
@@ -35,8 +35,8 @@
 JSON definitions (packages/tokens/src/definitions/)
     ↓ build script
 CSS custom properties (packages/tokens/src/output/tokens.css)
-    ↓ @theme in globals.css
-Tailwind utility classes + var(--color-*) in components
+    ↓ imported in globals.css
+var(--color-*) / var(--spacing-*) / var(--font-size-*) in component CSS classes
 ```
 
 After editing any token definition: `cd packages/tokens && pnpm build`

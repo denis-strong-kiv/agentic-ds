@@ -62,7 +62,7 @@ const SheetContent = React.forwardRef<
         )}
       >
         <Icon icon={X} size="sm" />
-        <span className="sr-only">Close</span>
+        <span className="ui-sheet-close__sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </SheetPortal>

@@ -1,5 +1,6 @@
 {
   "fontSize": {
+    "2xs":  { "value": "0.625rem", "type": "fontSize" },
     "xs":   { "value": "0.75rem",  "type": "fontSize" },
     "sm":   { "value": "0.875rem", "type": "fontSize" },
     "md":   { "value": "1rem",     "type": "fontSize" },

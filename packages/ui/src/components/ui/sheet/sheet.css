@@ -19,6 +19,7 @@
   .ui-sheet-footer { display: flex; flex-direction: column-reverse; }
   .ui-sheet-title { font-size: 1.125rem; font-weight: 600; color: var(--color-foreground-default); }
   .ui-sheet-description { font-size: 0.875rem; color: var(--color-foreground-muted); }
+  .ui-sheet-close__sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
   @media (min-width: 640px) {
     .ui-sheet-header { text-align: left; }
     .ui-sheet-footer { flex-direction: row; justify-content: flex-end; gap: 0.5rem; }

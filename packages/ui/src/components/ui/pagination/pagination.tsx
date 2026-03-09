@@ -65,7 +65,7 @@ const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'
     {...props}
   >
     <Icon icon={MoreHorizontal} size="sm" />
-    <span className="sr-only">More pages</span>
+    <span className="ui-pagination__sr-only">More pages</span>
   </span>
 );
 PaginationEllipsis.displayName = 'PaginationEllipsis';

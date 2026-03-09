@@ -21,17 +21,7 @@ export function SkipLink({ href = '#main-content', children = 'Skip to main cont
   return (
     <a
       href={href}
-      className={cn(
-        // Visually hidden until focused
-        'sr-only focus:not-sr-only',
-        // Position and style when visible
-        'focus:fixed focus:start-4 focus:top-4 focus:z-[9999]',
-        'focus:inline-block focus:rounded-md',
-        'focus:bg-[var(--color-primary-default)] focus:px-4 focus:py-2',
-        'focus:text-sm focus:font-semibold focus:text-[var(--color-primary-foreground)]',
-        'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-default)] focus:ring-offset-2',
-        className,
-      )}
+      className={cn('ui-skip-link', className)}
       {...props}
     >
       {children}

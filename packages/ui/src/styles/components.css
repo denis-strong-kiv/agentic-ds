@@ -42,6 +42,12 @@
 @import '../components/travel/price-breakdown/price-breakdown.css';
 @import '../components/ui/nav-bar/nav-bar.css';
 @import '../components/ui/chip/chip.css';
+@import '../components/ui/label/label.css';
+@import '../components/ui/popover/popover.css';
+@import '../components/ui/progress/progress.css';
+@import '../components/ui/separator/separator.css';
+@import '../components/ui/skip-link/skip-link.css';
+@import '../components/ui/tooltip/tooltip.css';
 @import '../components/travel/filter-chip/filter-chip.css';
 @import '../components/travel/filter-bar/filter-bar.css';
 @import '../components/travel/flight-details/flight-details.css';

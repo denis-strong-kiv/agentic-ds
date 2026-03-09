@@ -1,0 +1,38 @@
+@layer components {
+  .ui-skip-link {
+    /* Visually hidden by default */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .ui-skip-link:focus {
+    /* Visible on focus */
+    position: fixed;
+    inset-inline-start: var(--spacing-4);
+    top: var(--spacing-4);
+    z-index: 9999;
+    width: auto;
+    height: auto;
+    padding-inline: var(--spacing-4);
+    padding-block: var(--spacing-2);
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    display: inline-block;
+    border-radius: var(--shape-preset-button);
+    background: var(--color-primary-default);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary-foreground);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-primary-default), 0 0 0 4px var(--color-background-default);
+  }
+}

@@ -4,9 +4,9 @@
 
 ## Configuration
 
-- `@tailwindcss/vite` must be **first** in the `viteFinal` plugins array in `.storybook/main.ts`
-- `theme.css` must have `@source` directives covering `packages/ui/src/` and `packages/storybook/stories/`
+- No Tailwind dependency — pure CSS with token custom properties
 - `preview.ts` imports `globals.css` from `packages/ui/src/styles/`
+- `globals.css` imports `tokens.css`, `theme.css` (reset + base), `motion.css`, `components.css`
 
 ### BrandDecorator
 - Spreads brand tokens as **inline styles** on the wrapper div — never inject a `<style>` tag on `:root`

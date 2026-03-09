@@ -3,7 +3,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--spacing-2);
     white-space: nowrap;
     border-radius: var(--shape-preset-button);
     font-weight: 600;
@@ -163,32 +163,56 @@
   }
 
   .ui-button--sm {
-    height: 2rem;
-    padding-inline: 0.75rem;
-    font-size: 0.875rem;
+    height: var(--spacing-8);
+    padding-inline: var(--spacing-3);
+    font-size: var(--font-size-sm);
   }
 
   .ui-button--md {
-    height: 2.5rem;
-    padding-inline: 1rem;
-    font-size: 0.875rem;
+    height: var(--spacing-10);
+    padding-inline: var(--spacing-4);
+    font-size: var(--font-size-sm);
   }
 
   .ui-button--lg {
-    height: 3rem;
-    padding-inline: 1.5rem;
-    font-size: 1rem;
+    height: var(--spacing-12);
+    padding-inline: var(--spacing-6);
+    font-size: var(--font-size-md);
   }
 
   .ui-button--xl {
     height: 3.5rem;
-    padding-inline: 2rem;
-    font-size: 1rem;
+    padding-inline: var(--spacing-8);
+    font-size: var(--font-size-md);
   }
 
   .ui-button--icon {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: var(--spacing-10);
+    height: var(--spacing-10);
     padding: 0;
+  }
+
+  .ui-button__spinner {
+    height: var(--spacing-4);
+    width: var(--spacing-4);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ui-button__spinner {
+      animation: button-spin 1s linear infinite;
+    }
+
+    @keyframes button-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  }
+
+  .ui-button__spinner-track {
+    opacity: 0.25;
+  }
+
+  .ui-button__spinner-fill {
+    opacity: 0.75;
   }
 }

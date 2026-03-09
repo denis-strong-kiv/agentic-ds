@@ -1,3 +1,4 @@
+@import '../../../tokens/src/output/tokens.css';
 @import './theme.css';
 @import './motion.css';
 @import './components.css';

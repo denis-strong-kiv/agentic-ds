@@ -69,7 +69,7 @@ const DialogContent = React.forwardRef<
           )}
         >
           <Icon icon={X} size="sm" />
-          <span className="sr-only">Close</span>
+          <span className="ui-dialog-close__sr-only">Close</span>
         </DialogPrimitive.Close>
       )}
     </DialogPrimitive.Content>

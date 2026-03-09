@@ -76,10 +76,10 @@ Located at `packages/tokens/`.
 Located at `packages/ui/`.
 
 - Built on **Radix UI Primitives** (zero implicit HTML, full keyboard nav + ARIA)
-- Styled with **Tailwind CSS v4** using CSS custom properties from `@travel/tokens`
+- Styled with **pure CSS** using CSS custom properties from `@travel/tokens` — no Tailwind dependency
 - Variants via **CVA** (class-variance-authority)
-- RTL-safe: all directional utilities use CSS logical properties (`ms-*`, `me-*`, `ps-*`, `pe-*`, `start-*`, `end-*`)
-- Motion: `motion-safe:` Tailwind prefix + CSS `@keyframes` in `src/styles/motion.css`
+- RTL-safe: all directional properties use CSS logical properties (`margin-inline-start`, `padding-inline`, etc.)
+- Motion: `@media (prefers-reduced-motion: no-preference)` guards + CSS `@keyframes` in `src/styles/motion.css`
 
 **Component locations:**
 - `src/components/ui/` — base components (Button, Card, Input, Dialog, etc.)
@@ -160,7 +160,7 @@ getNativeTokens() + useBrandTokens()
 - **Vitest** per-package (`vitest.config.ts` in each package)
 - **React Testing Library** + `@testing-library/user-event` for components
 - Environment: `jsdom` for UI, `node` for token packages
-- **333+ tests** must pass on all commits to `feature/specify`
+- **384+ tests** must pass on all commits to `feature/specify`
 
 ---
 
@@ -170,7 +170,7 @@ getNativeTokens() + useBrandTokens()
 - All interactive Radix components have built-in ARIA + keyboard nav
 - `SkipLink` component (WCAG 2.4.1) in every page layout
 - RTL logical properties ensure correct layout in `dir="rtl"` contexts
-- `motion-safe:` prefix respects `prefers-reduced-motion`
+- `@media (prefers-reduced-motion: no-preference)` guards respect user motion preference
 - Skeleton has `aria-hidden="true"` (decorative)
 
 ---
@@ -181,9 +181,9 @@ getNativeTokens() + useBrandTokens()
 |---|---|
 | Color tokens | `var(--color-[category]-[scale])` |
 | Shape tokens | `var(--shape-preset-[component])` |
-| Spacing | Tailwind scale (`p-4`, `gap-6`, etc.) |
-| Directional | CSS logical properties (`ms-*`, `me-*`, `ps-*`, `pe-*`) |
-| Motion | `motion-safe:` prefix; durations via `var(--duration-*)` |
+| Spacing | Token vars (`var(--spacing-4)`, `var(--spacing-6)`, etc.) |
+| Directional | CSS logical properties (`margin-inline-start`, `padding-inline`, `inset-inline-start`, etc.) |
+| Motion | `@media (prefers-reduced-motion: no-preference)`; durations via `var(--duration-*)` |
 | Exports | Named exports only |
 | File naming | `kebab-case.tsx` for files, `PascalCase` for exported names |
 

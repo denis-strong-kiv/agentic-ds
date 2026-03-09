@@ -1,6 +1,6 @@
 # Travel Design System
 
-A multi-brand design system for travel applications built with Turborepo, React 19, Next.js 16, Radix UI, and Tailwind CSS v4.
+A multi-brand design system for travel applications built with Turborepo, React 19, Next.js 16, Radix UI, and pure CSS with token-driven custom properties.
 
 ## Packages
 

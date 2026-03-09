@@ -1,0 +1,18 @@
+@layer components {
+  .ui-progress {
+    position: relative;
+    height: 0.5rem;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: var(--color-background-subtle);
+  }
+
+  .ui-progress__indicator {
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    background: var(--color-primary-default);
+    transition: transform var(--duration-normal) var(--easing-ease-in-out);
+  }
+}

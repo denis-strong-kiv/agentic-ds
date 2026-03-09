@@ -1,0 +1,30 @@
+@layer components {
+  .ui-label-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .ui-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-foreground-default);
+    line-height: 1;
+  }
+
+  .ui-label:has(+ :disabled),
+  .ui-label--disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .ui-label__required {
+    margin-inline-start: var(--spacing-1);
+    color: var(--color-error-default);
+  }
+
+  .ui-label__helper {
+    font-size: var(--font-size-xs);
+    color: var(--color-foreground-muted);
+  }
+}

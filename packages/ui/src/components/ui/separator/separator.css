@@ -1,0 +1,16 @@
+@layer components {
+  .ui-separator {
+    flex-shrink: 0;
+    background: var(--color-border-default);
+  }
+
+  .ui-separator--horizontal {
+    height: 1px;
+    width: 100%;
+  }
+
+  .ui-separator--vertical {
+    height: 100%;
+    width: 1px;
+  }
+}
