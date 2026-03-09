@@ -89,9 +89,14 @@
     background: var(--color-primary-default);
     color: #ffffff;
   }
-.travel-filter-chip-arrow {
-    opacity: 0.5;
+  .travel-filter-chip-arrow-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
+
   }
   .travel-filter-chip-filter-icon {
     flex-shrink: 0;

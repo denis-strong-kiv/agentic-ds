@@ -83,7 +83,7 @@ export function QuickFilterChip({
       onClick={e => { e.stopPropagation(); onClear(); }}
       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear(); } }}
     >
-      <OtaCancelCircleFill size={16} aria-hidden />
+      <OtaCancelCircleFill aria-hidden />
     </span>
   );
 
@@ -185,7 +185,11 @@ export function FilterChip({
         aria-pressed={isActive}
       >
         {chipInner}
-        {!isActive && <OtaArrowDown04Round size={8} className="travel-filter-chip-arrow" aria-hidden />}
+        {!isActive && (
+          <span className="travel-filter-chip-arrow-icon" aria-hidden>
+            <OtaArrowDown04Round />
+          </span>
+        )}
         {isActive && onClear && (
           <span
             role="button"
@@ -195,7 +199,7 @@ export function FilterChip({
             onClick={e => { e.stopPropagation(); onClear(); }}
             onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear(); } }}
           >
-            <OtaCancelCircleFill size={16} aria-hidden />
+            <OtaCancelCircleFill aria-hidden />
           </span>
         )}
       </button>
@@ -217,7 +221,11 @@ export function FilterChip({
             aria-pressed={isActive}
           >
             {chipInner}
-            {!isActive && <OtaArrowDown04Round size={8} className="travel-filter-chip-arrow" aria-hidden />}
+            {!isActive && (
+              <span className="travel-filter-chip-arrow-icon" aria-hidden>
+                <OtaArrowDown04Round />
+              </span>
+            )}
             {isActive && onClear && (
               <span
                 role="button"
@@ -227,7 +235,7 @@ export function FilterChip({
                 onClick={e => { e.stopPropagation(); onClear(); }}
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear(); } }}
               >
-                <OtaCancelCircleFill size={16} aria-hidden />
+                <OtaCancelCircleFill aria-hidden />
               </span>
             )}
           </button>

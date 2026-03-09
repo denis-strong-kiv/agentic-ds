@@ -3,7 +3,6 @@ import * as React from 'react';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface OtaIconProps {
-  size?: number;
   className?: string;
   style?: React.CSSProperties;
   'aria-hidden'?: boolean | 'true' | 'false';
@@ -16,12 +15,13 @@ export type OtaIcon = React.FC<OtaIconProps>;
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
 function makeIcon(viewBox: string, children: React.ReactNode, name: string): OtaIcon {
-  const Comp: OtaIcon = ({ size = 16, className, style, 'aria-hidden': ah, 'aria-label': al }) => (
+  const [, , w, h] = viewBox.split(' ').map(Number);
+  const Comp: OtaIcon = ({ className, style, 'aria-hidden': ah, 'aria-label': al }) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox={viewBox}
-      width={size}
-      height={size}
+      width={w}
+      height={h}
       fill="currentColor"
       className={className}
       style={style}
