@@ -9,7 +9,8 @@
     "test": "FORCE_COLOR=1 turbo test --ui=stream",
     "storybook": "pnpm --filter @travel/storybook storybook",
     "storybook:build": "pnpm --filter @travel/storybook storybook:build",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "generate:ui-manifest": "pnpm --filter @travel/ai-manifest generate"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^10.2.14",

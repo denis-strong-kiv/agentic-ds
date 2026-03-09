@@ -4,6 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 
 ---
 
+## UI Manifest
+
+**`docs/ui-manifest.dsl`** — auto-generated index of all components, tokens, dependency graph, UI patterns, and screen mappings. Read this file before working on any component or UI task. Regenerate after adding or changing components:
+
+```bash
+pnpm generate:ui-manifest
+```
+
+---
+
 ## Overview
 
 This repository is a **multi-brand travel design system** monorepo built with Turborepo + pnpm workspaces.
