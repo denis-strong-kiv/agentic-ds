@@ -4,6 +4,7 @@
     width: 100%;
     height: 100%;
     position: relative;
+    background: var(--color-map-water, oklch(0.84 0.06 210));
   }
 
   /* ── Marker base ─────────────────────────────────────────────────────────── */

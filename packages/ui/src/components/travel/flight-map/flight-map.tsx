@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
+import maplibregl from 'maplibre-gl';
 import type { LineLayerSpecification } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { cn } from '../../../utils/cn';
@@ -37,8 +38,6 @@ export interface FlightMapProps {
   className?: string;
   airports: AirportPoint[];
   paths?: FlightPath[];
-  /** Camera padding in pixels — map centers within the unpadded (visible) area */
-  padding?: MapPadding;
   initialViewState?: {
     longitude: number;
     latitude: number;
@@ -143,11 +142,12 @@ export function FlightMap({
   className,
   airports,
   paths = [],
-  padding,
   initialViewState,
 }: FlightMapProps) {
   const mapRef = React.useRef<React.ElementRef<typeof Map>>(null);
   const [mapLoaded, setMapLoaded] = React.useState(false);
+  const airportKeyRef = React.useRef('');
+  const airportsRef = React.useRef(airports);
 
   // Straight [origin, dest] coordinates → 80-point great-circle arc
   const pathGeoJSON = React.useMemo(
@@ -192,37 +192,52 @@ export function FlightMap({
     return () => cancelAnimationFrame(animId);
   }, [mapLoaded]);
 
-  // Camera padding + auto-fit — recalculates whenever airports or padding changes
+  // Always keep airportsRef current so the resize handler uses fresh data
+  airportsRef.current = airports;
+
+  const fitAirports = React.useCallback((map: maplibregl.Map, duration = 900) => {
+    const pts = airportsRef.current;
+    if (pts.length === 0) return;
+    const lngs = pts.map(a => a.lng);
+    const lats = pts.map(a => a.lat);
+    map.fitBounds(
+      [
+        [Math.min(...lngs), Math.min(...lats)],
+        [Math.max(...lngs), Math.max(...lats)],
+      ],
+      { padding: 80, duration, maxZoom: 7 },
+    );
+  }, []);
+
+  // Re-fit when airports set changes (new flight selected / deselected)
   React.useEffect(() => {
     if (!mapLoaded) return;
     const map = mapRef.current?.getMap();
     if (!map) return;
 
-    const pad = { top: 0, bottom: 0, left: 0, right: 0, ...padding };
+    const newKey = airports.map(a => a.id).join(',');
+    if (newKey === airportKeyRef.current) return;
+    airportKeyRef.current = newKey;
 
-    if (airports.length > 0) {
-      const lngs = airports.map(a => a.lng);
-      const lats = airports.map(a => a.lat);
-      map.fitBounds(
-        [
-          [Math.min(...lngs), Math.min(...lats)],
-          [Math.max(...lngs), Math.max(...lats)],
-        ],
-        {
-          padding: {
-            top:    pad.top    + 80,
-            bottom: pad.bottom + 80,
-            left:   pad.left   + 80,
-            right:  pad.right  + 80,
-          },
-          duration: 900,
-          maxZoom: 7,
-        },
-      );
-    } else {
-      map.easeTo({ padding: pad, duration: 350 });
-    }
-  }, [airports, padding, mapLoaded]);
+    fitAirports(map, 900);
+  }, [airports, mapLoaded, fitAirports]);
+
+  // Re-fit when map canvas resizes (panel opens/closes) — debounced so it
+  // fires once after the 300ms CSS transition completes
+  React.useEffect(() => {
+    if (!mapLoaded) return;
+    const map = mapRef.current?.getMap();
+    if (!map) return;
+
+    let tid: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(tid);
+      tid = setTimeout(() => fitAirports(map, 700), 320);
+    };
+
+    map.on('resize', onResize);
+    return () => { clearTimeout(tid); map.off('resize', onResize); };
+  }, [mapLoaded, fitAirports]);
 
   const defaultView = { longitude: -40, latitude: 45, zoom: 2.5, ...initialViewState };
 

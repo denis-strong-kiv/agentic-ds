@@ -55,6 +55,9 @@
   --shape-preset-input: 6px;
   --shape-preset-dialog: 16px;
   --shape-preset-badge: 6px;
+
+  /* Map */
+  --color-map-water: oklch(0.84 0.06 210);
 }
 
 
@@ -382,12 +385,12 @@
     padding: 1rem;
   }
 
-  /* ── Map — fills all remaining space ─────────────────────────────────────── */
+  /* ── Map — flex child that fills all remaining space right of the panels ──── */
   .web-flights-map {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background: var(--color-background-subtle);
+    flex: 1;
+    min-width: 0;
+    background: var(--color-map-water);
+    overflow: hidden;
   }
   .web-flights-map-placeholder {
     position: absolute;
