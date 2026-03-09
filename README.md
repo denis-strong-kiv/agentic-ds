@@ -15,22 +15,22 @@ A multi-brand design system for travel applications built with Turborepo, React 
 ## Prerequisites
 
 - Node.js 20+
-- npm 10+
+- pnpm 10+
 
 ## Setup
 
 ```bash
 # Install all workspace dependencies
-npm install
+pnpm install
 
 # Start all packages in development mode
-npm run dev
+pnpm dev
 
 # Start only the Next.js reference app
-npm run dev --filter=@travel/web
+pnpm dev --filter @travel/web
 
 # Start Storybook (port :6006)
-npm run storybook
+pnpm storybook
 ```
 
 ## Development
@@ -63,7 +63,7 @@ Tokens are defined as JSON in `packages/tokens/src/definitions/` and compiled to
 
 ```bash
 # Rebuild tokens after editing definitions
-cd packages/tokens && npm run build
+cd packages/tokens && pnpm build
 ```
 
 Token categories: `colors`, `spacing`, `typography`, `motion`, `shapes`
@@ -74,23 +74,23 @@ Brands: `default`, `luxury`, `adventure`, `eco` — each gets a `.brand-*` CSS c
 
 ```bash
 # Run all tests (333+ tests)
-npm test
+pnpm test
 
 # Watch mode during development
-npm run test:watch --filter=@travel/ui
+pnpm test:watch --filter @travel/ui
 
 # Type check all packages
-npm run typecheck
+pnpm typecheck
 ```
 
 ### Building
 
 ```bash
 # Build all packages
-npm run build
+pnpm build
 
 # Build with bundle analysis
-ANALYZE=true npm run build --filter=@travel/web
+ANALYZE=true pnpm build --filter @travel/web
 ```
 
 ## Supported Brands
