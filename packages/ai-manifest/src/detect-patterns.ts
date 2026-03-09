@@ -125,10 +125,11 @@ function detectScreenMappings(components: ComponentEntry[]): ScreenMapping[] {
 
     if (existsSync(filePath)) {
       const content = readFileSync(filePath, 'utf-8');
-      // Find which component names are imported/used in this page
+      // Extract only import statements to avoid false positives from data strings
+      const importLines = content.split('\n').filter(l => l.trimStart().startsWith('import'));
+      const importBlock = importLines.join('\n');
       for (const comp of components) {
-        const nameInFile = comp.name;
-        if (content.includes(nameInFile) || content.includes(comp.id)) {
+        if (importBlock.includes(comp.name) || importBlock.includes(comp.id)) {
           usedComponents.push(comp.id);
         }
       }

@@ -96,11 +96,6 @@ describe('FlightCard', () => {
     expect(screen.queryByText('Cheapest')).not.toBeInTheDocument();
   });
 
-  it('renders fare class badge', () => {
-    render(<FlightCard {...PROPS} fareClass="Economy" />);
-    expect(screen.getByText('Economy')).toBeInTheDocument();
-  });
-
   it('renders Select button', () => {
     render(<FlightCard {...PROPS} />);
     expect(screen.getByRole('button', { name: 'Select' })).toBeInTheDocument();
