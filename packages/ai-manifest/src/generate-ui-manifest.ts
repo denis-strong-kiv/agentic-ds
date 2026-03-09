@@ -24,7 +24,7 @@ const DSL_OUT = resolve(new URL('.', import.meta.url).pathname, '../../../docs/u
 
 async function main() {
   const tokens = extractTokens();
-  const components = extractComponents();
+  const components = await extractComponents();
   const dependencyGraph = buildDependencyGraph(components);
   const { patterns, screenMappings } = detectPatterns(components);
 

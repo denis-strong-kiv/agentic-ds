@@ -90,6 +90,28 @@ export function serializeToDSL(manifest: UIManifest): string {
     if (c.uses && c.uses.length > 0) {
       lines.push(`  USES ${c.uses.join(' ')}`);
     }
+    if (c.aiHints) {
+      lines.push(`  WHEN ${c.aiHints.whenToUse}`);
+      if (c.aiHints.whenNotToUse) lines.push(`  NOT ${c.aiHints.whenNotToUse}`);
+      if (c.aiHints.alternatives?.length) lines.push(`  ALT ${c.aiHints.alternatives.join(' | ')}`);
+      if (c.aiHints.preferOver) lines.push(`  PREFER_OVER ${c.aiHints.preferOver}`);
+    }
+    if (c.behavior) {
+      lines.push(`  STATES ${c.behavior.states.join(' | ')}`);
+      if (c.behavior.animations?.length) lines.push(`  ANIM ${c.behavior.animations.join(' | ')}`);
+      if (c.behavior.responsive) lines.push(`  RESPONSIVE ${c.behavior.responsive}`);
+    }
+    if (c.accessibility) {
+      lines.push(`  A11Y role=${c.accessibility.role} keys="${c.accessibility.keyboardNav}"`);
+      if (c.accessibility.wcag?.length) lines.push(`  WCAG ${c.accessibility.wcag.join(' ')}`);
+    }
+    if (c.examples?.length) {
+      for (const ex of c.examples) {
+        // Inline single-line example; multi-line collapsed to first line
+        const code = ex.code.replace(/\n\s*/g, ' ');
+        lines.push(`  EX "${ex.label}" ${code}`);
+      }
+    }
     lines.push('');
   }
 

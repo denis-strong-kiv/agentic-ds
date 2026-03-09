@@ -108,6 +108,16 @@ C ui/avatar Avatar @avatar
   P status:enum(online|away|busy|offline) req
 
 C ui/badge Badge [variant:default|secondary|outline|destructive|deal|new|popular=default]
+  WHEN Static labels, status indicators, counts, or categorical tags that are purely informational. Use on cards, table rows, and list items.
+  NOT Interactive toggle actions (use Chip). Notification counts on icons (use NotificationBadge). Long sentences.
+  ALT Chip — for interactive, dismissible, or toggleable labels | NotificationBadge — for numeric counts overlaid on icons | Alert — for full-width status messages
+  PREFER_OVER Raw <span> elements with manual styling.
+  STATES default
+  A11Y role=status (implied) — wrap in aria-live region if content changes dynamically keys="Not focusable — not interactive."
+  WCAG 1.4.3 Contrast Minimum
+  EX "Status label" <Badge variant="success">Confirmed</Badge>
+  EX "Deal tag on a card" <Badge variant="deal">Best value</Badge>
+  EX "Destructive / warning" <Badge variant="destructive">Cancelled</Badge>
 
 C ui/breadcrumb Breadcrumb
 
@@ -116,6 +126,19 @@ C ui/button Button [variant:primary|secondary|tertiary|neutral|'inverted-primary
   P isLoading:boolean?
   P spinner:React.ReactNode?
   SLOTS spinner
+  WHEN Any user-triggered action: form submission, navigation trigger, dialog open/close, data mutation. Use when the action has immediate consequence.
+  NOT Pure navigation between pages — use an <a> tag or Next.js <Link> instead. Decorative or non-interactive elements.
+  ALT Link (variant="link") for inline text actions | IconButton (size="icon") for icon-only actions | DropdownMenu trigger for multi-action menus
+  PREFER_OVER Raw <button> elements — Button handles focus styles, disabled states, loading, and ARIA automatically.
+  STATES default | hover | active | focus-visible | disabled | loading
+  ANIM Loading spinner fades in; button width locks to prevent layout shift
+  RESPONSIVE Intrinsic width by default; apply w-full or travel-flight-card-select-btn for full-width contexts.
+  A11Y role=button keys="Tab to focus, Enter or Space to activate. Disabled state removes from tab order via aria-disabled."
+  WCAG 2.1.1 Keyboard 1.4.3 Contrast Minimum 4.1.2 Name Role Value
+  EX "Primary action" <Button variant="primary">Book flight</Button>
+  EX "Loading state" <Button variant="primary" isLoading>Processing...</Button>
+  EX "Destructive with confirmation" <Button variant="destructive" onClick={handleDelete}>Cancel booking</Button>
+  EX "Icon-only" <Button size="icon" variant="ghost" aria-label="Close"><X size={16} /></Button>
 
 C ui/calendar Calendar
   # Selected date or date range
@@ -140,6 +163,16 @@ C ui/chip Chip
   P disabled:boolean?
   P size:enum(sm|md)?
   SLOTS label
+  WHEN Interactive filter tags, multi-select option tags, or removable selections. Use when the user toggles or dismisses individual values.
+  NOT Static informational labels (use Badge). Navigation tabs (use Tabs). Broad filter categories with a popover (use FilterChip).
+  ALT Badge — static, non-interactive labels | FilterChip — filter chips with popover content for the travel domain | Tabs — mutually exclusive navigation between views
+  PREFER_OVER Custom toggle-button implementations.
+  STATES default | active (isActive=true) | disabled | hover | focus-visible
+  ANIM Active state background transition via CSS duration-fast
+  A11Y role=button keys="Tab to focus chip. Enter/Space to toggle. Tab to dismiss button, Enter/Space to dismiss."
+  WCAG 2.1.1 Keyboard 4.1.2 Name Role Value
+  EX "Filter toggle" <Chip label="Nonstop" isActive={filter === 'nonstop'} onClick={() => setFilter('nonstop')} />
+  EX "Dismissible selection" <Chip label="New York" isActive onDismiss={() => removeCity('nyc')} />
 
 C ui/combobox Combobox
   P options:array req
@@ -160,6 +193,17 @@ C ui/date-picker DatePicker
 C ui/dialog Dialog [size:sm|md|lg|xl|full=md] @dialog
   # Hide the close button
   P hideClose:boolean?
+  WHEN Blocking interactions requiring user decision before continuing: confirmations, forms, detail views that must stay in context. Use when the task is short and self-contained.
+  NOT Large content areas or multi-step flows that need persistent side panels (use Sheet). Non-blocking supplementary info (use Tooltip or Popover). Destructive confirmations (use AlertDialog).
+  ALT AlertDialog — for destructive confirmation prompts with required affirmation | Sheet — for side panels with richer content | Popover — for non-blocking, anchor-relative info | FlightDetails — travel-domain dialog wrapping full itinerary
+  PREFER_OVER Custom modal implementations — Dialog handles focus trap, scroll lock, escape key, and ARIA automatically.
+  STATES closed | open | closing (exit animation)
+  ANIM Fade + scale in/out via CSS data-state animations
+  RESPONSIVE size="full" for full-screen mobile modals.
+  A11Y role=dialog keys="Escape closes. Focus trapped inside. First focusable element receives focus on open. Focus returns to trigger on close."
+  WCAG 2.1.2 No Keyboard Trap (focus trap is intentional and escapable) 1.3.1 Info and Relationships
+  EX "Basic confirmation dialog" <Dialog> <DialogTrigger asChild><Button>Open</Button></DialogTrigger> <DialogContent> <DialogHeader> <DialogTitle>Confirm booking</DialogTitle> <DialogDescription>This will charge your card.</DialogDescription> </DialogHeader> <DialogFooter> <Button variant="outline">Cancel</Button> <Button variant="primary">Confirm</Button> </DialogFooter> </DialogContent> </Dialog>
+  EX "Large content" <Dialog> <DialogTrigger asChild><Button>View details</Button></DialogTrigger> <DialogContent size="lg"> <DialogHeader><DialogTitle>Fare rules</DialogTitle></DialogHeader> {/* content */} </DialogContent> </Dialog>
 
 C ui/dropdown-menu DropdownMenu @dropdown-menu
 
@@ -176,6 +220,17 @@ C ui/input Input
   P leftSlot:React.ReactNode?
   P rightSlot:React.ReactNode?
   SLOTS leftSlot rightSlot
+  WHEN Any single-line text entry: search, name, email, phone, airport code. Use with Label for accessible form fields.
+  NOT Multi-line text (use Textarea). Selecting from a predefined list (use Select or Combobox). Date entry (use DatePicker).
+  ALT Textarea — multi-line text | Select — fixed option lists | Combobox — searchable option lists | DatePicker — date/time entry
+  PREFER_OVER Raw <input> elements — Input handles error states, ARIA, and slot layout automatically.
+  STATES default | focus | error (aria-invalid) | disabled
+  RESPONSIVE Full-width by default within its container.
+  A11Y role=textbox (implicit) keys="Tab to focus. Standard text input keyboard behaviour."
+  WCAG 1.3.1 Info and Relationships 3.3.1 Error Identification 4.1.2 Name Role Value
+  EX "Labelled field" <Label htmlFor="email">Email</Label> <Input id="email" type="email" placeholder="you@example.com" />
+  EX "With error" <Input id="phone" error={{ message: 'Invalid phone number' }} />
+  EX "With icon slot" <Input leftSlot={<Search size={16} />} placeholder="Search flights" />
 
 C ui/label Label
   # Mark field as required with a visual indicator
@@ -219,8 +274,29 @@ C ui/select Select @select
 C ui/separator Separator @separator
 
 C ui/sheet Sheet [side:top|bottom|left|right=right] @dialog
+  WHEN Persistent side panels, filter panels, detail views, or mobile navigation drawers. Use when content is too rich for a Dialog and does not need to fully block the page.
+  NOT Short confirmations (use AlertDialog). Anchor-relative tooltips (use Popover). Full-page modals (use Dialog size="full").
+  ALT Dialog — for blocking, centered modals | FilterPanel — travel-domain sheet wrapping all filter controls | FlightDetails — travel-domain right-side detail panel
+  PREFER_OVER Custom drawer implementations — Sheet handles focus trap, scroll lock, and exit animation.
+  STATES closed | open | closing (slide-out animation)
+  ANIM Slides in/out from the configured side via CSS data-state transitions
+  RESPONSIVE side="bottom" is common for mobile sheets.
+  A11Y role=dialog keys="Escape closes. Focus trapped. Focus returns to trigger on close."
+  WCAG 2.1.2 No Keyboard Trap 1.3.1 Info and Relationships
+  EX "Filter side panel" <Sheet> <SheetTrigger asChild><Button>Filters</Button></SheetTrigger> <SheetContent side="left"> <SheetHeader><SheetTitle>Filter results</SheetTitle></SheetHeader> <FilterPanel filters={filters} onChange={setFilters} /> </SheetContent> </Sheet>
 
 C ui/skeleton Skeleton [animation:pulse|shimmer|none=pulse]
+  WHEN Replace content areas while async data loads. Mirror the shape and size of the content it replaces for minimal layout shift.
+  NOT Spinner/progress indicators for actions (use Progress or a loading Button). Error states. Empty states.
+  ALT Progress — for determinate loading with known completion | Button isLoading — for action-level loading feedback
+  PREFER_OVER Blank space, spinners, or generic "Loading..." text during content fetch.
+  STATES pulse | shimmer | none
+  ANIM pulse: opacity oscillation | shimmer: highlight sweep left-to-right
+  RESPONSIVE Size via className — match the dimensions of the real content.
+  A11Y role=none (aria-hidden="true") keys="Not focusable."
+  WCAG 2.2.2 Pause Stop Hide — reduced-motion disables animation
+  EX "Card skeleton" <div className="travel-flight-card"> <Skeleton className="h-8 w-3/4" /> <Skeleton className="h-4 w-1/2 mt-2" /> </div>
+  EX "Shimmer variant" <Skeleton animation="shimmer" className="h-48 w-full rounded-lg" />
 
 C ui/skip-link SkipLink
   # The id of the main content area to skip to (without the `#`).
@@ -253,6 +329,16 @@ C ui/textarea Textarea
   P autoResize:boolean?
 
 C ui/toast Toast [variant:default|success|error|warning=default] @toast
+  WHEN Non-blocking, transient feedback for completed actions: save success, copy confirmation, booking created. Auto-dismisses after a timeout.
+  NOT Critical errors requiring user action (use Alert or Dialog). Persistent status messages. Information the user needs to read carefully.
+  ALT Alert — for persistent, inline status banners | Dialog — for errors requiring acknowledgment | NotificationBadge — for unread count indicators
+  STATES entering | visible | dismissing | dismissed
+  ANIM Slides in from bottom-right, fades out on dismiss
+  RESPONSIVE Full-width on mobile, fixed-width on desktop. Stacks vertically for multiple toasts.
+  A11Y role=status (default) or alert (for error/warning variants) keys="Focus is not moved to toast — it is non-blocking. Close button is focusable."
+  WCAG 4.1.3 Status Messages 2.2.1 Timing Adjustable
+  EX "Success notification" toast({ title: 'Booking confirmed', description: 'Check your email for details.', variant: 'success' })
+  EX "Error notification" toast({ title: 'Payment failed', description: 'Please try a different card.', variant: 'error' })
 
 C ui/tooltip Tooltip @tooltip
 
@@ -319,6 +405,15 @@ C travel/filter-bar FilterBar
   P onToggleSidebar:function req
   P airlineOptions:array?
   P maxPrice:number?
+  WHEN Horizontal quick-filter strip above flight search results. Manages chip order, FLIP animation, and coordination between sidebar and inline filters.
+  NOT Hotel or car filter bars (FilterPanel with mode="hotels|cars" is more appropriate). Vertical filter layouts.
+  ALT FilterPanel — full sidebar panel with all filter options | Chip — for standalone toggle chips outside the results page
+  STATES default | with-active-filters (chips reorder via FLIP) | sidebar-open (AllFiltersChip active)
+  ANIM FLIP position animation on chip activation (useFlip hook) | Chip reordering is frozen while a popover is open to prevent layout jump
+  RESPONSIVE Single scrollable row; no wrapping.
+  A11Y role=toolbar (implicit via structure) keys="Tab between chips. Each chip handles its own keyboard interaction."
+  WCAG 2.1.1 Keyboard
+  EX "Full filter bar" <FilterBar filters={filters} onChange={setFilters} sortBy={sortBy} onSortChange={setSortBy} sidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} airlineOptions={airlines} maxPrice={2000} />
 
 C travel/filter-chip FilterChip
   # When active, clicking the chip label opens this popover instead of dismissing the filter.
@@ -331,6 +426,18 @@ C travel/filter-chip FilterChip
   P style:React.CSSProperties?
   P 'data-flip-id':string?
   SLOTS label popoverContent
+  WHEN Filter bar chips in travel search results. Three exports for three roles: FilterChip (dropdown filter with popover), QuickFilterChip (single toggle), AllFiltersChip (opens full filter panel).
+  NOT Generic toggle chips outside the filter bar context (use Chip). Static labels (use Badge).
+  ALT Chip — generic interactive chip outside filter bar context | FilterBar — the full filter bar that composes these chips
+  PREFER_OVER Custom filter dropdown implementations.
+  STATES inactive | active (filled style + clear icon) | popover-open
+  ANIM FLIP animation via data-flip-id when chips reorder on activation | Popover fade/slide transition
+  RESPONSIVE FilterBar handles horizontal scroll; chips do not wrap.
+  A11Y role=button keys="Tab to focus. Enter/Space to activate. Popover traps focus when open, Escape closes."
+  WCAG 2.1.1 Keyboard 4.1.2 Name Role Value
+  EX "Dropdown filter chip" <FilterChip label="Price" activeLabel="Up to £500" isActive={priceActive} popoverContent={<PriceRangeSlider />} onClear={() => clearPrice()} />
+  EX "Quick toggle chip" <QuickFilterChip label="Nonstop only" isActive={nonstopOnly} onClick={() => setNonstopOnly(v => !v)} onClear={() => setNonstopOnly(false)} />
+  EX "All filters chip" <AllFiltersChip activeCount={3} onClick={toggleSidebar} isActive={sidebarOpen} />
 
 C travel/filter-panel FilterPanel
   # Controlled open state — false collapses the sidebar
@@ -360,6 +467,18 @@ C travel/flight-card FlightCard
   P seatsLeft:number?
   P isCompact:boolean?
   P isSelected:boolean?
+  WHEN Display a single flight option in search results. Supports one-way, round-trip, and multi-city (up to 6 legs). Use isCompact for the 400px mini-list panel.
+  NOT Full itinerary detail (use FlightDetails). Hotel or car results (use HotelCard, CarCard). Static schedule display without selection.
+  ALT FlightDetails — full expanded itinerary with fare options | ActivityCard / HotelCard — for non-flight travel products
+  PREFER_OVER Custom flight result row implementations.
+  STATES default | hover (elevated shadow) | selected (isSelected=true — 2px primary border) | compact (isCompact=true — stacked layout)
+  ANIM Shadow transition on hover | Container-query switches to compact layout at 480px
+  RESPONSIVE Desktop: content | price column. Compact/narrow: stacked with price strip at bottom.
+  A11Y role=article keys="Tab to focus card (tabIndex=0). Enter/Space triggers onSelect. Select button and Pin button are independently focusable."
+  WCAG 2.1.1 Keyboard 1.3.1 Info and Relationships
+  EX "One-way nonstop" <FlightCard legs={[{ segments: [{ airline: 'BA', flightNumber: 'BA178', origin: 'JFK', destination: 'LHR', departureTime: '10:00 PM', arrivalTime: '10:15 AM+1', duration: '7h 15m', class: 'Economy' }], stops: 0, duration: '7h 15m' }]} price="£420" totalPrice="£840" baggage={{ carryOn: 1, checked: 0 }} onSelect={handleSelect} />
+  EX "Compact (mini-list)" <FlightCard {...props} isCompact isSelected />
+  EX "With urgency and best-value tag" <FlightCard {...props} isBestValue seatsLeft={3} />
 
 C travel/flight-details FlightDetails
   # Night count between outbound arrival and return departure
@@ -371,12 +490,32 @@ C travel/flight-details FlightDetails
   P onClose:function req
   P onShare:function?
   P onSelectFare:function?
+  WHEN Full itinerary detail panel shown when a FlightCard is selected. Displays all segments, layovers, fare options, and nights between legs.
+  NOT Compact result list (use FlightCard). Booking confirmation (use BookingConfirmation). Static schedule display.
+  ALT FlightCard — compact result card | BookingConfirmation — post-booking receipt
+  PREFER_OVER Custom itinerary detail implementations.
+  STATES closed (isOpen=false) | open (isOpen=true, slides in from right) | fare-option selected
+  ANIM Panel slides in from the right when isOpen changes to true
+  RESPONSIVE Full-height panel, 720px wide on desktop. Full-width on mobile.
+  A11Y role=dialog keys="Escape or close button to close. Focus managed on open/close."
+  WCAG 2.1.1 Keyboard 1.3.1 Info and Relationships
+  EX "Basic usage" <FlightDetails title="New York → London" legs={flightLegs} fareOptions={fareOptions} isOpen={detailOpen} onClose={() => setDetailOpen(false)} onSelectFare={handleFareSelect} />
 
 C travel/flight-map FlightMap
   # [origin, destination] — great-circle arc is generated internally
   P airports:array req
   P paths:array?
   P initialViewState:object?
+  WHEN Visualise flight routes on a map alongside search results or flight detail. Renders great-circle arcs with animated dashes and airport markers.
+  NOT Static route diagrams (use ItineraryTimeline). Hotel location maps. Non-flight geographic contexts.
+  ALT ItineraryTimeline — for linear, text-based segment display without a map
+  STATES loading (map tiles loading) | loaded | animating dashes (RAF loop) | refitting (fitBounds on airport or resize change)
+  ANIM Animated white dashes on flight paths via requestAnimationFrame at ~20fps | fitBounds camera animation (900ms on airport change, 700ms on resize) | Pulsing ring on origin airport marker
+  RESPONSIVE Must be placed in a flex:1 container to fill remaining space. Container must have overflow:hidden.
+  A11Y role=img (map canvas) keys="Map canvas is not keyboard-navigable by default. Navigation controls removed. Ensure route information is also available as text (ItineraryTimeline)."
+  WCAG 1.1.1 Non-text Content — provide text alternative of route via ItineraryTimeline alongside the map
+  EX "Single flight route" <FlightMap airports={[ { id: 'JFK', lat: 40.64, lng: -73.78, label: 'JFK', isOrigin: true }, { id: 'LHR', lat: 51.47, lng: -0.45, label: 'LHR', isDestination: true }, ]} paths={[{ id: 'seg-1', originId: 'JFK', destinationId: 'LHR', coordinates: [[-73.78, 40.64], [-0.45, 51.47]] }]} />
+  EX "With connecting stop" <FlightMap airports={[ { id: 'JFK', lat: 40.64, lng: -73.78, label: 'JFK', isOrigin: true }, { id: 'ZRH', lat: 47.46, lng: 8.56 }, { id: 'LHR', lat: 51.47, lng: -0.45, label: 'LHR', isDestination: true }, ]} paths={[ { id: 's1', originId: 'JFK', destinationId: 'ZRH', coordinates: [[-73.78, 40.64], [8.56, 47.46]] }, { id: 's2', originId: 'ZRH', destinationId: 'LHR', coordinates: [[8.56, 47.46], [-0.45, 51.47]] }, ]} />
 
 C travel/hotel-card HotelCard
   P name:string req
@@ -405,6 +544,16 @@ C travel/nav-bar NavBar
   P onAccountClick:function?
   P onMenuClick:function?
   SLOTS brandLogo
+  WHEN Top-level page header on all travel pages. Shows brand, optional mini search pill, 24/7 support phone, account button, and hamburger menu.
+  NOT In-page section headers. Mobile bottom tab bars. Sub-navigation within a page (use Tabs).
+  ALT ui/nav-bar — the generic base NavBar without travel-specific search pill | Tabs — for in-page tab navigation
+  PREFER_OVER Custom header implementations.
+  STATES default | with-search-pill (search prop provided) | scrolled (consumer manages)
+  RESPONSIVE Search pill collapses or hides on narrow viewports (CSS contract handles).
+  A11Y role=banner keys="Tab through brand, search pill, support link, account button, menu button."
+  WCAG 2.1.1 Keyboard 2.4.1 Bypass Blocks — pair with SkipLink
+  EX "With search pill" <NavBar brandName="TravelCo" search={{ route: 'NYC → LON', dates: '12–19 Mar', passengers: 2 }} onSearchClick={openSearchOverlay} supportPhone="+1 800 123 4567" onAccountClick={openAccount} onMenuClick={openMenu} />
+  EX "Brand only" <NavBar brandName="TravelCo" onAccountClick={openAccount} onMenuClick={openMenu} />
 
 C travel/passenger-form PassengerForm
   P index:number req
@@ -437,6 +586,16 @@ C travel/search-form SearchForm [divider:bottom|top|none=none] [indent:true|fals
   P airportOptions:array?
   P recentSearches:array?
   P onSearch:function?
+  WHEN Primary flight/hotel search entry point. Handles origin/destination, date range, passenger count, cabin class, and trip type. Use in the nav bar or as a standalone hero search.
+  NOT Read-only search summary display (use the nav bar search pill). Car or activity search (those require different form fields).
+  ALT NavBar search pill — compact read-only summary with edit trigger | SearchOverlay — wrapper that slides the SearchForm into full-screen on mobile
+  STATES collapsed (in nav) | expanded (hero or overlay) | tab-flights | tab-hotels | trip-type: one-way|round-trip|multi-city
+  ANIM Divider variants (top/bottom) animate on scroll | Destination suggestion list fades in
+  RESPONSIVE Stacks vertically on narrow viewports. SearchOverlay wraps for mobile full-screen mode.
+  A11Y role=search (form with role=search) keys="Tab through all fields. Combobox supports arrow keys for suggestion navigation. Date picker is keyboard-navigable."
+  WCAG 2.1.1 Keyboard 3.3.2 Labels or Instructions 1.3.1 Info and Relationships
+  EX "Hero search form" <SearchForm destinationOptions={destinations} airportOptions={airports} recentSearches={recent} onSearch={handleSearch} />
+  EX "Controlled active tab" <SearchForm activeTab="hotels" onTabChange={setTab} onSearch={handleSearch} />
 
 C travel/search-overlay SearchOverlay
   P isOpen:boolean req
@@ -530,7 +689,7 @@ PAT data-table "Data Table" [ui/table,ui/pagination,ui/skeleton]
   EXAMPLE <Table columns={cols} rows={rows} />
 
 # SCREENS
-SCR flights-search "Flights Search" [ui/breadcrumb,ui/card,ui/nav-bar,ui/select,travel/filter-bar,travel/filter-panel,travel/flight-card,travel/flight-details,travel/flight-map,travel/nav-bar,travel/search-form,travel/search-overlay]
+SCR flights-search "Flights Search" [ui/card,ui/nav-bar,travel/filter-bar,travel/filter-panel,travel/flight-card,travel/flight-details,travel/flight-map,travel/nav-bar,travel/search-form,travel/search-overlay]
   PAT search-form filter-bar flight-listing flight-detail nav-bar
 SCR hotels-search "Hotels Search" [travel/hotel-card,travel/room-gallery,ui/badge,ui/skeleton,travel/nav-bar,ui/button,ui/dropdown-menu]
   PAT hotel-listing nav-bar

@@ -96,6 +96,31 @@ export interface ComponentEntry {
   hasCssContract: boolean;
   /** Whether the component accepts className */
   acceptsClassName: boolean;
+  /** When/why to use this component — AI selection guidance */
+  aiHints?: {
+    whenToUse: string;
+    whenNotToUse?: string;
+    alternatives?: string[];
+    preferOver?: string;
+    neverUseFor?: string;
+  };
+  /** Interaction model — states, interactions, animations */
+  behavior?: {
+    states: string[];
+    interactions: string[];
+    animations?: string[];
+    responsive?: string;
+  };
+  /** Accessibility contract — role, keyboard, ARIA, WCAG */
+  accessibility?: {
+    role: string;
+    keyboardNav: string;
+    ariaAttributes?: string[];
+    wcag?: string[];
+    screenReader?: string;
+  };
+  /** Canonical JSX usage examples */
+  examples?: Array<{ label: string; code: string }>;
 }
 
 // ─── Dependency graph ─────────────────────────────────────────────────────────
