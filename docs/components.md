@@ -72,7 +72,7 @@ Every value must come from the design system — no exceptions.
 | Hover/active | `oklch(from var(--color-X) calc(l ± 0.07) c h)` | hardcoded colour |
 | White-alpha | `oklch(100% 0 0 / 0.8)` | `rgba(255,255,255,0.8)` or alpha token |
 
-Token source: `packages/tokens/src/definitions/` — after editing, run `cd packages/tokens && npm run build`.
+Token source: `packages/tokens/src/definitions/` — after editing, run `cd packages/tokens && pnpm build`.
 Component token JSON files (`button.json`, etc.) are documentation-only; components use `var(--color-*)` directly.
 
 ---

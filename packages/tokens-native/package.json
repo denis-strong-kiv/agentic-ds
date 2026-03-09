@@ -20,7 +20,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@travel/tokens": "*"
+    "@travel/tokens": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.3.0",

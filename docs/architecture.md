@@ -6,14 +6,14 @@
 
 | Layer | Technology |
 |---|---|
-| Monorepo | Turborepo + npm workspaces |
+| Monorepo | Turborepo + pnpm workspaces |
 | UI components | React + Radix UI Primitives + CVA |
 | Styling | Tailwind CSS v4 + CSS custom properties |
 | Tokens | OKLCH two-seed model → CSS custom properties |
 | App | Next.js 16 + React 19 + next-intl v4 |
 | Testing | Vitest + React Testing Library + jsdom |
 | Docs | Storybook 8 + @storybook/react-vite |
-| Package manager | **npm only** (not yarn, not bun) |
+| Package manager | **pnpm only** (not npm, not yarn, not bun) |
 
 ---
 
@@ -39,7 +39,7 @@ CSS custom properties (packages/tokens/src/output/tokens.css)
 Tailwind utility classes + var(--color-*) in components
 ```
 
-After editing any token definition: `cd packages/tokens && npm run build`
+After editing any token definition: `cd packages/tokens && pnpm build`
 
 ---
 

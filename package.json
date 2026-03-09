@@ -2,17 +2,13 @@
   "name": "travel-design-system",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "FORCE_COLOR=1 turbo test --ui=stream",
-    "storybook": "npm run -w @travel/storybook storybook",
-    "storybook:build": "npm run -w @travel/storybook storybook:build",
+    "storybook": "pnpm --filter @travel/storybook storybook",
+    "storybook:build": "pnpm --filter @travel/storybook storybook:build",
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {
@@ -37,5 +33,17 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@10.9.2"
+  "packageManager": "pnpm@10.15.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@bundled-es-modules/glob",
+      "@parcel/watcher",
+      "@swc/core",
+      "esbuild",
+      "sharp",
+      "style-dictionary",
+      "unrs-resolver",
+      "workerd"
+    ]
+  }
 }

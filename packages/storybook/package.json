@@ -7,8 +7,8 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
-    "@travel/tokens": "*",
-    "@travel/ui": "*",
+    "@travel/tokens": "workspace:*",
+    "@travel/ui": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

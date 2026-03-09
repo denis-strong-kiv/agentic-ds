@@ -23,7 +23,7 @@
 
 ### Commands
 ```bash
-npm run storybook                # Start dev server on :6006
+pnpm storybook                   # Start dev server on :6006
 lsof -ti :6006 | xargs kill -9  # Kill stale Storybook process
 ```
 

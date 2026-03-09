@@ -270,7 +270,7 @@
   - Validate no broken references in default token set
   - Verify WCAG AA contrast on `color.primary.foreground` / `color.primary.default` and `color.foreground.default` / `color.background.default` in both modes
 
-**Checkpoint**: `cd packages/tokens && npm run build` produces CSS custom properties, Tailwind theme, and RN tokens from a test brand config. Token resolution traverses all three tiers. Validation catches broken/circular references.
+**Checkpoint**: `cd packages/tokens && pnpm build` produces CSS custom properties, Tailwind theme, and RN tokens from a test brand config. Token resolution traverses all three tiers. Validation catches broken/circular references.
 
 ---
 
@@ -569,7 +569,7 @@
   - `tabs.stories.tsx` — `play`: click each tab, verify panel content switches
   - Uses `@storybook/test` (`expect`, `userEvent`, `within`)
 
-**Checkpoint**: `cd packages/ui && npx vitest run` — all base component tests pass. `npm run storybook -- --ci` — all interaction tests pass. Zero `aria-*` violations in test output.
+**Checkpoint**: `cd packages/ui && pnpm exec vitest run` — all base component tests pass. `pnpm storybook -- --ci` — all interaction tests pass. Zero `aria-*` violations in test output.
 
 ---
 

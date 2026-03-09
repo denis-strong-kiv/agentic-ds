@@ -2,7 +2,7 @@
  * Pre-resolved static native tokens for all brands.
  * Colors are hex (OKLCH → hex converted), spacing is in density-independent pixels.
  *
- * These are generated outputs — update by running `npm run build:tokens-native`
+ * These are generated outputs — update by running `pnpm build:tokens-native`
  * in packages/tokens (or re-run the token engine).
  */
 

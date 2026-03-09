@@ -4,7 +4,7 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
-// Run `ANALYZE=true npm run build` to generate bundle analysis reports.
+// Run `ANALYZE=true pnpm build` to generate bundle analysis reports.
 const analyze = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,

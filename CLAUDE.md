@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 
 ## Overview
 
-This repository is a **multi-brand travel design system** monorepo built with Turborepo + npm workspaces.
+This repository is a **multi-brand travel design system** monorepo built with Turborepo + pnpm workspaces.
 It also contains a legacy Cloudflare Worker at the root (`src/index.ts`); see the [Cloudflare Worker](#cloudflare-worker) section below.
 
 ---
@@ -33,26 +33,26 @@ Agentic-DS/
 
 ```bash
 # Development
-npm run dev               # Start all packages in watch mode (Turborepo)
-npm run dev --filter=@travel/web     # Start only the Next.js app
+pnpm dev                              # Start all packages in watch mode (Turborepo)
+pnpm dev --filter @travel/web        # Start only the Next.js app
 
 # Testing
-npm test                  # Run all tests across all packages (Vitest)
-npm test --filter=@travel/ui         # Run UI component tests only
-cd packages/tokens-native && npx vitest run  # Run RN parity tests
+pnpm test                             # Run all tests across all packages (Vitest)
+pnpm test --filter @travel/ui        # Run UI component tests only
+cd packages/tokens-native && pnpm exec vitest run  # Run RN parity tests
 
 # Storybook
-npm run storybook         # Start Storybook dev server on :6006
+pnpm storybook                        # Start Storybook dev server on :6006
 
 # Building
-npm run build             # Build all packages
-ANALYZE=true npm run build --filter=@travel/web  # Build + open bundle analyzer
+pnpm build                            # Build all packages
+ANALYZE=true pnpm build --filter @travel/web  # Build + open bundle analyzer
 
 # Type checking
-npm run typecheck         # TypeScript check across all packages
+pnpm typecheck                        # TypeScript check across all packages
 
 # Token pipeline
-cd packages/tokens && npm run build  # Rebuild CSS custom property output
+cd packages/tokens && pnpm build     # Rebuild CSS custom property output
 ```
 
 ---
@@ -69,7 +69,7 @@ Located at `packages/tokens/`.
 - **Brands**: `default`, `luxury`, `adventure`, `eco` — each gets its own CSS class (`.brand-luxury`, etc.)
 - Color modes: `:root` = light, `.dark` = dark mode
 
-**Critical**: After editing any file in `src/definitions/`, run `npm run build` to regenerate `tokens.css`.
+**Critical**: After editing any file in `src/definitions/`, run `pnpm build` to regenerate `tokens.css`.
 
 ### `@travel/ui` — Component Library
 
@@ -194,9 +194,9 @@ getNativeTokens() + useBrandTokens()
 The legacy Worker lives at `src/index.ts` (root level). Commands:
 
 ```bash
-npm run dev          # wrangler dev
-npm run deploy       # deploy to Cloudflare
-npm run cf-typegen   # regenerate types from wrangler.toml
+pnpm dev          # wrangler dev
+pnpm deploy       # deploy to Cloudflare
+pnpm cf-typegen   # regenerate types from wrangler.toml
 ```
 
 **Bindings**: `env.DB` (D1/SQLite), `env.KV` (60s TTL cache), `env.BUCKET` (R2).

@@ -34,8 +34,8 @@
 ## Commands
 
 ```bash
-npm test --filter=@travel/ui        # Run UI component tests
-npm test                            # Run all tests across all packages
+pnpm test --filter @travel/ui       # Run UI component tests
+pnpm test                           # Run all tests across all packages
 ```
 
 ---
