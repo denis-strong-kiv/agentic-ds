@@ -74,20 +74,35 @@
     padding-inline: 4px;
     line-height: 18px;
   }
-  /* Purple badge — count of active filters (used on All Filters chip) */
+  /* Purple badge — collapses to zero, expands smoothly; content fades in after chip reaches size */
   .travel-filter-chip-count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 1rem;
+    min-width: 0;
+    max-width: 0;
     height: 1rem;
-    padding-inline: 4px;
+    padding-inline: 0;
     border-radius: 9999px;
     font-size: 0.625rem;
     font-weight: 600;
     line-height: 12px;
     background: var(--color-primary-default);
     color: #ffffff;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      min-width var(--duration-normal) ease,
+      max-width var(--duration-normal) ease,
+      padding-inline var(--duration-normal) ease;
+  }
+  .travel-filter-chip-count--visible {
+    min-width: 1rem;
+    max-width: 2rem;
+    padding-inline: 4px;
+    opacity: 1;
+    /* Start partway through the chip expansion so both finish at the same time */
+    animation: chip-trailing-appear var(--duration-fast) ease calc(var(--duration-normal) - var(--duration-fast)) backwards;
   }
   .travel-filter-chip-arrow-icon {
     display: inline-flex;
@@ -96,33 +111,37 @@
     width: 16px;
     height: 16px;
     flex-shrink: 0;
-
+    opacity: 0.5;
+    /* Instant swap: close icon is hidden immediately, arrow fades in right away */
+    animation: chip-trailing-appear var(--duration-fast) ease 0s backwards;
   }
   .travel-filter-chip-filter-icon {
     flex-shrink: 0;
     opacity: 0.7;
   }
 
-  /* ── Clear icon (inside button or as inline span) ────────────────────────── */
+  /* ── Clear icon — always rendered; collapses to zero when inactive ──────── */
   .travel-filter-chip-clear-icon {
-    position: relative;
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-    opacity: 0.4;
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
     cursor: pointer;
-    transition: opacity var(--duration-fast);
+    transition:
+      max-width var(--duration-normal) ease,
+      opacity var(--duration-fast) ease;
   }
-  /* Extend hit zone by 8px in every direction — 16px icon + 8+8 = 32px total (full chip height) */
-  .travel-filter-chip-clear-icon::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    bottom: -8px;
-    left: -8px;
+  .travel-filter-chip-clear-icon--visible {
+    max-width: 1rem;
+    opacity: 0.4;
+    pointer-events: auto;
+    /* Start partway through chip expansion so both finish at the same time */
+    animation: chip-trailing-appear var(--duration-fast) ease calc(var(--duration-normal) - var(--duration-fast)) backwards;
   }
-  .travel-filter-chip-clear-icon:hover {
+  .travel-filter-chip-clear-icon--visible:hover {
     opacity: 1;
   }
 
@@ -131,4 +150,10 @@
     width: 18rem;
     padding: 1rem;
   }
+}
+
+/* Shared trailing-element entrance — 'to' is implicit from each element's computed style,
+   so every trailing item fades to its own natural opacity without conflicting with hover. */
+@keyframes chip-trailing-appear {
+  from { opacity: 0; transform: scale(0.7); }
 }

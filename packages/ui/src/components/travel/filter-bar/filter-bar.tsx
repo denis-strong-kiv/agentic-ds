@@ -29,6 +29,8 @@ export interface FilterBarProps {
 function useFlip() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const savedPositions = React.useRef<Map<string, number>>(new Map());
+  // Track AllFiltersChip right edge so badge growth is factored out of snap positions
+  const savedAnchorRight = React.useRef<number>(0);
 
   const capturePositions = React.useCallback(() => {
     const container = containerRef.current;
@@ -37,6 +39,8 @@ function useFlip() {
     container.querySelectorAll<HTMLElement>('[data-flip-id]').forEach(el => {
       savedPositions.current.set(el.dataset.flipId!, el.getBoundingClientRect().left);
     });
+    const anchor = container.querySelector<HTMLElement>('.travel-filter-chip--all-filters');
+    savedAnchorRight.current = anchor?.getBoundingClientRect().right ?? 0;
   }, []);
 
   // Runs after every commit — applies FLIP if positions were captured
@@ -44,16 +48,21 @@ function useFlip() {
     const container = containerRef.current;
     if (!container || savedPositions.current.size === 0) return;
 
+    // How much did the AllFilters chip grow? Offset snap positions by this amount
+    // so chips never start from a position that overlaps the wider badge.
+    const anchor = container.querySelector<HTMLElement>('.travel-filter-chip--all-filters');
+    const anchorGrowth = (anchor?.getBoundingClientRect().right ?? 0) - savedAnchorRight.current;
+
     container.querySelectorAll<HTMLElement>('[data-flip-id]').forEach(el => {
       const id = el.dataset.flipId!;
       const prevLeft = savedPositions.current.get(id);
       if (prevLeft === undefined) return;
 
       const newLeft = el.getBoundingClientRect().left;
-      const dx = prevLeft - newLeft;
+      const dx = (prevLeft - newLeft) + anchorGrowth;
       if (Math.abs(dx) < 2) return;
 
-      // Snap to old position, then animate to new
+      // Snap to adjusted position (never behind the AllFilters badge), then animate to new
       el.style.transform = `translateX(${dx}px)`;
       el.style.transition = 'none';
       requestAnimationFrame(() => {
@@ -274,6 +283,13 @@ export function FilterBar({
     onChange(newFilters);
   }, [capturePositions, onChange, maxPrice]);
 
+  // handleClear: called by clear-button (X) clicks. Resets frozen popover state immediately
+  // so the badge count updates even if Radix never fires onOpenChange(false) on unmount.
+  const handleClear = React.useCallback((newFilters: FilterState) => {
+    setIsAnyPopoverOpen(false);
+    handleChange(newFilters);
+  }, [handleChange]);
+
   // External sync: when filters change via the sidebar (not through our chip handlers),
   // update activeOrder and trigger FLIP so chips animate to their new positions.
   React.useEffect(() => {
@@ -375,7 +391,7 @@ export function FilterBar({
           style={chipStyle('nonstop', nonstopOnly)}
           onClick={() => handleChange({ ...filters, stops: ['nonstop'] })}
           {...(nonstopOnly ? { popoverContent: stopsPopover, onOpenChange: open => handleOpenChange('nonstop', open) } : {})}
-          {...(nonstopOnly ? { onClear: () => handleChange({ ...filters, stops: [] }) } : {})}
+          {...(nonstopOnly ? { onClear: () => handleClear({ ...filters, stops: [] }) } : {})}
         />
 
         {/* ── FilterChips ── */}
@@ -389,7 +405,7 @@ export function FilterBar({
           popoverContent={pricePopover}
           onOpenChange={open => handleOpenChange('price', open)}
           {...(priceLabel !== undefined ? { activeLabel: priceLabel } : {})}
-          {...(priceActive ? { onClear: () => handleChange({ ...filters, priceRange: [0, maxPrice] }) } : {})}
+          {...(priceActive ? { onClear: () => handleClear({ ...filters, priceRange: [0, maxPrice] }) } : {})}
         />
 
         {/* Stops chip — hidden while nonstopOnly QuickFilter is covering it */}
@@ -403,7 +419,7 @@ export function FilterBar({
             popoverContent={stopsPopover}
             onOpenChange={open => handleOpenChange('stops', open)}
             {...(stopsLabel !== undefined ? { activeLabel: stopsLabel } : {})}
-            {...(stopsActive ? { onClear: () => handleChange({ ...filters, stops: [] }) } : {})}
+            {...(stopsActive ? { onClear: () => handleClear({ ...filters, stops: [] }) } : {})}
           />
         )}
 
@@ -417,7 +433,7 @@ export function FilterBar({
             popoverContent={airlinesPopover}
             onOpenChange={open => handleOpenChange('airlines', open)}
             {...(airlinesLabel !== undefined ? { activeLabel: airlinesLabel } : {})}
-            {...(airlinesActive ? { onClear: () => handleChange({ ...filters, airlines: [] }) } : {})}
+            {...(airlinesActive ? { onClear: () => handleClear({ ...filters, airlines: [] }) } : {})}
           />
         )}
 

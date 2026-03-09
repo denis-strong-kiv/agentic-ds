@@ -30,11 +30,13 @@ export function AllFiltersChip({ count, isActive = false, onClick, className, st
       <span className="travel-filter-chip-inner">
         <SlidersHorizontal size={14} className="travel-filter-chip-filter-icon" aria-hidden />
         <span className="travel-filter-chip-label">All filters</span>
-        {count !== undefined && count > 0 && (
-          <span className="travel-filter-chip-count" aria-label={`${count} active filters`}>
-            {count}
-          </span>
-        )}
+        <span
+          className={cn('travel-filter-chip-count', count !== undefined && count > 0 && 'travel-filter-chip-count--visible')}
+          aria-label={count !== undefined && count > 0 ? `${count} active filters` : undefined}
+          aria-hidden={!(count !== undefined && count > 0)}
+        >
+          {count ?? ''}
+        </span>
       </span>
     </button>
   );
@@ -74,14 +76,16 @@ export function QuickFilterChip({
     </span>
   );
 
-  const clearIcon = onClear && (
+  const clearIconVisible = isActive && !!onClear;
+  const clearIcon = (
     <span
-      role="button"
-      tabIndex={0}
-      className="travel-filter-chip-clear-icon"
-      aria-label={`Remove ${label} filter`}
-      onClick={e => { e.stopPropagation(); onClear(); }}
-      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear(); } }}
+      role={clearIconVisible ? 'button' : undefined}
+      tabIndex={clearIconVisible ? 0 : -1}
+      className={cn('travel-filter-chip-clear-icon', clearIconVisible && 'travel-filter-chip-clear-icon--visible')}
+      aria-label={clearIconVisible ? `Remove ${label} filter` : undefined}
+      aria-hidden={!clearIconVisible}
+      onClick={clearIconVisible ? (e => { e.stopPropagation(); onClear!(); }) : undefined}
+      onKeyDown={clearIconVisible ? (e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear!(); } }) : undefined}
     >
       <OtaCancelCircleFill aria-hidden />
     </span>
@@ -129,7 +133,7 @@ export function QuickFilterChip({
       aria-pressed={isActive}
     >
       {chipInner}
-      {isActive && clearIcon}
+      {clearIcon}
     </button>
   );
 }
@@ -170,6 +174,21 @@ export function FilterChip({
     </span>
   );
 
+  const clearIconVisible = isActive && !!onClear;
+  const clearIcon = (
+    <span
+      role={clearIconVisible ? 'button' : undefined}
+      tabIndex={clearIconVisible ? 0 : -1}
+      className={cn('travel-filter-chip-clear-icon', clearIconVisible && 'travel-filter-chip-clear-icon--visible')}
+      aria-label={clearIconVisible ? `Remove ${label} filter` : undefined}
+      aria-hidden={!clearIconVisible}
+      onClick={clearIconVisible ? (e => { e.stopPropagation(); onClear!(); }) : undefined}
+      onKeyDown={clearIconVisible ? (e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear!(); } }) : undefined}
+    >
+      <OtaCancelCircleFill aria-hidden />
+    </span>
+  );
+
   // No popover — plain button (placeholder chips, or degenerate use)
   if (!popoverContent) {
     return (
@@ -190,18 +209,7 @@ export function FilterChip({
             <OtaArrowDown04Round />
           </span>
         )}
-        {isActive && onClear && (
-          <span
-            role="button"
-            tabIndex={0}
-            className="travel-filter-chip-clear-icon"
-            aria-label={`Remove ${label} filter`}
-            onClick={e => { e.stopPropagation(); onClear(); }}
-            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear(); } }}
-          >
-            <OtaCancelCircleFill aria-hidden />
-          </span>
-        )}
+        {clearIcon}
       </button>
     );
   }
@@ -226,18 +234,7 @@ export function FilterChip({
                 <OtaArrowDown04Round />
               </span>
             )}
-            {isActive && onClear && (
-              <span
-                role="button"
-                tabIndex={0}
-                className="travel-filter-chip-clear-icon"
-                aria-label={`Remove ${label} filter`}
-                onClick={e => { e.stopPropagation(); onClear(); }}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClear(); } }}
-              >
-                <OtaCancelCircleFill aria-hidden />
-              </span>
-            )}
+            {clearIcon}
           </button>
         </PopoverTrigger>
         <PopoverContent className="travel-filter-chip-popover" align="start" sideOffset={6}>
