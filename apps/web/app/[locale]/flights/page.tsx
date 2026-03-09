@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { NavBar } from '@travel/ui/components/ui/nav-bar';
 import { FilterBar } from '@travel/ui/components/travel/filter-bar';
 import { FilterPanel, createDefaultFilters } from '@travel/ui/components/travel/filter-panel';
@@ -8,6 +8,7 @@ import { FlightCard } from '@travel/ui/components/travel/flight-card';
 import { FlightDetails } from '@travel/ui/components/travel/flight-details';
 import { SearchOverlay } from '@travel/ui/components/travel/search-overlay';
 import { TravelSearchForm } from '@travel/ui/components/travel/search-form';
+import { FlightMap } from '@travel/ui/components/travel/flight-map';
 import type { FilterState, SortOption } from '@travel/ui/components/travel/filter-panel';
 import type { FlightLeg, BaggageAllowance } from '@travel/ui/components/travel/flight-card';
 import type { FareOption } from '@travel/ui/components/travel/flight-details';
@@ -343,16 +344,19 @@ const FLIGHTS: FlightResult[] = [
   },
 ];
 
-const AIRPORTS: DestinationOption[] = [
-  { id: 'airport-jfk', iata: 'JFK', city: 'New York', country: 'United States', label: 'John F. Kennedy Intl Airport', itemType: 'airport', shortName: 'New York', distance: '13 km from city center', geographicBreadcrumbs: [{ type: 'city', label: 'New York' }, { type: 'country', label: 'United States' }] },
-  { id: 'airport-ewr', iata: 'EWR', city: 'Newark', country: 'United States', label: 'Newark Liberty Intl Airport', itemType: 'airport', shortName: 'Newark', distance: '9 km from city center', geographicBreadcrumbs: [{ type: 'city', label: 'Newark' }, { type: 'country', label: 'United States' }] },
-  { id: 'airport-lga', iata: 'LGA', city: 'New York', country: 'United States', label: 'LaGuardia Airport', itemType: 'airport', shortName: 'New York', distance: '8 km from city center', geographicBreadcrumbs: [{ type: 'city', label: 'New York' }, { type: 'country', label: 'United States' }] },
-  { id: 'airport-lhr', iata: 'LHR', city: 'London', country: 'United Kingdom', label: 'London Heathrow Airport', itemType: 'airport', shortName: 'London', geographicBreadcrumbs: [{ type: 'city', label: 'London' }, { type: 'country', label: 'United Kingdom' }] },
-  { id: 'airport-lgw', iata: 'LGW', city: 'London', country: 'United Kingdom', label: 'London Gatwick Airport', itemType: 'airport', shortName: 'London', geographicBreadcrumbs: [{ type: 'city', label: 'London' }, { type: 'country', label: 'United Kingdom' }] },
-  { id: 'airport-cdg', iata: 'CDG', city: 'Paris', country: 'France', label: 'Charles de Gaulle Airport', itemType: 'airport' },
-  { id: 'airport-ams', iata: 'AMS', city: 'Amsterdam', country: 'Netherlands', label: 'Amsterdam Schiphol Airport', itemType: 'airport' },
-  { id: 'airport-fra', iata: 'FRA', city: 'Frankfurt', country: 'Germany', label: 'Frankfurt Airport', itemType: 'airport' },
-  { id: 'airport-zrh', iata: 'ZRH', city: 'Zurich', country: 'Switzerland', label: 'Zurich Airport', itemType: 'airport' },
+const AIRPORTS: (DestinationOption & { lat: number, lng: number })[] = [
+  { id: 'airport-jfk', iata: 'JFK', city: 'New York', country: 'United States', label: 'John F. Kennedy Intl Airport', itemType: 'airport', shortName: 'New York', distance: '13 km from city center', geographicBreadcrumbs: [{ type: 'city', label: 'New York' }, { type: 'country', label: 'United States' }], lat: 40.6413, lng: -73.7781 },
+  { id: 'airport-ewr', iata: 'EWR', city: 'Newark', country: 'United States', label: 'Newark Liberty Intl Airport', itemType: 'airport', shortName: 'Newark', distance: '9 km from city center', geographicBreadcrumbs: [{ type: 'city', label: 'Newark' }, { type: 'country', label: 'United States' }], lat: 40.6895, lng: -74.1745 },
+  { id: 'airport-lga', iata: 'LGA', city: 'New York', country: 'United States', label: 'LaGuardia Airport', itemType: 'airport', shortName: 'New York', distance: '8 km from city center', geographicBreadcrumbs: [{ type: 'city', label: 'New York' }, { type: 'country', label: 'United States' }], lat: 40.7769, lng: -73.8740 },
+  { id: 'airport-lhr', iata: 'LHR', city: 'London', country: 'United Kingdom', label: 'London Heathrow Airport', itemType: 'airport', shortName: 'London', geographicBreadcrumbs: [{ type: 'city', label: 'London' }, { type: 'country', label: 'United Kingdom' }], lat: 51.4700, lng: -0.4543 },
+  { id: 'airport-lgw', iata: 'LGW', city: 'London', country: 'United Kingdom', label: 'London Gatwick Airport', itemType: 'airport', shortName: 'London', geographicBreadcrumbs: [{ type: 'city', label: 'London' }, { type: 'country', label: 'United Kingdom' }], lat: 51.1537, lng: -0.1821 },
+  { id: 'airport-cdg', iata: 'CDG', city: 'Paris', country: 'France', label: 'Charles de Gaulle Airport', itemType: 'airport', lat: 49.0097, lng: 2.5479 },
+  { id: 'airport-ams', iata: 'AMS', city: 'Amsterdam', country: 'Netherlands', label: 'Amsterdam Schiphol Airport', itemType: 'airport', lat: 52.3105, lng: 4.7683 },
+  { id: 'airport-fra', iata: 'FRA', city: 'Frankfurt', country: 'Germany', label: 'Frankfurt Airport', itemType: 'airport', lat: 50.0379, lng: 8.5622 },
+  { id: 'airport-zrh', iata: 'ZRH', city: 'Zurich', country: 'Switzerland', label: 'Zurich Airport', itemType: 'airport', lat: 47.4582, lng: 8.5555 },
+  { id: 'airport-yyz', iata: 'YYZ', city: 'Toronto', country: 'Canada', label: 'Toronto Pearson Airport', itemType: 'airport', lat: 43.6777, lng: -79.6248 },
+  { id: 'airport-lis', iata: 'LIS', city: 'Lisbon', country: 'Portugal', label: 'Lisbon Portela Airport', itemType: 'airport', lat: 38.7742, lng: -9.1342 },
+  { id: 'airport-bos', iata: 'BOS', city: 'Boston', country: 'United States', label: 'Logan International Airport', itemType: 'airport', lat: 42.3656, lng: -71.0096 }
 ];
 
 const AIRLINES = [
@@ -368,13 +372,108 @@ const AIRLINES = [
 export default function FlightsPage() {
   const [filters, setFilters] = useState<FilterState>(createDefaultFilters(2345));
   const [sortBy, setSortBy] = useState<SortOption>('cheap-and-fast');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Keep sidebar open by default only on very large screens (>1440px)
+      if (window.innerWidth > 1440) {
+        setSidebarOpen(true);
+      }
+    }
+  }, []);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTab, setSearchTab] = useState<NavBarSearchTab>('flights');
 
   const selectedFlight = FLIGHTS.find(f => f.id === selectedId) ?? null;
   const detailOpen = selectedFlight !== null;
+
+  // Extract map data for the view
+  const mapAirports = useMemo(() => {
+    if (!selectedFlight) {
+      // Default: Display origin and destination from search criteria
+      const origin = AIRPORTS.find(a => a.iata === 'JFK');
+      const dest = AIRPORTS.find(a => a.iata === 'LHR');
+      
+      return [
+        origin ? { id: origin.iata, lat: origin.lat, lng: origin.lng, label: origin.iata, isOrigin: true } : null,
+        dest ? { id: dest.iata, lat: dest.lat, lng: dest.lng, label: dest.iata, isDestination: true } : null
+      ].filter(Boolean) as any[];
+    }
+
+    const uniqueAirports = new Map<string, typeof AIRPORTS[number] & { isOrigin?: boolean; isDestination?: boolean }>();
+    
+    selectedFlight.legs.forEach(leg => {
+      leg.segments.forEach((seg, index) => {
+        const isFirst = index === 0;
+        const isLast = index === leg.segments.length - 1;
+        
+        if (!uniqueAirports.has(seg.origin)) {
+          const airport = AIRPORTS.find(a => a.iata === seg.origin);
+          if (airport) uniqueAirports.set(seg.origin, { ...airport, isOrigin: isFirst });
+        } else if (isFirst) {
+          uniqueAirports.get(seg.origin)!.isOrigin = true;
+        }
+
+        if (!uniqueAirports.has(seg.destination)) {
+          const airport = AIRPORTS.find(a => a.iata === seg.destination);
+          if (airport) uniqueAirports.set(seg.destination, { ...airport, isDestination: isLast });
+        } else if (isLast) {
+          uniqueAirports.get(seg.destination)!.isDestination = true;
+        }
+      });
+    });
+
+    return Array.from(uniqueAirports.values()).map(a => ({
+      id: a.iata || a.id || 'unknown',
+      lat: a.lat,
+      lng: a.lng,
+      label: (a.isOrigin || a.isDestination) ? a.iata : undefined, // ONLY show label for origin/dest
+      isOrigin: a.isOrigin,
+      isDestination: a.isDestination
+    }));
+  }, [selectedFlight]);
+
+  const mapPaths = useMemo(() => {
+    if (!selectedFlight) {
+       // Default path for search criteria
+       const origin = AIRPORTS.find(a => a.iata === 'JFK');
+       const dest = AIRPORTS.find(a => a.iata === 'LHR');
+       if (origin && dest) {
+         return [{
+           id: 'default-path',
+           originId: 'JFK',
+           destinationId: 'LHR',
+           coordinates: [[origin.lng, origin.lat], [dest.lng, dest.lat]]
+         }];
+       }
+       return [];
+    }
+
+    const paths: { id: string, originId: string, destinationId: string, coordinates: number[][] }[] = [];
+    
+    selectedFlight.legs.forEach((leg, legIndex) => {
+      leg.segments.forEach((seg, segIndex) => {
+        const originAirport = AIRPORTS.find(a => a.iata === seg.origin);
+        const destAirport = AIRPORTS.find(a => a.iata === seg.destination);
+        
+        if (originAirport && destAirport) {
+          paths.push({
+            id: `${selectedFlight.id}-${legIndex}-${segIndex}`,
+            originId: seg.origin,
+            destinationId: seg.destination,
+            coordinates: [
+              [originAirport.lng, originAirport.lat],
+              [destAirport.lng, destAirport.lat]
+            ]
+          });
+        }
+      });
+    });
+    
+    return paths;
+  }, [selectedFlight]);
 
   function handleSelectFlight(id: string) {
     const isOpening = selectedId !== id;
@@ -508,14 +607,19 @@ export default function FlightsPage() {
         </main>
 
         {/* Map — flex stretch, fills all remaining space */}
-        <div className="web-flights-map" aria-label="Map view" role="img">
-          <div className="web-flights-map-placeholder">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden>
-              <path d="M16 2C10.477 2 6 6.477 6 12c0 7.5 10 18 10 18s10-10.5 10-18c0-5.523-4.477-10-10-10z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-              <circle cx="16" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
-            <span>Map view</span>
-          </div>
+        <div className="web-flights-map" aria-label="Map view" role="region">
+          <FlightMap
+            airports={mapAirports}
+            paths={mapPaths}
+            // Fit bounds roughly around US East Coast & Western Europe
+            initialViewState={{
+              longitude: -40,
+              latitude: 45,
+              zoom: 2.2,
+              bearing: 0,
+              pitch: 0
+            }}
+          />
         </div>
       </div>
     </div>
