@@ -2,7 +2,7 @@
 
 import { cn } from '../../../utils/cn';
 import { Button } from '../../ui/button/index';
-import { Badge } from '../../ui/badge/index';
+import { NotificationBadge } from '../../ui/notification-badge/index';
 import { Checkbox } from '../../ui/checkbox/index';
 import { Slider } from '../../ui/slider/index';
 import { Switch } from '../../ui/switch/index';
@@ -134,9 +134,7 @@ export function FilterPanel({
         <h2 className="travel-filter-panel-title">
           Filters
           {activeCount > 0 && (
-            <Badge className="travel-filter-panel-active-count" variant="default">
-              {activeCount}
-            </Badge>
+            <NotificationBadge className="travel-filter-panel-active-count" count={activeCount} />
           )}
         </h2>
         {activeCount > 0 && (
