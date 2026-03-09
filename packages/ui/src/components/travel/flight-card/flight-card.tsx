@@ -1,5 +1,6 @@
 'use client';
 
+import { Pin } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../ui/button/index';
 
@@ -72,6 +73,11 @@ function parseArrivalTime(time: string): { base: string; nextDay?: string } {
   return match ? { base: match[1].trim(), nextDay: match[2] } : { base: time };
 }
 
+function parseTimeParts(time: string): { digits: string; period?: string } {
+  const match = time.match(/^(.+?)\s*(AM|PM)$/i);
+  return match ? { digits: match[1], period: match[2].toUpperCase() } : { digits: time };
+}
+
 // ─── Airline Emblem ───────────────────────────────────────────────────────────
 
 function AirlineEmblem({ segment }: { segment: FlightSegment }) {
@@ -91,17 +97,6 @@ function AirlineEmblem({ segment }: { segment: FlightSegment }) {
   );
 }
 
-// ─── Pin Icon ─────────────────────────────────────────────────────────────────
-
-function PinIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M10.5 2.5h-5l.75 4.5h3.5l.75-4.5z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <line x1="3.5" y1="7" x2="12.5" y2="7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
-      <line x1="8" y1="7" x2="8" y2="14" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 // ─── Baggage SVG Icons ────────────────────────────────────────────────────────
 
@@ -148,13 +143,6 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
 
   const stopCity = leg.stopAirports?.[0];
 
-  const originLabel = first.originCity
-    ? `${first.originCity} (${first.origin})`
-    : first.origin;
-  const destinationLabel = last.destinationCity
-    ? `${last.destinationCity} (${last.destination})`
-    : last.destination;
-
   return (
     <div className="travel-flight-card-leg">
       {/* Airline emblem — CSS tooltip on hover */}
@@ -170,7 +158,11 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
       {/* Itinerary: times + route — flex-1, min-width 0 */}
       <div className="travel-flight-card-leg-info">
         <div className="travel-flight-card-leg-times-row">
-          <span className="travel-flight-card-leg-time">{first.departureTime}</span>
+          {(() => { const p = parseTimeParts(first.departureTime); return (
+            <span className="travel-flight-card-leg-time">
+              {p.digits}{p.period && <span className="travel-flight-card-leg-time-period">{p.period}</span>}
+            </span>
+          ); })()}
           <span className="travel-flight-card-leg-dash" aria-hidden>–</span>
           <span className="travel-flight-card-leg-time travel-flight-card-leg-time-arr">
             {arr.base}
@@ -184,16 +176,16 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
           {isCompact ? (
             <>
               <span>{first.origin}</span>
-              <span aria-hidden> – </span>
+              <span className="travel-flight-card-leg-route-line" aria-hidden />
               <span>{last.destination}</span>
               <span className="travel-flight-card-leg-route-dot" aria-hidden> · </span>
               <span className="travel-flight-card-leg-duration-compact">{leg.duration}</span>
             </>
           ) : (
             <>
-              <span>{originLabel}</span>
-              <span aria-hidden> – </span>
-              <span>{destinationLabel}</span>
+              <span className="travel-flight-card-leg-route-city">{first.originCity ?? first.origin}</span>
+              <span className="travel-flight-card-leg-route-line" aria-hidden />
+              <span className="travel-flight-card-leg-route-city">{last.destinationCity ?? last.destination}</span>
             </>
           )}
         </div>
@@ -244,7 +236,7 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
         aria-label="Pin this flight segment"
         onClick={(e) => e.stopPropagation()}
       >
-        <PinIcon />
+        <Pin size={16} aria-hidden />
       </button>
     </div>
   );
@@ -256,7 +248,6 @@ export function FlightCard({
   legs,
   price,
   totalPrice,
-  fareClass,
   baggage,
   isBestValue,
   isCheapest,
@@ -315,29 +306,30 @@ export function FlightCard({
 
         {/* ── Price block ── */}
         <div className="travel-flight-card-price-col">
-          {showUrgency && (
-            <div className="travel-flight-card-urgency">
-              <span className="travel-flight-card-urgency-badge">{seatsLeft}</span>
-              <span className="travel-flight-card-urgency-label">seats left</span>
-            </div>
-          )}
+          {/* Top: seats left */}
+          <div className="travel-flight-card-price-top">
+            {showUrgency && (
+              <div className="travel-flight-card-urgency">
+                <span className="travel-flight-card-urgency-badge">{seatsLeft}</span>
+                <span className="travel-flight-card-urgency-label">seats left</span>
+              </div>
+            )}
+          </div>
 
+          {/* Middle: price + button */}
           <div className="travel-flight-card-price-center">
             <p className="travel-flight-card-price-display">{price}</p>
             {totalPrice && (
               <p className="travel-flight-card-total-price">{totalPrice} total</p>
             )}
-            {!isCompact && fareClass && (
-              <p className="travel-flight-card-fare-class">{fareClass}</p>
+            {!isCompact && (
+              <Button size="sm" onClick={(e) => e.stopPropagation()} className="travel-flight-card-select-btn">
+                Select
+              </Button>
             )}
           </div>
 
-          {!isCompact && (
-            <Button size="sm" onClick={(e) => e.stopPropagation()} className="travel-flight-card-select-btn">
-              Select
-            </Button>
-          )}
-
+          {/* Bottom: baggage */}
           {baggage && (
             <div className="travel-flight-card-baggage">
               <div className="travel-flight-card-baggage-icons">

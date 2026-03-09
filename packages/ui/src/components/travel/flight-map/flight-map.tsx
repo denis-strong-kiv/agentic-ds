@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import Map, { Marker, Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
+import Map, { Marker, Source, Layer } from 'react-map-gl/maplibre';
 import maplibregl from 'maplibre-gl';
 import type { LineLayerSpecification } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -252,8 +252,6 @@ export function FlightMap({
         pitchWithRotate={false}
         onLoad={() => setMapLoaded(true)}
       >
-        <NavigationControl position="top-right" />
-
         {paths.length > 0 && (
           // lineMetrics: true required for line-gradient interpolation
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

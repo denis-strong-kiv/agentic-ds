@@ -192,7 +192,10 @@ The map uses `flex: 1` (not `position: absolute`) so the canvas exactly equals t
 
 ## Migration Guardrail
 
-When editing a file that still has long utility class strings:
-1. Migrate the edited region to semantic class contracts in the same change
-2. Do not introduce new hardcoded color/shadow/spacing literals while migrating
-3. Update tests to assert semantic class contracts
+When editing **any** CSS file — new code or existing — every value must use design tokens. No exceptions, regardless of what the surrounding code does.
+
+1. **Never pattern-match hardcoded values from surrounding code.** If the file already has `#171d2e` or `padding: 16px`, that is pre-existing debt — do not copy it.
+2. Migrate the edited region to token-based values in the same change.
+3. New rules must always use `var(--color-*)`, `var(--spacing-*)`, `var(--font-size-*)`, `var(--font-weight-*)`, `var(--shape-preset-*)`, `var(--shadow-*)`, `var(--duration-*)`.
+4. Do not introduce new hardcoded color/shadow/spacing/radius/font literals — not even temporarily.
+5. Update tests to assert semantic class contracts.

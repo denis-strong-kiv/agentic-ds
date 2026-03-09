@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { UserRound } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -85,10 +86,7 @@ export function NavBar({
           onClick={onAccountClick}
           aria-label="Account"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
-            <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
+          <UserRound size={20} aria-hidden />
         </button>
         <button
           type="button"
