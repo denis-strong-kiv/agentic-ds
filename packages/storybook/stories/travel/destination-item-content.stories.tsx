@@ -95,7 +95,7 @@ export const RecentSearchRow: Story = {
 
 export const DropdownGroup: Story = {
   render: () => (
-    <div className="sb-stack-sm">
+    <div className="sb-stack-none">
       <div className="sb-destination-row sb-destination-row--hover">
         <DestinationItemContent
           destinationType="city"
