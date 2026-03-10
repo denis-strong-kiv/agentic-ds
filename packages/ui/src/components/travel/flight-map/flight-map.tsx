@@ -222,22 +222,6 @@ export function FlightMap({
     fitAirports(map, 900);
   }, [airports, mapLoaded, fitAirports]);
 
-  // Re-fit when map canvas resizes (panel opens/closes) — debounced so it
-  // fires once after the 300ms CSS transition completes
-  React.useEffect(() => {
-    if (!mapLoaded) return;
-    const map = mapRef.current?.getMap();
-    if (!map) return;
-
-    let tid: ReturnType<typeof setTimeout>;
-    const onResize = () => {
-      clearTimeout(tid);
-      tid = setTimeout(() => fitAirports(map, 700), 320);
-    };
-
-    map.on('resize', onResize);
-    return () => { clearTimeout(tid); map.off('resize', onResize); };
-  }, [mapLoaded, fitAirports]);
 
   const defaultView = { longitude: -40, latitude: 45, zoom: 2.5, ...initialViewState };
 

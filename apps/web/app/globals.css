@@ -385,10 +385,11 @@
     padding: 1rem;
   }
 
-  /* ── Map — flex child that fills all remaining space right of the panels ──── */
+  /* ── Map — absolutely fills the entire body area, below all panels ────────── */
   .web-flights-map {
-    flex: 1;
-    min-width: 0;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     background: var(--color-map-water);
     overflow: hidden;
   }
