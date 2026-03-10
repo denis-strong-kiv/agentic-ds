@@ -19,6 +19,7 @@
     "@storybook/addon-vitest": "^10.2.14",
     "@storybook/react": "^10.2.14",
     "@storybook/react-vite": "^10.2.14",
+    "@tailwindcss/postcss": "^4.2.1",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
     "eslint": "^9.18.0",
@@ -45,5 +46,8 @@
       "unrs-resolver",
       "workerd"
     ]
+  },
+  "dependencies": {
+    "lucide-react": "^0.577.0"
   }
 }

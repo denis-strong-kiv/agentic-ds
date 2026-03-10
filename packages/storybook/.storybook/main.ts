@@ -17,6 +17,11 @@ const config: StorybookConfig = {
     config.plugins = [...(config.plugins ?? [])];
 
     const uiSrc = path.resolve(import.meta.dirname, '../../../packages/ui/src');
+    const tokensCss = path.resolve(
+      import.meta.dirname,
+      '../../../packages/tokens/src/output/tokens.css',
+    );
+
     config.resolve = config.resolve ?? {};
     config.resolve.alias = {
       ...(config.resolve.alias as Record<string, string> | undefined ?? {}),
@@ -27,7 +32,10 @@ const config: StorybookConfig = {
       '@travel/ui/utils': path.join(uiSrc, 'utils'),
       // Keep the root import working too
       '@travel/ui': path.join(uiSrc, 'index.ts'),
+      // Allow CSS imports for design tokens from any package
+      '@travel/tokens/css': tokensCss,
     };
+
     return config;
   },
 };

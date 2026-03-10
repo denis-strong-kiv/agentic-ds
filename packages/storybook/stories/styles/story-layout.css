@@ -16,6 +16,23 @@
   .sb-row-between { display: flex; align-items: center; justify-content: space-between; }
   .sb-gap-3 { gap: 0.75rem; }
 
+  .sb-destination-row {
+    border-radius: var(--shape-preset-card);
+    padding: 0.5rem 0.75rem;
+  }
+
+  .sb-destination-row--hover:hover {
+    background: var(--color-background-subtle);
+  }
+
+  .sb-destination-row--compact {
+    border-radius: var(--shape-preset-button);
+  }
+
+  .sb-destination-row--indented .travel-destination-item-row {
+    margin-inline-start: 2.5rem;
+  }
+
   .sb-cursor-pointer { cursor: pointer; }
 
   .sb-max-xs { max-width: 20rem; }

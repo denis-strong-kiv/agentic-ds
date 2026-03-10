@@ -34,7 +34,7 @@ export const AirportRow: Story = {
     subtitle: '13 km from city center',
   },
   render: args => (
-    <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+    <div className="sb-destination-row">
       <DestinationItemContent {...args} />
     </div>
   ),
@@ -49,7 +49,7 @@ export const CityRow: Story = {
     imageAlt: 'London skyline',
   },
   render: args => (
-    <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+    <div className="sb-destination-row">
       <DestinationItemContent {...args} />
     </div>
   ),
@@ -62,7 +62,7 @@ export const CityFallbackIcon: Story = {
     subtitle: 'Spain',
   },
   render: args => (
-    <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+    <div className="sb-destination-row">
       <DestinationItemContent {...args} />
     </div>
   ),
@@ -72,16 +72,22 @@ export const RecentSearchRow: Story = {
   args: {
     destinationType: 'airport',
     title: (
-      <span className="inline-flex items-center gap-1.5">
+      <span className="sb-row-sm">
         <span>New York (JFK)</span>
-        <Icon icon={ArrowLeftRight} size="sm" className="shrink-0 text-[var(--color-foreground-subtle)]" aria-hidden />
+        <Icon
+          icon={ArrowLeftRight}
+          size="sm"
+          className="sb-icon-sm"
+          aria-hidden
+          style={{ color: 'var(--color-foreground-subtle)' }}
+        />
         <span>London (LHR)</span>
       </span>
     ),
     subtitle: 'Oct 20 – Nov 26',
   },
   render: args => (
-    <div className="flex items-center gap-2 rounded-md px-2 py-2">
+    <div className="sb-destination-row sb-destination-row--compact">
       <DestinationItemContent {...args} />
     </div>
   ),
@@ -89,44 +95,52 @@ export const RecentSearchRow: Story = {
 
 export const DropdownGroup: Story = {
   render: () => (
-    <div className="space-y-1">
-      <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-[var(--color-background-subtle)]">
+    <div className="sb-stack-sm">
+      <div className="sb-destination-row sb-destination-row--hover">
         <DestinationItemContent
-          destinationType="airport"
-          title="LaGuardia Airport (LGA)"
-          subtitle="8 km from city center"
+          destinationType="city"
+          title="London"
+          subtitle="United Kingdom"
         />
       </div>
 
-      <div className="ms-10 flex w-[calc(100%-2.5rem)] items-center gap-3 rounded-lg px-2 py-2 hover:bg-[var(--color-background-subtle)]">
+      <div className="sb-destination-row sb-destination-row--hover sb-destination-row--indented">
         <DestinationItemContent
-          destinationType="airport-indented"
-          title="Newark Liberty Intl Airport (EWR)"
+          destinationType="airport"
+          title="London Heathrow (LHR)"
           subtitle="17 km from city center"
         />
       </div>
 
-      <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-[var(--color-background-subtle)]">
+      <div className="sb-destination-row sb-destination-row--hover sb-destination-row--indented">
         <DestinationItemContent
-          title="Berlin"
-          subtitle="Germany"
-          destinationType="city"
+          destinationType="airport"
+          title="London Gatwick (LGW)"
+          subtitle="45 km from city center"
         />
       </div>
 
-      <div className="border-t border-[var(--color-border-default)] pt-2" />
-
-      <div className="flex items-center gap-2 rounded-md px-2 py-2 hover:bg-[var(--color-background-subtle)]">
+      <div className="sb-destination-row sb-destination-row--hover sb-destination-row--indented">
         <DestinationItemContent
-          title={(
-            <span className="inline-flex items-center gap-1.5">
-              <span>Newark (EWR)</span>
-              <Icon icon={ArrowLeftRight} size="sm" className="shrink-0 text-[var(--color-foreground-subtle)]" aria-hidden />
-              <span>London (LHR)</span>
-            </span>
-          )}
-          subtitle="Oct 20"
           destinationType="airport"
+          title="London Stansted (STN)"
+          subtitle="63 km from city center"
+        />
+      </div>
+
+      <div className="sb-destination-row sb-destination-row--hover sb-destination-row--indented">
+        <DestinationItemContent
+          destinationType="airport"
+          title="London Luton (LTN)"
+          subtitle="55 km from city center"
+        />
+      </div>
+
+      <div className="sb-destination-row sb-destination-row--hover sb-destination-row--indented">
+        <DestinationItemContent
+          destinationType="airport"
+          title="London City (LCY)"
+          subtitle="11 km from city center"
         />
       </div>
     </div>

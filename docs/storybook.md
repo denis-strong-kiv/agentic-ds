@@ -31,6 +31,12 @@ lsof -ti :6006 | xargs kill -9  # Kill stale Storybook process
 
 ## Stories
 
+### Layout & wrappers
+
+- Use **semantic Storybook layout classes** (`sb-*`) from `packages/storybook/stories/styles/story-layout.css` for spacing, alignment, and wrappers around components.
+- **Do not** use Tailwind-style inline utility class strings in stories (e.g. `className="flex items-center gap-3 px-2 py-2"`). Replace them with the closest `sb-*` helpers or add a new `sb-*` class in `story-layout.css` when needed.
+- If a story needs special spacing or one-off visual tweaks that are not broadly reusable, prefer **inline `style={{ ... }}`** on the wrapper over adding ad‑hoc utility-like class names.
+
 ### What to Include
 
 - **Playground story** — a single `render(args)` story as the first export so the controls panel is live. Use `argTypes` to expose meaningful props (text, boolean, select) and hide non-controllable ones (ReactNode slots, callbacks, layout props).

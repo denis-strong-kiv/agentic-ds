@@ -230,6 +230,7 @@ export function FlightMap({
       <Map
         ref={mapRef}
         initialViewState={defaultView}
+        mapLib={maplibregl}
         mapStyle={MAP_STYLE}
         interactive
         dragRotate={false}

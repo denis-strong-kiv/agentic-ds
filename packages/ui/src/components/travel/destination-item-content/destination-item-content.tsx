@@ -5,7 +5,6 @@ import { Icon } from '../../ui/icon/index';
 
 export type DestinationDisplayType =
   | 'airport'
-  | 'airport-indented'
   | 'city'
   | 'neighborhood'
   | 'country'
@@ -18,7 +17,6 @@ const destinationDecorationVariants = cva(
     variants: {
       destinationType: {
         airport: ['travel-destination-item-decoration--airport'],
-        'airport-indented': ['travel-destination-item-decoration--airport-indented'],
         city: ['travel-destination-item-decoration--city'],
         neighborhood: ['travel-destination-item-decoration--neighborhood'],
         country: ['travel-destination-item-decoration--country'],
@@ -73,7 +71,6 @@ function DestinationDecoration({
 
   const iconByType: Record<DestinationDisplayType, typeof Plane> = {
     airport: Plane,
-    'airport-indented': Plane,
     city: Building2,
     neighborhood: MapPin,
     country: Globe2,
@@ -107,7 +104,7 @@ export function DestinationItemContent({
   };
 
   return (
-    <>
+    <div className="travel-destination-item-row">
       <DestinationDecoration
         {...decorationProps}
       />
@@ -121,6 +118,6 @@ export function DestinationItemContent({
           </span>
         )}
       </span>
-    </>
+    </div>
   );
 }

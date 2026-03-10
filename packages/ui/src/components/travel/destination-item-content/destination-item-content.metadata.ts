@@ -11,7 +11,6 @@ export const metadata: ComponentMetadataShape = {
     states: [
       'city with imageUrl — renders thumbnail <img> instead of icon',
       'airport — Plane icon with airport-specific decoration styles',
-      'airport-indented — Plane icon indented for sub-airport display (terminal/gate grouping)',
       'city (no image) — Building2 icon',
       'neighborhood — MapPin icon',
       'country — Globe2 icon',
@@ -19,11 +18,11 @@ export const metadata: ComponentMetadataShape = {
       'area — Map icon',
     ],
     interactions: [],
-    responsive: 'Inline flex content; inherits width from the list container.',
+    responsive: 'Renders a horizontal flex row (`travel-destination-item-row`) that inherits width from the list container.',
   },
   accessibility: {
-    role: 'fragment (no wrapper element; renders as sibling spans)',
-    keyboardNav: 'No interactive elements; keyboard navigation is managed by the parent combobox/listbox.',
+    role: 'row-like wrapper inside a list item (non-interactive).',
+    keyboardNav: 'No interactive elements; keyboard navigation is managed by the parent combobox/listbox that owns the row.',
     ariaAttributes: [
       'aria-hidden on the decoration icon (Icon component passes aria-hidden)',
       'imageAlt defaults to "Destination" if not provided; pass a meaningful alt when imageUrl is set',
@@ -48,14 +47,6 @@ export const metadata: ComponentMetadataShape = {
   subtitle="United Kingdom"
   imageUrl="/images/destinations/london.jpg"
   imageAlt="London skyline"
-/>`,
-    },
-    {
-      label: 'Indented airport for sub-airport grouping',
-      code: `<DestinationItemContent
-  destinationType="airport-indented"
-  title="London Heathrow"
-  subtitle="LHR"
 />`,
     },
   ],
