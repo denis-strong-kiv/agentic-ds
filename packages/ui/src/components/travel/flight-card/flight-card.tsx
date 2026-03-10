@@ -1,8 +1,11 @@
 'use client';
 
+import * as React from 'react';
 import { Pin } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../ui/button/index';
+import { MonoTooltipProvider, MonoTooltip } from '../../ui/tooltip/tooltip';
+import { OtaBaggageTrolley, OtaBaggageChecked } from '../../ui/icon/ota-icons';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -13,8 +16,12 @@ export interface FlightSegment {
   aircraft?: string;
   origin: string;
   originCity?: string;
+  /** Full airport name shown on IATA hover, e.g. "John F. Kennedy Intl Airport" */
+  originAirportName?: string;
   destination: string;
   destinationCity?: string;
+  /** Full airport name shown on IATA hover, e.g. "London Heathrow Airport" */
+  destinationAirportName?: string;
   departureTime: string;
   arrivalTime: string;
   duration: string;
@@ -75,7 +82,38 @@ function parseArrivalTime(time: string): { base: string; nextDay?: string } {
 
 function parseTimeParts(time: string): { digits: string; period?: string } {
   const match = time.match(/^(.+?)\s*(AM|PM)$/i);
-  return match ? { digits: match[1], period: match[2].toUpperCase() } : { digits: time };
+  return match ? { digits: match[1], period: match[2].toLowerCase() } : { digits: time };
+}
+
+function parseTimeToMinutes(time: string): number {
+  const clean = time.replace(/\+\d+$/, '').trim();
+  const m = clean.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
+  if (!m) return 0;
+  let h = parseInt(m[1]);
+  const min = parseInt(m[2]);
+  if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+  if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+  return h * 60 + min;
+}
+
+function formatLayover(arrTime: string, depTime: string): string {
+  let diff = parseTimeToMinutes(depTime) - parseTimeToMinutes(arrTime);
+  if (diff < 0) diff += 24 * 60;
+  const h = Math.floor(diff / 60);
+  const m = diff % 60;
+  return m === 0 ? `${h}h layover` : `${h}h ${m}m layover`;
+}
+
+// ─── IATA Code with popover ───────────────────────────────────────────────────
+
+function IataCode({ iata, airportName, city }: { iata: string; airportName?: string | undefined; city?: string | undefined }) {
+  const trigger = <span className="travel-flight-card-leg-route-iata">{iata}</span>;
+  if (!airportName && !city) return trigger;
+  return (
+    <MonoTooltip content={airportName ?? city}>
+      {trigger}
+    </MonoTooltip>
+  );
 }
 
 // ─── Airline Emblem ───────────────────────────────────────────────────────────
@@ -98,26 +136,33 @@ function AirlineEmblem({ segment }: { segment: FlightSegment }) {
 }
 
 
-// ─── Baggage SVG Icons ────────────────────────────────────────────────────────
 
-function CarryOnIcon() {
+// ─── Stops Tooltip ────────────────────────────────────────────────────────────
+
+function StopsTooltipContent({ leg }: { leg: FlightLeg }) {
+  const stops = leg.segments.slice(0, -1);
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <rect x="4.5" y="5.5" width="7" height="8" rx="0.75" stroke="currentColor" strokeWidth="1.1" />
-      <path d="M6 5.5V4.5a2 2 0 0 1 4 0v1" stroke="currentColor" strokeWidth="1.1" />
-      <line x1="8" y1="7.5" x2="8" y2="11.5" stroke="currentColor" strokeWidth="1.1" />
-      <line x1="5.5" y1="9.5" x2="10.5" y2="9.5" stroke="currentColor" strokeWidth="1.1" />
-    </svg>
+    <div className="travel-flight-card-stops-tooltip">
+      {stops.map((seg, i) => (
+        <div key={i} className="travel-flight-card-iata-tooltip-content">
+          <span className="travel-flight-card-iata-tooltip-duration">
+            {formatLayover(seg.arrivalTime, leg.segments[i + 1].departureTime)}
+          </span>
+          {seg.destinationAirportName && (
+            <span className="travel-flight-card-iata-tooltip-name">{seg.destinationAirportName}</span>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
 
-function CheckedBagIcon() {
+function WithStopTooltip({ leg, children }: { leg: FlightLeg; children: React.ReactElement }) {
+  if (leg.stops === 0) return children;
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <rect x="3.5" y="5.5" width="9" height="8" rx="0.75" stroke="currentColor" strokeWidth="1.1" />
-      <path d="M6 5.5V4.5a2 2 0 0 1 4 0v1" stroke="currentColor" strokeWidth="1.1" />
-      <path d="M3.5 8.5h9" stroke="currentColor" strokeWidth="1.1" />
-    </svg>
+    <MonoTooltip content={<StopsTooltipContent leg={leg} />}>
+      {children}
+    </MonoTooltip>
   );
 }
 
@@ -141,19 +186,19 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
       ? 'nonstop'
       : `${leg.stops} stop${leg.stops > 1 ? 's' : ''}`;
 
-  const stopCity = leg.stopAirports?.[0];
+  // City names for all stops, joined with · — CSS truncates if they overflow
+  const stopCity = leg.stops > 0
+    ? leg.segments.slice(0, -1).map(s => s.destinationCity ?? s.destination).join(' · ')
+    : undefined;
 
   return (
     <div className="travel-flight-card-leg">
-      {/* Airline emblem — CSS tooltip on hover */}
-      <div className="travel-flight-card-leg-emblem-wrap">
-        <AirlineEmblem segment={first} />
-        <span className="travel-flight-card-leg-tooltip" aria-hidden>
-          <span className="travel-flight-card-leg-airline-name">{airlineName}</span>
-          {' '}
-          <span className="travel-flight-card-leg-flight-num">{first.flightNumber}</span>
-        </span>
-      </div>
+      {/* Airline emblem — mono tooltip on hover */}
+      <MonoTooltip content={airlineName}>
+        <div className="travel-flight-card-leg-emblem-wrap">
+          <AirlineEmblem segment={first} />
+        </div>
+      </MonoTooltip>
 
       {/* Itinerary: times + route — flex-1, min-width 0 */}
       <div className="travel-flight-card-leg-info">
@@ -165,9 +210,9 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
           ); })()}
           <span className="travel-flight-card-leg-dash" aria-hidden>–</span>
           <span className="travel-flight-card-leg-time travel-flight-card-leg-time-arr">
-            {arr.base}
+            {(() => { const p = parseTimeParts(arr.base); return <>{p.digits}{p.period && <span className="travel-flight-card-leg-time-period">{p.period}</span>}</>; })()}
             {arr.nextDay && (
-              <sup className="travel-flight-card-leg-next-day">{arr.nextDay}</sup>
+              <span className="travel-flight-card-leg-next-day">{arr.nextDay}</span>
             )}
           </span>
         </div>
@@ -175,17 +220,19 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
         <div className="travel-flight-card-leg-route">
           {isCompact ? (
             <>
-              <span>{first.origin}</span>
-              <span className="travel-flight-card-leg-route-line" aria-hidden />
-              <span>{last.destination}</span>
+              <IataCode iata={first.origin} airportName={first.originAirportName} city={first.originCity} />
+              <span className="travel-flight-card-leg-route-dash" aria-hidden> – </span>
+              <IataCode iata={last.destination} airportName={last.destinationAirportName} city={last.destinationCity} />
               <span className="travel-flight-card-leg-route-dot" aria-hidden> · </span>
               <span className="travel-flight-card-leg-duration-compact">{leg.duration}</span>
             </>
           ) : (
             <>
               <span className="travel-flight-card-leg-route-city">{first.originCity ?? first.origin}</span>
-              <span className="travel-flight-card-leg-route-line" aria-hidden />
+              <IataCode iata={first.origin} airportName={first.originAirportName} city={first.originCity} />
+              <span className="travel-flight-card-leg-route-dash" aria-hidden> – </span>
               <span className="travel-flight-card-leg-route-city">{last.destinationCity ?? last.destination}</span>
+              <IataCode iata={last.destination} airportName={last.destinationAirportName} city={last.destinationCity} />
             </>
           )}
         </div>
@@ -201,28 +248,32 @@ function LegRow({ leg, isCompact }: { leg: FlightLeg; isCompact: boolean }) {
       {/* Stops column */}
       {isCompact ? (
         <div className="travel-flight-card-leg-stops-col">
-          <span
-            className={cn(
-              'travel-flight-card-leg-stops-text',
-              leg.stops === 0 && 'travel-flight-card-leg-stops-text--nonstop',
-            )}
-          >
-            {stopsLabel}
-          </span>
+          <WithStopTooltip leg={leg}>
+            <span
+              className={cn(
+                'travel-flight-card-leg-stops-text',
+                leg.stops === 0 && 'travel-flight-card-leg-stops-text--nonstop',
+              )}
+            >
+              {stopsLabel}
+            </span>
+          </WithStopTooltip>
           {stopCity && (
             <span className="travel-flight-card-leg-stop-city-compact">{stopCity}</span>
           )}
         </div>
       ) : (
         <div className="travel-flight-card-leg-stops-desk">
-          <span
-            className={cn(
-              'travel-flight-card-leg-stops-val',
-              leg.stops === 0 && 'travel-flight-card-leg-stops-val--nonstop',
-            )}
-          >
-            {stopsLabel}
-          </span>
+          <WithStopTooltip leg={leg}>
+            <span
+              className={cn(
+                'travel-flight-card-leg-stops-val',
+                leg.stops === 0 && 'travel-flight-card-leg-stops-val--nonstop',
+              )}
+            >
+              {stopsLabel}
+            </span>
+          </WithStopTooltip>
           {stopCity && (
             <span className="travel-flight-card-leg-stop-city">{stopCity}</span>
           )}
@@ -269,6 +320,7 @@ export function FlightCard({
   const showUrgency = !isCompact && seatsLeft !== undefined && seatsLeft <= 9;
 
   return (
+    <MonoTooltipProvider tooltipClassName={isCompact ? 'travel-flight-card-tooltip--compact' : undefined}>
     <article
       className={cn('travel-flight-card', className)}
       data-compact={isCompact || undefined}
@@ -337,7 +389,7 @@ export function FlightCard({
                   className="travel-flight-card-baggage-item"
                   aria-label={`${baggage.carryOn} carry-on bag`}
                 >
-                  <CarryOnIcon />
+                  <OtaBaggageTrolley aria-hidden style={{ height: 16, width: 'auto' }} />
                   <span className="travel-flight-card-baggage-count">{baggage.carryOn}</span>
                 </span>
                 <span
@@ -347,13 +399,13 @@ export function FlightCard({
                   )}
                   aria-label={`${baggage.checked} checked bag`}
                 >
-                  <CheckedBagIcon />
+                  <OtaBaggageChecked aria-hidden style={{ height: 16, width: 'auto' }} />
                   <span className="travel-flight-card-baggage-count">{baggage.checked}</span>
                 </span>
               </div>
               {baggage.checkedFee && (
                 <p className="travel-flight-card-bag-fee">
-                  Optional bag (20kg){' '}
+                  20kg{' '}
                   <span className="travel-flight-card-bag-fee-price">{baggage.checkedFee}</span>
                 </p>
               )}
@@ -362,5 +414,6 @@ export function FlightCard({
         </div>
       </div>
     </article>
+    </MonoTooltipProvider>
   );
 }

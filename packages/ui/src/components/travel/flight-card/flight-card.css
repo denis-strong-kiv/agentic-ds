@@ -6,7 +6,6 @@
     border-radius: var(--shape-preset-card);
     background: var(--color-surface-card);
     box-shadow: var(--shadow-sm);
-    overflow: hidden;
     transition: box-shadow var(--duration-normal);
     cursor: pointer;
   }
@@ -84,9 +83,8 @@
     border-top: 1px solid var(--color-border-muted);
   }
 
-  /* Emblem with tooltip */
+  /* Emblem */
   .travel-flight-card-leg-emblem-wrap {
-    position: relative;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -96,14 +94,13 @@
   .travel-flight-card-emblem-img {
     width: var(--spacing-8);
     height: var(--spacing-8);
-    border-radius: var(--shape-preset-rounded-full);
     object-fit: contain;
     flex-shrink: 0;
   }
   .travel-flight-card-emblem-fallback {
     width: var(--spacing-8);
     height: var(--spacing-8);
-    border-radius: var(--shape-preset-rounded-full);
+    border-radius: var(--shape-preset-badge);
     background: var(--color-background-subtle);
     display: flex;
     align-items: center;
@@ -114,32 +111,6 @@
     flex-shrink: 0;
     border: 1px solid var(--color-border-muted);
   }
-  .travel-flight-card-leg-tooltip {
-    position: absolute;
-    bottom: calc(100% + var(--spacing-1-5));
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    background: var(--color-foreground-default);
-    color: oklch(100% 0 0);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--line-height-tight);
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--shape-preset-rounded-sm);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--duration-fast);
-    z-index: 10;
-    display: flex;
-    gap: var(--spacing-1);
-    align-items: baseline;
-  }
-  .travel-flight-card-leg-emblem-wrap:hover .travel-flight-card-leg-tooltip {
-    opacity: 1;
-  }
-  .travel-flight-card-leg-airline-name { font-weight: var(--font-weight-semibold); }
-  .travel-flight-card-leg-flight-num { font-weight: var(--font-weight-regular); opacity: 0.75; }
 
   /* Itinerary column */
   .travel-flight-card-leg-info {
@@ -166,22 +137,18 @@
     white-space: nowrap;
   }
   .travel-flight-card-leg-time-period {
-    font-size: var(--font-size-2xs);
+    font-size: var(--font-size-md);
     font-weight: var(--font-weight-medium);
-    margin-inline-start: 1px;
-    vertical-align: middle;
-  }
-  .travel-flight-card-leg-time-arr {
-    position: relative;
-    padding-inline-end: var(--spacing-2-5);
+    margin-inline-start: var(--spacing-0-5);
+    letter-spacing: -0.01em;
   }
   .travel-flight-card-leg-next-day {
     font-size: var(--font-size-2xs);
     font-weight: var(--font-weight-semibold);
     color: var(--color-foreground-muted);
-    position: absolute;
-    top: -4px;
-    right: 0;
+    vertical-align: super;
+    line-height: 0;
+    margin-inline-start: var(--spacing-0-5);
   }
   .travel-flight-card-leg-dash {
     font-size: var(--font-size-sm);
@@ -210,6 +177,7 @@
     width: 120px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--spacing-1);
     padding-top: var(--spacing-0-5);
   }
@@ -226,6 +194,10 @@
     font-weight: var(--font-weight-regular);
     color: var(--color-foreground-subtle);
     line-height: var(--line-height-tight);
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Pin segment button — 20px, desktop only */
@@ -253,7 +225,6 @@
     font-size: var(--font-size-xs);
     color: var(--color-foreground-muted);
     line-height: var(--line-height-tight);
-    overflow: hidden;
     gap: var(--spacing-1-5);
   }
   .travel-flight-card-leg-route-city {
@@ -263,12 +234,52 @@
     flex-shrink: 1;
     min-width: 0;
   }
-  .travel-flight-card-leg-route-line {
-    flex: 1;
-    height: 1px;
-    background: var(--color-border-default);
-    min-width: var(--spacing-3);
+  .travel-flight-card-leg-route-dash {
+    color: var(--color-foreground-subtle);
     flex-shrink: 0;
+  }
+  .travel-flight-card-leg-route-iata {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-foreground-muted);
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-border-default);
+    flex-shrink: 0;
+    cursor: default;
+  }
+
+  /* Compact card tooltip overrides */
+  .travel-flight-card-tooltip--compact {
+    max-width: 160px;
+    text-align: center;
+  }
+
+  /* IATA / stop tooltip content — shared by origin, destination, and stop tooltips */
+  .travel-flight-card-iata-tooltip-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+  }
+  /* City + IATA code on the same line */
+  .travel-flight-card-iata-tooltip-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-1);
+  }
+  .travel-flight-card-iata-tooltip-code { font-weight: var(--font-weight-semibold); }
+  .travel-flight-card-iata-tooltip-city { opacity: 0.9; }
+  .travel-flight-card-iata-tooltip-name { opacity: 0.65; }
+  /* Stop layover duration — inline with city + IATA on the first line */
+  .travel-flight-card-iata-tooltip-duration {
+    opacity: 0.9;
+  }
+
+  /* Wrapper when a tooltip shows multiple stops */
+  .travel-flight-card-stops-tooltip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2-5);
   }
 
   /* Route row — compact additions */
@@ -289,12 +300,13 @@
     width: 112px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--spacing-1);
     padding-inline-start: var(--spacing-2);
     padding-top: var(--spacing-0-5);
   }
   .travel-flight-card-leg-stops-text {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     color: var(--color-foreground-default);
     line-height: var(--line-height-tight);
@@ -446,39 +458,67 @@
     padding: var(--spacing-3) 0;
   }
 
-  /* Price strip: horizontal bar at bottom */
+  /* Price strip: 2-column grid so baggage rows and price rows share row heights */
   .travel-flight-card[data-compact='true'] .travel-flight-card-price-col {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    row-gap: var(--spacing-1);
+    column-gap: var(--spacing-4);
     align-items: center;
-    justify-content: space-between;
+    align-content: center;
     width: 100%;
     min-height: 48px;
     border-inline-start: none;
     border-top: 1px solid var(--color-border-muted);
     padding: var(--spacing-2) var(--spacing-4);
-    gap: var(--spacing-2);
   }
-
-  /* Baggage left-aligned in compact strip */
+  /* Urgency badge not shown in compact — remove from grid flow */
+  .travel-flight-card[data-compact='true'] .travel-flight-card-price-top {
+    display: none;
+  }
+  /* Flatten baggage and price-center into direct grid children */
   .travel-flight-card[data-compact='true'] .travel-flight-card-baggage {
-    order: -1;
-    align-items: flex-start;
-    flex-direction: column;
+    display: contents;
+  }
+  .travel-flight-card[data-compact='true'] .travel-flight-card-price-center {
+    display: contents;
+  }
+  /* Row 1 col 1 — baggage icons */
+  .travel-flight-card[data-compact='true'] .travel-flight-card-baggage-icons {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: 0;
   }
   .travel-flight-card[data-compact='true'] .travel-flight-card-baggage-item {
     padding: 0;
   }
+  /* Row 2 col 1 — bag fee */
   .travel-flight-card[data-compact='true'] .travel-flight-card-bag-fee {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: baseline;
     text-align: start;
+    white-space: nowrap;
   }
-
-  /* Price right-aligned in compact strip */
-  .travel-flight-card[data-compact='true'] .travel-flight-card-price-center {
-    align-items: flex-end;
-  }
+  /* Row 1 col 2 — price */
   .travel-flight-card[data-compact='true'] .travel-flight-card-price-display {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
     font-size: var(--font-size-md);
     line-height: var(--line-height-tight);
+    text-align: end;
+  }
+  /* Row 2 col 2 — total price */
+  .travel-flight-card[data-compact='true'] .travel-flight-card-total-price {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    align-self: baseline;
+    text-align: end;
   }
 
   /* Container-query-driven compact (pure CSS, no prop) */
@@ -487,20 +527,37 @@
     .travel-flight-card-content { padding: var(--spacing-3) var(--spacing-2) var(--spacing-1) var(--spacing-3); }
     .travel-flight-card-leg { padding: var(--spacing-3) 0; }
     .travel-flight-card-price-col {
-      flex-direction: row;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      row-gap: var(--spacing-1);
+      column-gap: var(--spacing-4);
       align-items: center;
-      justify-content: space-between;
+      align-content: center;
       width: 100%;
       min-height: 48px;
       border-inline-start: none;
       border-top: 1px solid var(--color-border-muted);
       padding: var(--spacing-2) var(--spacing-4);
-      gap: var(--spacing-2);
     }
-    .travel-flight-card-baggage { order: -1; align-items: flex-start; flex-direction: column; }
+    .travel-flight-card-price-top { display: none; }
+    .travel-flight-card-baggage { display: contents; }
+    .travel-flight-card-price-center { display: contents; }
+    .travel-flight-card-baggage-icons {
+      grid-column: 1; grid-row: 1;
+      display: flex; align-items: center; gap: var(--spacing-1); padding: 0;
+    }
     .travel-flight-card-baggage-item { padding: 0; }
-    .travel-flight-card-bag-fee { text-align: start; }
-    .travel-flight-card-price-center { align-items: flex-end; }
-    .travel-flight-card-price-display { font-size: var(--font-size-md); line-height: var(--line-height-tight); }
+    .travel-flight-card-bag-fee {
+      grid-column: 1; grid-row: 2;
+      align-self: baseline; text-align: start; white-space: nowrap;
+    }
+    .travel-flight-card-price-display {
+      grid-column: 2; grid-row: 1;
+      justify-self: end; font-size: var(--font-size-md); line-height: var(--line-height-tight); text-align: end;
+    }
+    .travel-flight-card-total-price {
+      grid-column: 2; grid-row: 2;
+      justify-self: end; align-self: baseline; text-align: end;
+    }
   }
 }

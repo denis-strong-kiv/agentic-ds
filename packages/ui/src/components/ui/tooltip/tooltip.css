@@ -12,9 +12,14 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .ui-tooltip-content[data-state='delayed-open'],
-    .ui-tooltip-content[data-state='instant-open'] {
+    /* Full entry animation: fade in + scale up from 8px below */
+    .ui-tooltip-content[data-state='delayed-open'] {
       animation: tooltip-in var(--duration-fast) var(--easing-ease-out);
+    }
+
+    /* Moving between nearby triggers quickly — skip animation, just show */
+    .ui-tooltip-content[data-state='instant-open'] {
+      animation: none;
     }
 
     .ui-tooltip-content[data-state='closed'] {
@@ -24,23 +29,62 @@
     @keyframes tooltip-in {
       from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.95) translateY(8px);
       }
       to {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateY(0);
       }
     }
 
     @keyframes tooltip-out {
       from {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateY(0);
       }
       to {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.95) translateY(8px);
       }
+    }
+  }
+
+  /* ── Mono tooltip — single shared instance, position: fixed via JS ────────── */
+
+  .ui-mono-tooltip-content {
+    position: fixed;
+    /* Use individual CSS translate so @keyframes transform (scale + translateY)
+       does not overwrite the positioning offset */
+    translate: -50% calc(-100% - 8px);
+    pointer-events: none;
+    max-width: 200px;
+    /* shared visual style */
+    z-index: 50;
+    border-radius: var(--shape-preset-badge);
+    background: var(--color-foreground-default);
+    padding-inline: var(--spacing-3);
+    padding-block: calc(var(--spacing-1) + 0.125rem);
+    font-size: var(--font-size-xs);
+    color: var(--color-background-default);
+    box-shadow: var(--shadow-sm);
+    /* Slide smoothly between trigger positions */
+    transition:
+      left var(--duration-fast) var(--easing-ease-out),
+      top var(--duration-fast) var(--easing-ease-out);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Plays once on initial mount; does NOT replay on content-only updates */
+    .ui-mono-tooltip-content {
+      animation: tooltip-in var(--duration-fast) var(--easing-ease-out);
+    }
+    /* Fade in new content on each trigger swap; outer element slides instead */
+    .ui-mono-tooltip-inner {
+      animation: tooltip-mono-swap var(--duration-fast) var(--easing-ease-out);
+    }
+    @keyframes tooltip-mono-swap {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
   }
 }
