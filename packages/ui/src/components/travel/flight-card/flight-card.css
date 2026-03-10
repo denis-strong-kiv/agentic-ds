@@ -70,6 +70,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    flex: 1;
   }
 
   /* ─────────────────────────────────────────────────────────────────────────
@@ -78,9 +79,9 @@
 
   .travel-flight-card-leg {
     display: flex;
-    align-items: flex-start;
-    padding: var(--spacing-3-5) 0;
+    align-items: center;
     width: 100%;
+    flex: 1;
   }
   .travel-flight-card-leg + .travel-flight-card-leg {
     border-top: 1px solid var(--color-border-muted);
@@ -458,7 +459,7 @@
     padding: var(--spacing-3) var(--spacing-2) var(--spacing-1) var(--spacing-3);
   }
   .travel-flight-card[data-compact='true'] .travel-flight-card-leg {
-    padding: var(--spacing-3) 0;
+    padding: var(--spacing-2-5) 0;
   }
 
   /* Price strip: 2-column grid so baggage rows and price rows share row heights */
@@ -528,7 +529,7 @@
   @container flight-card (max-width: 480px) {
     .travel-flight-card-inner { flex-direction: column; min-height: 0; }
     .travel-flight-card-content { padding: var(--spacing-3) var(--spacing-2) var(--spacing-1) var(--spacing-3); }
-    .travel-flight-card-leg { padding: var(--spacing-3) 0; }
+    .travel-flight-card-leg { padding: var(--spacing-2-5) 0; }
     .travel-flight-card-price-col {
       display: grid;
       grid-template-columns: 1fr auto;
