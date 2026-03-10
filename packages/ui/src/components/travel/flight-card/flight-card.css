@@ -28,6 +28,9 @@
     display: flex;
     align-items: stretch;
   }
+  .travel-flight-card:not([data-compact]) .travel-flight-card-inner {
+    min-height: 200px;
+  }
 
   /* Content area */
   .travel-flight-card-content {
@@ -523,7 +526,7 @@
 
   /* Container-query-driven compact (pure CSS, no prop) */
   @container flight-card (max-width: 480px) {
-    .travel-flight-card-inner { flex-direction: column; }
+    .travel-flight-card-inner { flex-direction: column; min-height: 0; }
     .travel-flight-card-content { padding: var(--spacing-3) var(--spacing-2) var(--spacing-1) var(--spacing-3); }
     .travel-flight-card-leg { padding: var(--spacing-3) 0; }
     .travel-flight-card-price-col {
