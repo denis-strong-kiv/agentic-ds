@@ -6,7 +6,7 @@
     width: 2.5rem;
     flex-shrink: 0;
     overflow: hidden;
-    border-radius: 9999px;
+    border-radius: var(--shape-preset-pill-full);
   }
 
   .ui-avatar-image {
@@ -22,10 +22,10 @@
     width: 100%;
     align-items: center;
     justify-content: center;
-    border-radius: 9999px;
+    border-radius: var(--shape-preset-pill-full);
     background: var(--color-background-subtle);
     color: var(--color-foreground-muted);
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     font-weight: 500;
   }
 
@@ -36,7 +36,7 @@
     display: block;
     height: 0.625rem;
     width: 0.625rem;
-    border-radius: 9999px;
+    border-radius: var(--shape-preset-pill-full);
     border: 2px solid var(--color-surface-card);
   }
 }

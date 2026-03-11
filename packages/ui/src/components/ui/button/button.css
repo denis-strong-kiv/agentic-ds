@@ -163,19 +163,19 @@
   }
 
   .ui-button--sm {
-    height: var(--spacing-8);
+    height: 2rem;
     padding-inline: var(--spacing-3);
     font-size: var(--font-size-sm);
   }
 
   .ui-button--md {
-    height: var(--spacing-10);
+    height: 2.5rem;
     padding-inline: var(--spacing-4);
     font-size: var(--font-size-sm);
   }
 
   .ui-button--lg {
-    height: var(--spacing-12);
+    height: 3rem;
     padding-inline: var(--spacing-6);
     font-size: var(--font-size-md);
   }
@@ -187,14 +187,14 @@
   }
 
   .ui-button--icon {
-    width: var(--spacing-10);
-    height: var(--spacing-10);
+    width: 2.5rem;
+    height: 2.5rem;
     padding: 0;
   }
 
   .ui-button__spinner {
-    height: var(--spacing-4);
-    width: var(--spacing-4);
+    height: 1rem;
+    width: 1rem;
   }
 
   @media (prefers-reduced-motion: no-preference) {

@@ -3,7 +3,6 @@
 import StyleDictionary from 'style-dictionary';
 import { oklchTransform } from './transforms/oklch.js';
 import { cssCustomPropertiesFormat } from './formats/css-custom-properties.js';
-import { tailwindThemeFormat } from './formats/tailwind-theme.js';
 import { reactNativeFormat } from './formats/react-native.js';
 import { jsonFlatFormat } from './formats/json-flat.js';
 
@@ -24,16 +23,6 @@ export function createStyleDictionary(outputDir: string = 'src/output'): StyleDi
             destination: 'tokens.css',
             format: 'css/custom-properties',
             options: { selector: ':root' },
-          },
-        ],
-      },
-      tailwind: {
-        transforms: ['attribute/cti', 'name/kebab', 'color/oklch'],
-        buildPath: `${outputDir}/`,
-        files: [
-          {
-            destination: 'tailwind-theme.css',
-            format: 'css/tailwind-theme',
           },
         ],
       },
@@ -63,7 +52,6 @@ export function createStyleDictionary(outputDir: string = 'src/output'): StyleDi
   // Register custom extensions
   sd.registerTransform(oklchTransform);
   sd.registerFormat(cssCustomPropertiesFormat);
-  sd.registerFormat(tailwindThemeFormat);
   sd.registerFormat(reactNativeFormat);
   sd.registerFormat(jsonFlatFormat);
 

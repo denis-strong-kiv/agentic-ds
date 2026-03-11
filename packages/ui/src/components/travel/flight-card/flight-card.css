@@ -57,12 +57,12 @@
     flex-shrink: 0;
   }
   .travel-flight-card-tag--deal {
-    background: oklch(0.93 0.04 280);
-    color: oklch(0.38 0.16 280);
+    background: var(--color-success-subtle);
+    color: var(--color-success-default);
   }
   .travel-flight-card-tag--cheap {
-    background: oklch(0.95 0.05 75);
-    color: oklch(0.40 0.12 60);
+    background: var(--color-warning-subtle);
+    color: var(--color-warning-default);
   }
 
   /* Legs list */

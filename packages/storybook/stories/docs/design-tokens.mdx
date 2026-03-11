@@ -94,26 +94,7 @@ CSS     JS     iOS/Android (future)
 
 ## Using Tokens in Components
 
-In Tailwind CSS v4 with `@theme`:
-
-```css
-/* packages/tokens/src/tailwind-theme.css */
-@theme {
-  --color-primary: var(--color-primary-default);
-  --color-primary-foreground: var(--color-primary-foreground);
-}
-```
-
-Then in a component:
-
-```tsx
-// Uses Tailwind class backed by the CSS custom property
-<button className="bg-primary text-primary-foreground hover:bg-primary/90">
-  Book Now
-</button>
-```
-
-Or directly with CSS:
+A simple CSS example using the generated custom properties:
 
 ```css
 .button-primary {

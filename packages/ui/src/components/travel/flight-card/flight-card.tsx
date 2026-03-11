@@ -320,7 +320,7 @@ export function FlightCard({
   const showUrgency = !isCompact && seatsLeft !== undefined && seatsLeft <= 9;
 
   return (
-    <MonoTooltipProvider tooltipClassName={isCompact ? 'travel-flight-card-tooltip--compact' : undefined}>
+    <MonoTooltipProvider {...(isCompact && { tooltipClassName: 'travel-flight-card-tooltip--compact' })}>
     <article
       className={cn('travel-flight-card', className)}
       data-compact={isCompact || undefined}
