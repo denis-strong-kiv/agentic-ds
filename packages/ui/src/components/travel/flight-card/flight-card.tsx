@@ -5,7 +5,12 @@ import { Pin } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { Button } from '../../ui/button/index';
 import { MonoTooltipProvider, MonoTooltip } from '../../ui/tooltip/tooltip';
-import { OtaBaggageTrolley, OtaBaggageChecked } from '../../ui/icon/ota-icons';
+import {
+  OtaBaggageTrolley,
+  OtaBaggageTrolleyOff,
+  OtaBaggageChecked,
+  OtaBaggageCheckedOff,
+} from '../../ui/icon/ota-icons';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -386,10 +391,17 @@ export function FlightCard({
             <div className="travel-flight-card-baggage">
               <div className="travel-flight-card-baggage-icons">
                 <span
-                  className="travel-flight-card-baggage-item"
+                  className={cn(
+                    'travel-flight-card-baggage-item',
+                    baggage.carryOn === 0 && 'travel-flight-card-baggage-item--none',
+                  )}
                   aria-label={`${baggage.carryOn} carry-on bag`}
                 >
-                  <OtaBaggageTrolley aria-hidden style={{ height: 16, width: 'auto' }} />
+                  {baggage.carryOn > 0 ? (
+                    <OtaBaggageTrolley aria-hidden style={{ width: 16, height: 16 }} />
+                  ) : (
+                    <OtaBaggageTrolleyOff aria-hidden style={{ width: 16, height: 16 }} />
+                  )}
                   <span className="travel-flight-card-baggage-count">{baggage.carryOn}</span>
                 </span>
                 <span
@@ -399,7 +411,11 @@ export function FlightCard({
                   )}
                   aria-label={`${baggage.checked} checked bag`}
                 >
-                  <OtaBaggageChecked aria-hidden style={{ height: 16, width: 'auto' }} />
+                  {baggage.checked > 0 ? (
+                    <OtaBaggageChecked aria-hidden style={{ width: 16, height: 16 }} />
+                  ) : (
+                    <OtaBaggageCheckedOff aria-hidden style={{ width: 16, height: 16 }} />
+                  )}
                   <span className="travel-flight-card-baggage-count">{baggage.checked}</span>
                 </span>
               </div>
