@@ -19,8 +19,6 @@ const buttonVariants = cva(
         'inverted-primary': ['ui-button--inverted-primary'],
         'inverted-secondary': ['ui-button--inverted-secondary'],
         'inverted-tertiary': ['ui-button--inverted-tertiary'],
-        outline: ['ui-button--outline'],
-        ghost: ['ui-button--ghost'],
         destructive: ['ui-button--destructive'],
         link: ['ui-button--link'],
       },

@@ -35,7 +35,7 @@ export const metadata: ComponentMetadataShape = {
     },
     {
       label: 'Icon-only',
-      code: `<Button size="icon" variant="ghost" aria-label="Close"><X size={16} /></Button>`,
+      code: `<Button size="icon" variant="tertiary" aria-label="Close"><X size={16} /></Button>`,
     },
   ],
 };

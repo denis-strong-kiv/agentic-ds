@@ -49,18 +49,6 @@ describe('Button', () => {
       expect(btn.className).toContain('ui-button--inverted-tertiary');
     });
 
-    it('renders outline variant', () => {
-      render(<Button variant="outline">Outline</Button>);
-      const btn = screen.getByRole('button');
-      expect(btn.className).toContain('ui-button--outline');
-    });
-
-    it('renders ghost variant', () => {
-      render(<Button variant="ghost">Ghost</Button>);
-      const btn = screen.getByRole('button');
-      expect(btn.className).toContain('ui-button--ghost');
-    });
-
     it('renders destructive variant', () => {
       render(<Button variant="destructive">Delete</Button>);
       const btn = screen.getByRole('button');

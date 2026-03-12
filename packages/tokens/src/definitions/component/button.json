@@ -42,12 +42,6 @@
       "foreground": { "value": "oklch(100% 0 0)",           "type": "color" },
       "border":     { "value": "transparent",               "type": "color" }
     },
-    "ghost": {
-      "$description": "Kept for backward compatibility — transparent bg, foreground-colored label.",
-      "background": { "value": "transparent",               "type": "color" },
-      "foreground": { "value": "{color.foreground.default}", "type": "color" },
-      "border":     { "value": "transparent",               "type": "color" }
-    },
     "destructive": {
       "background": { "value": "{color.error.default}",     "type": "color" },
       "foreground": { "value": "{color.error.foreground}",  "type": "color" },

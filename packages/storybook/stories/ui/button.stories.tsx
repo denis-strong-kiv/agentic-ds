@@ -11,7 +11,7 @@ const meta: Meta<typeof Button> = {
       options: [
         'primary', 'secondary', 'tertiary', 'neutral',
         'inverted-primary', 'inverted-secondary', 'inverted-tertiary',
-        'outline', 'ghost', 'destructive', 'link',
+        'destructive', 'link',
       ],
     },
     size: { control: 'select', options: ['sm', 'md', 'lg', 'xl', 'icon'] },
@@ -28,7 +28,7 @@ export const AllVariants: Story = {
   render: () => (
     <div className="sb-stack-lg">
       <div className="sb-row-wrap-sm">
-        {(['primary', 'secondary', 'tertiary', 'neutral', 'outline', 'ghost', 'destructive', 'link'] as const).map(v => (
+        {(['primary', 'secondary', 'tertiary', 'neutral', 'destructive', 'link'] as const).map(v => (
           <Button key={v} variant={v}>{v}</Button>
         ))}
       </div>
