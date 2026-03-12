@@ -5,6 +5,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing, getDirection, type Locale } from '../../i18n/routing';
 import { SkipLink } from '@travel/ui/components/ui/skip-link';
+import { BrandSwitcherFab } from '../dev-brand-switcher-fab';
 import '../globals.css';
 
 const inter = Inter({
@@ -59,6 +60,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <BrandSwitcherFab />
       </body>
     </html>
   );
