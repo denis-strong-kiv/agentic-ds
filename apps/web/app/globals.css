@@ -134,6 +134,168 @@
 }
 
 @layer components {
+  /* ── Dev brand switcher FAB ───────────────────────────────────────────────── */
+
+  .dev-brand-fab {
+    position: fixed;
+    inset-inline-end: 1.5rem;
+    inset-block-end: 1.5rem;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    pointer-events: none;
+  }
+
+  .dev-brand-fab-toggle {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 0.85rem;
+    padding-block: 0.45rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border-default);
+    background: color-mix(in oklab, var(--color-surface-card) 82%, transparent);
+    box-shadow: 0 10px 25px oklch(0% 0 0 / 0.16);
+    color: var(--color-foreground-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(18px);
+    transition:
+      transform var(--duration-normal) var(--easing-ease-out),
+      box-shadow var(--duration-normal) var(--easing-ease-out),
+      border-color var(--duration-normal) var(--easing-ease-out),
+      background-color var(--duration-normal) var(--easing-ease-out),
+      color var(--duration-normal) var(--easing-ease-out);
+    animation: dev-brand-fab-float 6s ease-in-out infinite alternate;
+  }
+
+  .dev-brand-fab-toggle:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 18px 40px oklch(0% 0 0 / 0.22);
+    border-color: var(--color-border-muted);
+    background: color-mix(in oklab, var(--color-surface-card) 96%, transparent);
+    color: var(--color-foreground-default);
+  }
+
+  .dev-brand-fab-toggle-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--color-primary-default);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary-default) 26%, transparent);
+  }
+
+  .dev-brand-fab-toggle-label {
+    text-shadow: 0 1px 2px oklch(0% 0 0 / 0.35);
+  }
+
+  .dev-brand-fab-panel {
+    pointer-events: auto;
+    position: absolute;
+    inset-inline-end: 0;
+    width: 220px;
+    border-radius: 0.85rem;
+    border: 1px solid var(--color-border-default);
+    background: color-mix(in oklab, var(--color-surface-card) 95%, transparent);
+    box-shadow:
+      0 18px 45px oklch(0% 0 0 / 0.26),
+      0 0 0 1px color-mix(in oklab, var(--color-border-muted) 55%, transparent);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+  }
+
+  .dev-brand-fab-panel--bottom {
+    top: 100%;
+    margin-block-start: 0.5rem;
+  }
+
+  .dev-brand-fab-panel--top {
+    bottom: 100%;
+    margin-block-end: 0.5rem;
+  }
+
+  .dev-brand-fab-panel-header {
+    padding: 0.6rem 0.75rem 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: move;
+  }
+
+  .dev-brand-fab-panel-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-foreground-muted);
+  }
+
+  .dev-brand-fab-panel-body {
+    padding: 0.25rem 0.35rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .dev-brand-fab-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding-inline: 0.55rem 0.65rem;
+    padding-block: 0.35rem;
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    color: var(--color-foreground-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: left;
+    transition:
+      background-color var(--duration-fast) var(--easing-ease-out),
+      color var(--duration-fast) var(--easing-ease-out),
+      transform var(--duration-fast) var(--easing-ease-out);
+  }
+
+  .dev-brand-fab-option:hover {
+    background: color-mix(in oklab, var(--color-background-subtle) 80%, transparent);
+    color: var(--color-foreground-default);
+    transform: translateY(-0.5px);
+  }
+
+  .dev-brand-fab-option--active {
+    background: color-mix(in oklab, var(--color-primary-default) 8%, var(--color-background-default) 92%);
+    color: var(--color-foreground-default);
+  }
+
+  .dev-brand-fab-option-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+  }
+
+  .dev-brand-fab-option-label {
+    text-transform: capitalize;
+  }
+
+  @keyframes dev-brand-fab-float {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -4px, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   .web-locale-home {
     min-height: 100vh;
     display: flex;

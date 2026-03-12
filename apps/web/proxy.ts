@@ -6,10 +6,11 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
+import type { DefaultBrandId } from '@travel/tokens';
 
 // ─── Security: brand allow-list ───────────────────────────────────────────────
 // Only known brand IDs are accepted. Unknown values fall through to 'default'.
-const VALID_BRAND_IDS = new Set(['default', 'luxury', 'adventure', 'eco']);
+const VALID_BRAND_IDS = new Set<DefaultBrandId>(['default', 'luxury', 'adventure', 'eco']);
 
 function sanitizeBrandId(raw: string | null | undefined): string {
   if (!raw) return 'default';

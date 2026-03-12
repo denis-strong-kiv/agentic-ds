@@ -39,5 +39,7 @@ export type { ResolvedValue, TokenStore } from './resolver/resolver.js';
 export { validateBrandTokens } from './validator/validator.js';
 export type { ValidationReport, ValidationError, ContrastResult } from './validator/types.js';
 
-// Brand types
+// Brand types + default brand set
 export type { ResolvedTokenOutput } from './brand/types.js';
+export { DEFAULT_BRANDS } from './brand/default-brands.js';
+export type { DefaultBrandId } from './brand/default-brands.js';
